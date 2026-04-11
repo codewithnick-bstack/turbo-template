@@ -1,0 +1,19 @@
+{
+  "name": "@repo/eslint-config",
+  "private": true,
+  "version": "0.1.0",
+  "exports": {
+    "./base": "./base.cjs",
+    "./next": "./next.cjs",
+    "./node": "./node.cjs"
+  },
+  "peerDependencies": {
+    "eslint": "^8.57.1",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "build": "echo 'eslint config ready'",
+    "lint": "echo 'eslint config ready'",
+    "typecheck": "echo 'eslint config ready'"
+  }
+}

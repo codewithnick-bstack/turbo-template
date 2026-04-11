@@ -1,0 +1,10 @@
+@theme {
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-surface: #0b1020;
+  --radius-xl: 1rem;
+  --shadow-soft: 0 12px 40px rgba(15, 23, 42, 0.12);
+}

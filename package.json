@@ -1,0 +1,47 @@
+{
+  "name": "my-client-websites",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.8.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "format": "prettier --write .",
+    "clean": "rimraf node_modules apps/*/node_modules packages/*/node_modules",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,mjs,cjs}": [
+      "eslint --fix"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@axe-core/cli": "^4.10.2",
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@typescript-eslint/eslint-plugin": "^8.29.1",
+    "@typescript-eslint/parser": "^8.29.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.3.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.4.0",
+    "tsx": "^4.19.3",
+    "turbo": "^2.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
+  }
+}
