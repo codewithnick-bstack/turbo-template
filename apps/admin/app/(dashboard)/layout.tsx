@@ -11,6 +11,7 @@ const NAV = [
     { href: "/settings/members", label: "Members" },
     { href: "/settings/branding", label: "Branding" },
     { href: "/settings/billing", label: "Billing" },
+    { href: "/settings/compliance", label: "Compliance" },
     { href: "/webhooks", label: "Webhooks" },
   ]},
 ];
