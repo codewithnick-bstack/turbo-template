@@ -546,4 +546,154 @@ export const toolDefinitions: ToolDef[] = [
       return clientFor(ctx).analytics.get(siteId, days);
     },
   },
+
+  // ── AI Assistant ──────────────────────────────────────────────────────
+  {
+    name: "ai_chat",
+    description: "Chat with the AI site assistant. Has access to site context.",
+    inputSchema: {
+      type: "object",
+      required: ["siteId", "messages"],
+      properties: {
+        siteId: { type: "string" },
+        messages: { type: "array" },
+      },
+    },
+    handler: (input, ctx) => {
+      const { siteId, messages } = input as { siteId: string; messages: Array<{ role: string; content: string }> };
+      return clientFor(ctx).aiAssistant.chat(siteId, messages);
+    },
+  },
+  {
+    name: "generate_blog_post",
+    description: "AI-generate a first-draft blog post from a title and outline.",
+    inputSchema: {
+      type: "object",
+      required: ["title"],
+      properties: {
+        title: { type: "string" },
+        outline: { type: "string" },
+        keywords: { type: "array", items: { type: "string" } },
+        tone: { type: "string" },
+      },
+    },
+    handler: (input, ctx) => clientFor(ctx).aiAssistant.generateBlogPost(input),
+  },
+  {
+    name: "seo_audit",
+    description: "Run an AI SEO audit on a page.",
+    inputSchema: {
+      type: "object",
+      required: ["pageId"],
+      properties: { pageId: { type: "string" } },
+    },
+    handler: (input, ctx) =>
+      clientFor(ctx).aiAssistant.seoAudit((input as { pageId: string }).pageId),
+  },
+  {
+    name: "seo_generate_meta",
+    description: "AI-generate optimised meta title and description for a page.",
+    inputSchema: {
+      type: "object",
+      required: ["pageId"],
+      properties: { pageId: { type: "string" } },
+    },
+    handler: (input, ctx) =>
+      clientFor(ctx).aiAssistant.seoGenerateMeta((input as { pageId: string }).pageId),
+  },
+
+  // ── Members ───────────────────────────────────────────────────────────
+  {
+    name: "list_members",
+    description: "List team members of the current tenant.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    handler: (_input, ctx) => clientFor(ctx).members.list(),
+  },
+  {
+    name: "invite_member",
+    description: "Invite a user by email to the current tenant.",
+    inputSchema: {
+      type: "object",
+      required: ["email"],
+      properties: {
+        email: { type: "string" },
+        role: { type: "string", enum: ["admin", "editor", "viewer"] },
+      },
+    },
+    handler: (input, ctx) => {
+      const { email, role } = input as { email: string; role?: string };
+      return clientFor(ctx).members.invite(email, role);
+    },
+  },
+  {
+    name: "remove_member",
+    description: "Remove a member from the tenant. Requires approval.",
+    inputSchema: {
+      type: "object",
+      required: ["userId"],
+      properties: { userId: { type: "string" } },
+    },
+    annotations: { destructive: true, requiresApproval: true },
+    handler: (input, ctx) =>
+      clientFor(ctx).members.remove((input as { userId: string }).userId),
+  },
+
+  // ── Templates ─────────────────────────────────────────────────────────
+  {
+    name: "list_templates",
+    description: "List available site templates in the marketplace.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        category: { type: "string" },
+        limit: { type: "number" },
+      },
+    },
+    handler: (input, ctx) => {
+      const { category, limit } = input as { category?: string; limit?: number };
+      return clientFor(ctx).templates.list(category, limit);
+    },
+  },
+  {
+    name: "use_template",
+    description: "Create a new site from a template. Requires approval.",
+    inputSchema: {
+      type: "object",
+      required: ["templateId", "name", "slug"],
+      properties: {
+        templateId: { type: "string" },
+        name: { type: "string" },
+        slug: { type: "string" },
+      },
+    },
+    annotations: { requiresApproval: true },
+    handler: (input, ctx) => {
+      const { templateId, name, slug } = input as { templateId: string; name: string; slug: string };
+      return clientFor(ctx).templates.use(templateId, { name, slug });
+    },
+  },
+
+  // ── Branding ──────────────────────────────────────────────────────────
+  {
+    name: "get_branding",
+    description: "Get the tenant's white-label branding settings.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    handler: (_input, ctx) => clientFor(ctx).branding.get(),
+  },
+  {
+    name: "update_branding",
+    description: "Update white-label branding (logo, colors, custom CSS).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        logoUrl: { type: "string" },
+        faviconUrl: { type: "string" },
+        primaryColor: { type: "string" },
+        accentColor: { type: "string" },
+        customCss: { type: "string" },
+        supportEmail: { type: "string" },
+      },
+    },
+    handler: (input, ctx) => clientFor(ctx).branding.update(input),
+  },
 ];

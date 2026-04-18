@@ -145,4 +145,51 @@ export class PlatformClient {
     publishPost: (id: string) => this.request<unknown>("POST", `/v1/blog/posts/${id}/publish`),
     deletePost: (id: string) => this.request<unknown>("DELETE", `/v1/blog/posts/${id}`),
   };
+
+  members = {
+    list: () => this.request<{ data: unknown[] }>("GET", "/v1/members"),
+    invite: (email: string, role?: string) =>
+      this.request<unknown>("POST", "/v1/members/invite", { email, role }),
+    remove: (userId: string) => this.request<unknown>("DELETE", `/v1/members/${userId}`),
+    updateRole: (userId: string, role: string) =>
+      this.request<unknown>("PATCH", `/v1/members/${userId}`, { role }),
+    listInvites: () => this.request<{ data: unknown[] }>("GET", "/v1/members/invites"),
+    revokeInvite: (id: string) => this.request<unknown>("DELETE", `/v1/members/invites/${id}`),
+  };
+
+  branding = {
+    get: () => this.request<unknown>("GET", "/v1/branding"),
+    update: (input: unknown) => this.request<unknown>("PATCH", "/v1/branding", input),
+  };
+
+  templates = {
+    list: (category?: string, limit?: number) => {
+      const params = new URLSearchParams();
+      if (category) params.set("category", category);
+      if (limit) params.set("limit", String(limit));
+      const qs = params.toString();
+      return this.request<{ data: unknown[] }>("GET", `/v1/templates${qs ? `?${qs}` : ""}`);
+    },
+    get: (id: string) => this.request<unknown>("GET", `/v1/templates/${id}`),
+    create: (input: unknown) => this.request<unknown>("POST", "/v1/templates", input),
+    use: (id: string, input: { name: string; slug: string }) =>
+      this.request<unknown>("POST", `/v1/templates/${id}/use`, input),
+  };
+
+  aiAssistant = {
+    chat: (siteId: string, messages: Array<{ role: string; content: string }>) =>
+      this.request<{ text: string }>("POST", "/v1/ai/chat", { siteId, messages }),
+    generateBlogPost: (input: unknown) =>
+      this.request<{ content: string }>("POST", "/v1/ai/generate/blog-post", input),
+    generateSectionCopy: (input: unknown) =>
+      this.request<{ props: unknown }>("POST", "/v1/ai/generate/section-copy", input),
+    seoAudit: (pageId: string) =>
+      this.request<{ findings: unknown[] }>("POST", "/v1/ai/seo/audit", { pageId }),
+    seoGenerateMeta: (pageId: string) =>
+      this.request<{ metaTitle?: string; metaDescription?: string }>(
+        "POST",
+        "/v1/ai/seo/generate-meta",
+        { pageId },
+      ),
+  };
 }

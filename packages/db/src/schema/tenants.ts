@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp, index, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, index, pgEnum, jsonb } from "drizzle-orm/pg-core";
 
 export const tenantType = pgEnum("tenant_type", ["direct", "agency", "client"]);
 export const tenantPlan = pgEnum("tenant_plan", ["starter", "pro", "agency"]);
@@ -16,6 +16,8 @@ export const tenants = pgTable(
     status: tenantStatus("status").notNull().default("active"),
     stripeCustomerId: text("stripe_customer_id"),
     stripeSubscriptionId: text("stripe_subscription_id"),
+    // white-label branding: { logoUrl, primaryColor, faviconUrl, customCss }
+    branding: jsonb("branding").default({}).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
     deletedAt: timestamp("deleted_at", { withTimezone: true }),

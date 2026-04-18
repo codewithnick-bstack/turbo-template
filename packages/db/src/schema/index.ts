@@ -13,3 +13,5 @@ export * from "./domains";
 export * from "./search";
 export * from "./analytics";
 export * from "./blog";
+export * from "./invites";
+export * from "./templates";

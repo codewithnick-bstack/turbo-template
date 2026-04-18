@@ -1,28 +1,58 @@
 import { Hono } from "hono";
-import { createModelAdapter } from "@repo/ai";
+import * as AI from "@repo/core/ai";
 import { authMiddleware, type AuthEnv } from "../middleware/auth";
+import { buildCtx, getDb } from "../ctx";
 import { handleError } from "../lib/errors";
-import { env } from "../env";
-
-const adapter = createModelAdapter({
-  provider: (env.AI_PROVIDER as "anthropic" | "openai" | "mock") ?? "mock",
-  anthropicApiKey: env.ANTHROPIC_API_KEY,
-  openaiApiKey: env.OPENAI_API_KEY,
-});
 
 export const aiRoute = new Hono<AuthEnv>()
-  .use("*", authMiddleware)
-  .post("/complete", async (c) => {
+  .post("/chat", authMiddleware, async (c) => {
     try {
-      const body = await c.req.json();
-      const result = await adapter.complete(body);
+      const result = await AI.chat(buildCtx(c), await c.req.json());
       return c.json(result);
     } catch (err) { return handleError(err, c); }
   })
-  .post("/embed", async (c) => {
+  .post("/generate/blog-post", authMiddleware, async (c) => {
     try {
-      const { input } = await c.req.json<{ input: string | string[] }>();
-      const embeddings = await adapter.embed(input);
-      return c.json({ embeddings });
+      const result = await AI.generateBlogPost(buildCtx(c), await c.req.json());
+      return c.json(result);
+    } catch (err) { return handleError(err, c); }
+  })
+  .post("/generate/section-copy", authMiddleware, async (c) => {
+    try {
+      const result = await AI.generateSectionCopy(buildCtx(c), await c.req.json());
+      return c.json(result);
+    } catch (err) { return handleError(err, c); }
+  })
+  .post("/generate/alt-text", authMiddleware, async (c) => {
+    try {
+      const result = await AI.generateAltText(buildCtx(c), await c.req.json());
+      return c.json(result);
+    } catch (err) { return handleError(err, c); }
+  })
+  .post("/seo/audit", authMiddleware, async (c) => {
+    try {
+      const result = await AI.seoAudit(buildCtx(c), await c.req.json());
+      return c.json(result);
+    } catch (err) { return handleError(err, c); }
+  })
+  .post("/seo/generate-meta", authMiddleware, async (c) => {
+    try {
+      const result = await AI.seoGenerateMeta(buildCtx(c), await c.req.json());
+      return c.json(result);
+    } catch (err) { return handleError(err, c); }
+  })
+  .post("/chatbot", async (c) => {
+    try {
+      const tid = c.req.query("tid");
+      if (!tid) return c.json({ code: "bad_request", message: "tid required" }, 400);
+      const ctx = {
+        db: getDb(),
+        tenantId: tid,
+        actor: { kind: "system" as const, reason: "chatbot" },
+        requestId: crypto.randomUUID(),
+        log: console,
+      };
+      const result = await AI.chatbot(ctx, await c.req.json());
+      return c.json(result);
     } catch (err) { return handleError(err, c); }
   });

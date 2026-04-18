@@ -5,6 +5,7 @@ import { Cta } from "./blocks/cta";
 import { Testimonials } from "./blocks/testimonials";
 import { RichText } from "./blocks/richtext";
 import { FormBlock } from "./blocks/form";
+import { SearchBlock } from "./blocks/search";
 
 type AnyBlock = { id: string; type: string; props: Record<string, unknown>; children?: AnyBlock[] };
 
@@ -15,6 +16,7 @@ const REGISTRY: Record<string, (props: Record<string, unknown>) => JSX.Element |
   testimonials: Testimonials as (p: Record<string, unknown>) => JSX.Element,
   richtext: RichText as (p: Record<string, unknown>) => JSX.Element,
   form: FormBlock as (p: Record<string, unknown>) => JSX.Element,
+  search: SearchBlock as (p: Record<string, unknown>) => JSX.Element,
 };
 
 export function RenderBlocks({ tree }: { tree: TBlockTree }) {
@@ -33,4 +35,4 @@ export function RenderBlocks({ tree }: { tree: TBlockTree }) {
   );
 }
 
-export { Hero, Features, Cta, Testimonials, RichText, FormBlock };
+export { Hero, Features, Cta, Testimonials, RichText, FormBlock, SearchBlock };

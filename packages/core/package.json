@@ -14,7 +14,11 @@
     "./forms": "./src/forms/index.ts",
     "./media": "./src/media/index.ts",
     "./webhooks": "./src/webhooks/index.ts",
-    "./billing": "./src/billing/index.ts"
+    "./billing": "./src/billing/index.ts",
+    "./ai": "./src/ai/index.ts",
+    "./members": "./src/members/index.ts",
+    "./branding": "./src/branding/index.ts",
+    "./templates": "./src/templates/index.ts"
   },
   "scripts": {
     "build": "echo 'core ready'",
@@ -23,6 +27,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@repo/ai": "workspace:*",
     "@repo/billing": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/observability": "workspace:*",

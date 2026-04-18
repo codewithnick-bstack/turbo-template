@@ -3,12 +3,15 @@ import Link from "next/link";
 const NAV = [
   { label: "Content", items: [
     { href: "/sites", label: "Sites" },
+    { href: "/templates", label: "Templates" },
     { href: "/forms", label: "Forms" },
     { href: "/media", label: "Media" },
   ]},
   { label: "Settings", items: [
-    { href: "/webhooks", label: "Webhooks" },
+    { href: "/settings/members", label: "Members" },
+    { href: "/settings/branding", label: "Branding" },
     { href: "/settings/billing", label: "Billing" },
+    { href: "/webhooks", label: "Webhooks" },
   ]},
 ];
 

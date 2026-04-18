@@ -19,6 +19,9 @@ import { searchRoute } from "./routes/search";
 import { aiRoute } from "./routes/ai";
 import { analyticsRoute } from "./routes/analytics";
 import { blogRoute } from "./routes/blog";
+import { membersRoute } from "./routes/members";
+import { brandingRoute } from "./routes/branding";
+import { templatesRoute } from "./routes/templates";
 
 export function buildServer() {
   const app = new Hono();
@@ -52,6 +55,9 @@ export function buildServer() {
   app.route("/v1/ai", aiRoute);
   app.route("/v1/analytics", analyticsRoute);
   app.route("/v1/blog", blogRoute);
+  app.route("/v1/members", membersRoute);
+  app.route("/v1/branding", brandingRoute);
+  app.route("/v1/templates", templatesRoute);
 
   app.onError((err, c) => {
     if (isAppError(err)) {

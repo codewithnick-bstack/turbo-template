@@ -4,6 +4,7 @@ import { RenderBlocks } from "@repo/renderer-blocks";
 import type { TBlockTree } from "@repo/schemas";
 import { getSiteByHostname, getPageBySlug } from "../../lib/platform";
 import { AnalyticsBeacon } from "../../components/analytics-beacon";
+import { ChatbotWidget } from "../../components/chatbot-widget";
 
 type Props = { params: Promise<{ slug: string[] }> };
 
@@ -33,6 +34,13 @@ export default async function PlatformPage({ params }: Props) {
         apiUrl={apiUrl}
       />
       <RenderBlocks tree={tree} />
+      {process.env.NEXT_PUBLIC_CHATBOT_ENABLED === "true" && (
+        <ChatbotWidget
+          siteId={site.id}
+          tenantId={site.tenantId}
+          apiUrl={apiUrl}
+        />
+      )}
     </article>
   );
 }

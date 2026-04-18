@@ -33,9 +33,11 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
       </div>
       <p className="mt-1 text-sm text-[var(--muted-foreground)]">{site.slug}{site.primaryDomain ? ` · ${site.primaryDomain}` : ""}</p>
 
-      <div className="mt-4 flex gap-3">
+      <div className="mt-4 flex flex-wrap gap-3">
         <Link href={`/sites/${id}/analytics`} className="text-sm text-blue-600 hover:underline">Analytics</Link>
         <Link href={`/sites/${id}/blog`} className="text-sm text-blue-600 hover:underline">Blog</Link>
+        <Link href={`/sites/${id}/assistant`} className="text-sm text-blue-600 hover:underline">AI Assistant</Link>
+        <Link href={`/sites/${id}/seo`} className="text-sm text-blue-600 hover:underline">SEO</Link>
       </div>
 
       <div className="mt-8 flex items-center justify-between">
