@@ -1,0 +1,21 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "your-org/my-client-websites" }
+  ],
+  "commit": false,
+  "access": "restricted",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": [
+    "web",
+    "api",
+    "cron",
+    "admin",
+    "platform-api",
+    "worker",
+    "mcp",
+    "docs-site"
+  ]
+}

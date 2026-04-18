@@ -1,2 +1,6 @@
 #!/usr/bin/env sh
+# Use corepack pnpm if pnpm not in PATH
+if ! command -v pnpm >/dev/null 2>&1; then
+  export PATH="$HOME/.nvm/versions/node/v20.9.0/lib/node_modules/corepack/shims:$PATH"
+fi
 pnpm lint-staged

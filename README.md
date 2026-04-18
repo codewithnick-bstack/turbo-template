@@ -1,169 +1,119 @@
-# `my-client-websites`
+# Agent-Native Website Platform
 
-A **Turborepo monorepo starter** for shipping polished client websites quickly.
+Turborepo monorepo for a **multi-tenant, agent-native website platform** with an **agency reseller tier**. Serves both self-serve small businesses and agencies operating many client sites.
 
-It includes:
+Every feature must be reachable through **UI, HTTP API, and MCP tools at parity** (ADR 0005).
 
-- `apps/web` — **Next.js 15 + App Router** marketing site with Tailwind CSS v4, dark/light mode, MDX blog, portfolio, services, and contact page
-- `apps/api` — **Express.js API** with security middleware, rate limiting, health checks, and contact form delivery
-- `apps/cron` — **Node cron microservice** for scheduled tasks and IndexNow sitemap submission
-- `packages/ui` — shared shadcn-style UI building blocks for future reuse
-- `packages/config` and `packages/eslint-config` — shared TypeScript, Tailwind, and ESLint setup
-
-> The web app is intentionally **runtime self-contained** so it can be handed off or deployed independently without coupling to shared workspace code.
+> Origin: this repo was bootstrapped from a client-website starter (`apps/web`, `apps/api`, `apps/cron`). The 12–18 month roadmap in `docs/plans/` evolves it into the full platform.
 
 ---
 
-## Project structure
+## Repo layout
 
-```txt
-my-client-websites/
-├── apps/
-│   ├── web/
-│   ├── api/
-│   └── cron/
-├── packages/
-│   ├── ui/
-│   ├── config/
-│   └── eslint-config/
-├── turbo.json
-├── package.json
-└── README.md
+```
+apps/
+  web/            Renderer — Next.js 15 marketing/client-site renderer
+  api/            (legacy) Express contact API — deprecated, removed in Phase 3
+  cron/           (legacy) node-cron IndexNow — subsumed by apps/worker in Phase 2
+  admin/          Authoring UI (Next.js 15)              [scaffolded]
+  platform-api/   Primary HTTP + tRPC API (Hono)         [scaffolded]
+  worker/         BullMQ worker                          [scaffolded]
+  mcp/            MCP server (HTTP tools endpoint)       [scaffolded]
+  docs/           Nextra docs site                       [scaffolded]
+packages/
+  ui/             Shared UI primitives (shadcn-style)
+  config/         tsconfig + tailwind + env helpers
+  eslint-config/  Shared ESLint config
+  schemas/        Zod schemas — single source of truth   [scaffolded]
+  core/           Domain services (parity invariant)     [scaffolded]
+  db/             Postgres + Drizzle                     [scaffolded]
+  sdk/            Typed client for the API               [scaffolded]
+  auth/           Auth adapter (WorkOS / Clerk / mock)   [scaffolded]
+  billing/        Stripe + entitlements                  [scaffolded]
+  ai/             Model adapters + prompts               [scaffolded]
+  search/         Hybrid BM25 + vector search            [scaffolded]
+  flags/          OpenFeature wrapper                    [scaffolded]
+  observability/  Logger, tracer, AppError taxonomy      [scaffolded]
+  renderer-blocks/ Page-builder blocks                   [scaffolded]
+  test-utils/     Shared fixtures                        [scaffolded]
+  cli/            `platform` CLI                         [scaffolded]
+infra/            docker-compose for local Postgres + Redis + MinIO, perf budget, SLOs
+docs/
+  plans/          Roadmap + per-phase plans
+  adr/            Architecture Decision Records
+  brainstorms/    Feature-level requirements seeds
+  runbooks/       On-call playbooks
+  solutions/      Institutional memory
+scripts/
+  verify-parity.ts     CI lint for ADR 0005
+  generate-openapi.ts  Stub; full in Phase 1 Unit 1.6
 ```
 
 ---
 
 ## Quick start
 
-### 1) Install dependencies
-
 ```bash
 pnpm install
-```
-
-### 2) Copy env values
-
-```bash
 cp .env.example .env
-cp apps/web/.env.example apps/web/.env.local
-cp apps/api/.env.example apps/api/.env
-cp apps/cron/.env.example apps/cron/.env
+cp apps/platform-api/.env.example apps/platform-api/.env
+cp apps/worker/.env.example apps/worker/.env
+cp apps/mcp/.env.example apps/mcp/.env
+cp apps/admin/.env.example apps/admin/.env.local
+pnpm db:up                 # Postgres + Redis + MinIO via docker compose
+pnpm -F @repo/db db:generate
+pnpm db:migrate
+pnpm db:seed
+pnpm dev                   # all apps in parallel
 ```
 
-### 3) Start everything in parallel
+Default ports:
+
+| Service       | URL                   |
+| ------------- | --------------------- |
+| renderer      | http://localhost:3000 |
+| admin         | http://localhost:4000 |
+| platform-api  | http://localhost:4100 |
+| mcp           | http://localhost:4200 |
+| docs          | http://localhost:4300 |
+| postgres      | localhost:5432        |
+| redis         | localhost:6379        |
+| minio console | http://localhost:9001 |
+
+Third-party credentials (WorkOS/Clerk, Stripe, Resend, Anthropic, etc.) are optional in dev: apps boot with placeholder-safe defaults and fall back to dry-run or mock behavior until real keys are supplied.
+
+---
+
+## Verify
 
 ```bash
-pnpm dev
-# or
-pnpm turbo run dev
-```
-
-This starts:
-
-- Web: `http://localhost:3000`
-- API: `http://localhost:4000`
-- Cron worker: scheduled every 30 minutes by default
-
-### Build for production
-
-```bash
-pnpm build
-```
-
-### Other useful commands
-
-```bash
-pnpm lint
 pnpm typecheck
+pnpm lint
 pnpm test
+pnpm build
+pnpm parity:check
 ```
 
 ---
 
-## What’s included
+## Roadmap
 
-### `apps/web`
+Full strategic roadmap: [`docs/plans/2026-04-18-001-feat-agent-native-platform-roadmap-plan.md`](docs/plans/2026-04-18-001-feat-agent-native-platform-roadmap-plan.md).
 
-- Next.js 15 App Router + React 19
-- Mobile-first responsive UI
-- Tailwind CSS v4 styling
-- shadcn-style components and theme toggle
-- Home, About, Services, Portfolio, Blog, Contact pages
-- MDX blog with dynamic routes: `/blog/[slug]`
-- `loading.tsx`, `not-found.tsx`, metadata, OpenGraph image, `robots.ts`, and `sitemap.ts`
-- Framer Motion animations and polished gradients
+Phase plans:
 
-**Demo content lives in:** `apps/web/lib/site-data.ts`
-
-### `apps/api`
-
-- Express REST API under `/api/*`
-- `GET /api/health`
-- `POST /api/contact`
-- `helmet`, `cors`, `morgan`, `body-parser`, and `express-rate-limit`
-- Resend / SMTP / log-only fallback for contact emails
-- Exported serverless entry for Vercel in `apps/api/api/index.ts`
-
-### `apps/cron`
-
-- `node-cron` scheduler
-- IndexNow sitemap submission every 30 minutes (configurable)
-- Detects sitemap changes using a hash file
-- Logs to stdout and `logs/indexnow.log`
-- Safe dry-run mode when `INDEXNOW_KEY` is not configured
+- [Phase 1 — Multi-tenancy, auth, API shell](docs/plans/2026-04-18-002-feat-phase-1-multitenancy-auth-plan.md)
+- [Phase 2 — Builder, CMS, media, MCP, webhooks](docs/plans/2026-04-18-003-feat-phase-2-builder-cms-mcp-plan.md)
+- [Phase 3 — Billing, forms, analytics, legacy sunset](docs/plans/2026-04-18-004-feat-phase-3-billing-analytics-plan.md)
+- [Phase 4 — AI differentiators](docs/plans/2026-04-18-005-feat-phase-4-ai-differentiators-plan.md)
+- [Phase 5 — Agency layer + polish](docs/plans/2026-04-18-006-feat-phase-5-agency-polish-plan.md)
+- [Phase 6 — Ecosystem, compliance, GTM](docs/plans/2026-04-18-007-feat-phase-6-ecosystem-compliance-plan.md)
 
 ---
 
-## Deployment guide
+## Core principles
 
-### Web → Vercel
-
-1. Create a new Vercel project.
-2. Set the **root directory** to `apps/web`.
-3. Add `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_API_URL`.
-4. Deploy.
-
-### API → Vercel
-
-1. Create a second Vercel project.
-2. Set the **root directory** to `apps/api`.
-3. Add API env variables from `apps/api/.env.example`.
-4. Deploy — Vercel uses the `api/index.ts` serverless handler.
-
-### Cron → Railway / Render / Docker / PM2
-
-Use `apps/cron/Dockerfile` or run:
-
-```bash
-pnpm --filter cron build
-pnpm --filter cron start
-```
-
-Set:
-
-- `SITEMAP_URL`
-- `INDEXNOW_HOST`
-- `INDEXNOW_KEY`
-- `INDEXNOW_KEY_LOCATION`
-- `CRON_SCHEDULE`
-
----
-
-## Client customization workflow
-
-For a new client, update these first:
-
-1. `apps/web/lib/site-data.ts` — brand name, nav, services, testimonials, projects
-2. `apps/web/content/posts/*.mdx` — publish niche-specific articles
-3. `apps/web/app/layout.tsx` — metadata and schema defaults
-4. `apps/web/app/globals.css` — color mood and theme tokens
-5. `apps/api/.env` — contact delivery provider settings
-
----
-
-## Notes
-
-- Husky pre-commit hooks run `lint-staged`.
-- Vitest is configured for API tests.
-- Dockerfiles are included for all three apps.
-- `packages/ui` is ready for future shared component extraction as your monorepo grows.
+- **Agent parity invariant** — ADR 0005. Enforced by `scripts/verify-parity.ts` in CI.
+- **Contract-first** — ADR 0004. `packages/schemas` is the single source of truth; OpenAPI, SDK, MCP manifest, and webhook payloads are generated.
+- **Tenant isolation at the DB** — Drizzle + Postgres RLS. Handlers cannot bypass.
+- **Safe-by-default** — missing third-party creds degrade to dry-run or mock, never crash at boot.

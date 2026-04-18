@@ -20,6 +20,7 @@ const csp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  transpilePackages: ["@repo/renderer-blocks", "@repo/schemas"],
   poweredByHeader: false,
   compress: true,
   outputFileTracingRoot: path.join(process.cwd(), "../.."),

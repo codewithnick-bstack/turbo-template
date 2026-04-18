@@ -1,0 +1,23 @@
+{
+  "name": "@repo/renderer-blocks",
+  "private": true,
+  "version": "0.1.0",
+  "main": "./src/index.tsx",
+  "types": "./src/index.tsx",
+  "exports": {
+    ".": "./src/index.tsx"
+  },
+  "scripts": {
+    "build": "echo 'renderer-blocks ready'",
+    "lint": "eslint src --max-warnings 0",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@repo/schemas": "workspace:*",
+    "@repo/ui": "workspace:*"
+  }
+}

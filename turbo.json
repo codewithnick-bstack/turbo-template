@@ -1,5 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    ".env",
+    "tsconfig.json",
+    "packages/config/tsconfig/**"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -18,6 +23,18 @@
     "test": {
       "dependsOn": ["^build"],
       "outputs": ["coverage/**"]
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false
+    },
+    "db:seed": {
+      "cache": false
+    },
+    "generate:openapi": {
+      "outputs": ["packages/sdk/generated/**"]
     }
   }
 }

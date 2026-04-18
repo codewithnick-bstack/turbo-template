@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #0b0d10;
+    --muted-foreground: #6b7280;
+    --primary: #111827;
+    --primary-foreground: #ffffff;
+    --border: #e5e7eb;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #0b0d10;
+      --foreground: #f3f4f6;
+      --muted-foreground: #9ca3af;
+      --primary: #f3f4f6;
+      --primary-foreground: #0b0d10;
+      --border: #1f2937;
+    }
+  }
+}
