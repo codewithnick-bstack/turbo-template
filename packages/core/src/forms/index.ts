@@ -108,6 +108,42 @@ export async function listForms(ctx: ServiceContext, filter: { siteId: string })
     .orderBy(desc(schema.forms.createdAt));
 }
 
+export async function getForm(ctx: ServiceContext, id: string) {
+  const [row] = await ctx.db
+    .select()
+    .from(schema.forms)
+    .where(and(eq(schema.forms.id, id), eq(schema.forms.tenantId, ctx.tenantId)))
+    .limit(1);
+  if (!row) throw new AppError("not_found", `form not found: ${id}`);
+  return row;
+}
+
+export async function deleteForm(ctx: ServiceContext, id: string) {
+  const current = await getForm(ctx, id);
+  await ctx.db
+    .delete(schema.forms)
+    .where(and(eq(schema.forms.id, id), eq(schema.forms.tenantId, ctx.tenantId)));
+
+  await recordAudit({
+    db: ctx.db,
+    tenantId: ctx.tenantId,
+    actor: ctx.actor,
+    action: "delete",
+    resourceKind: "form",
+    resourceId: id,
+    before: current as unknown as Record<string, unknown>,
+  });
+
+  await emitEvent({
+    db: ctx.db,
+    tenantId: ctx.tenantId,
+    event: "form.deleted",
+    payload: { formId: id, siteId: current.siteId },
+  });
+
+  return { deleted: id };
+}
+
 export async function submitForm(ctx: ServiceContext, input: unknown) {
   const parsed = SubmitFormInput.parse(input);
 

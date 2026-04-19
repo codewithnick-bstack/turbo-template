@@ -66,6 +66,8 @@ export class PlatformClient {
   forms = {
     list: (siteId: string) => this.request<{ data: unknown[] }>("GET", `/v1/forms?siteId=${siteId}`),
     create: (input: unknown) => this.request<unknown>("POST", "/v1/forms", input),
+    get: (id: string) => this.request<unknown>("GET", `/v1/forms/${id}`),
+    delete: (id: string) => this.request<unknown>("DELETE", `/v1/forms/${id}`),
     submit: (id: string, data: unknown) => this.request<unknown>("POST", `/v1/forms/${id}/submit`, data),
     submissions: (id: string, limit?: number) =>
       this.request<{ data: unknown[] }>("GET", `/v1/forms/${id}/submissions${limit ? `?limit=${limit}` : ""}`),

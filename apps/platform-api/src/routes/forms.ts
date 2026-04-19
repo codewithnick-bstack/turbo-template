@@ -46,6 +46,18 @@ export const formsRoute = new Hono<AuthEnv>()
       return c.json(form, 201);
     } catch (err) { return handleError(err, c); }
   })
+  .get("/:id", async (c) => {
+    try {
+      const form = await Forms.getForm(buildCtx(c), c.req.param("id"));
+      return c.json(form);
+    } catch (err) { return handleError(err, c); }
+  })
+  .delete("/:id", async (c) => {
+    try {
+      const result = await Forms.deleteForm(buildCtx(c), c.req.param("id"));
+      return c.json(result);
+    } catch (err) { return handleError(err, c); }
+  })
   .get("/:id/submissions", async (c) => {
     try {
       const limit = c.req.query("limit") ? Number(c.req.query("limit")) : undefined;

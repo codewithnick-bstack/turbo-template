@@ -259,6 +259,17 @@ export const toolDefinitions: ToolDef[] = [
     },
   },
   {
+    name: "delete_form",
+    description: "Permanently delete a form and all its submissions. Requires approval.",
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    annotations: { destructive: true, requiresApproval: true },
+    handler: (input, ctx) => clientFor(ctx).forms.delete((input as { id: string }).id),
+  },
+  {
     name: "list_form_submissions",
     description: "List submissions for a form.",
     inputSchema: {

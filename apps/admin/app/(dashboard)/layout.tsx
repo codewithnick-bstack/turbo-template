@@ -22,7 +22,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex min-h-dvh">
       <aside className="w-56 shrink-0 border-r border-[var(--border)] bg-[var(--background)] px-4 py-6">
-        <Link href="/sites">
+        <Link href="/">
           <p className="mb-6 text-sm font-bold tracking-tight text-[var(--foreground)]">Platform</p>
         </Link>
         <nav className="space-y-4 text-sm">

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getApiClient } from "../../../../../lib/api";
 import NewFormClient from "./new-form-client";
+import { DeleteFormButton } from "./form-actions";
 
 type Form = { id: string; name: string; fields: unknown[]; captcha: boolean; createdAt: string };
 
@@ -34,12 +35,15 @@ export default async function SiteFormsPage({ params }: { params: Promise<{ id: 
                   {f.captcha ? " · captcha enabled" : ""}
                 </p>
               </div>
-              <Link
-                href={`/sites/${siteId}/forms/${f.id}/submissions`}
-                className="text-xs text-blue-600 hover:underline"
-              >
-                View submissions
-              </Link>
+              <div className="flex items-center gap-3">
+                <Link
+                  href={`/sites/${siteId}/forms/${f.id}/submissions`}
+                  className="text-xs text-blue-600 hover:underline"
+                >
+                  Submissions
+                </Link>
+                <DeleteFormButton formId={f.id} />
+              </div>
             </div>
           ))}
         </div>
