@@ -696,4 +696,91 @@ export const toolDefinitions: ToolDef[] = [
     },
     handler: (input, ctx) => clientFor(ctx).branding.update(input),
   },
+
+  // ── Invite acceptance ─────────────────────────────────────────────────
+  {
+    name: "get_invite_info",
+    description: "Look up an invite by token to see email, role, and expiry.",
+    inputSchema: {
+      type: "object",
+      required: ["token"],
+      properties: { token: { type: "string" } },
+    },
+    handler: (input, ctx) => clientFor(ctx).members.getInviteInfo((input as { token: string }).token),
+  },
+  {
+    name: "accept_invite",
+    description: "Accept a team invitation using the invite token.",
+    inputSchema: {
+      type: "object",
+      required: ["token"],
+      properties: {
+        token: { type: "string" },
+        name: { type: "string", description: "Invitee's display name" },
+      },
+    },
+    handler: (input, ctx) => {
+      const { token, name } = input as { token: string; name?: string };
+      return clientFor(ctx).members.acceptInvite(token, name);
+    },
+  },
+
+  // ── Collections & Entries ─────────────────────────────────────────────
+  {
+    name: "list_collections",
+    description: "List content collections for a site.",
+    inputSchema: {
+      type: "object",
+      required: ["siteId"],
+      properties: { siteId: { type: "string" } },
+    },
+    handler: (input, ctx) => clientFor(ctx).collections.list((input as { siteId: string }).siteId),
+  },
+  {
+    name: "create_collection",
+    description: "Create a new content collection (content type) with typed fields.",
+    inputSchema: {
+      type: "object",
+      required: ["siteId", "name", "slug", "fields"],
+      properties: {
+        siteId: { type: "string" },
+        name: { type: "string" },
+        slug: { type: "string" },
+        fields: { type: "array", items: { type: "object" } },
+      },
+    },
+    handler: (input, ctx) => clientFor(ctx).collections.create(input),
+  },
+  {
+    name: "list_entries",
+    description: "List entries in a collection.",
+    inputSchema: {
+      type: "object",
+      required: ["collectionId"],
+      properties: {
+        collectionId: { type: "string" },
+        status: { type: "string", enum: ["draft", "published"] },
+      },
+    },
+    handler: (input, ctx) => {
+      const { collectionId, status } = input as { collectionId: string; status?: "draft" | "published" };
+      return clientFor(ctx).entries.list(collectionId, status);
+    },
+  },
+  {
+    name: "create_entry",
+    description: "Create a new content entry in a collection.",
+    inputSchema: {
+      type: "object",
+      required: ["collectionId", "slug", "data"],
+      properties: {
+        collectionId: { type: "string" },
+        slug: { type: "string" },
+        locale: { type: "string", default: "en" },
+        data: { type: "object" },
+        status: { type: "string", enum: ["draft", "published"] },
+      },
+    },
+    handler: (input, ctx) => clientFor(ctx).entries.create(input),
+  },
 ];

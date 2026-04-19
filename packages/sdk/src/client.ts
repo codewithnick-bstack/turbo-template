@@ -155,6 +155,10 @@ export class PlatformClient {
       this.request<unknown>("PATCH", `/v1/members/${userId}`, { role }),
     listInvites: () => this.request<{ data: unknown[] }>("GET", "/v1/members/invites"),
     revokeInvite: (id: string) => this.request<unknown>("DELETE", `/v1/members/invites/${id}`),
+    getInviteInfo: (token: string) =>
+      this.request<unknown>("GET", `/v1/members/invite/info?token=${encodeURIComponent(token)}`),
+    acceptInvite: (token: string, name?: string) =>
+      this.request<unknown>("POST", "/v1/members/invite/accept", { token, name }),
   };
 
   branding = {
