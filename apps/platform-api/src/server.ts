@@ -23,6 +23,7 @@ import { membersRoute } from "./routes/members";
 import { brandingRoute } from "./routes/branding";
 import { templatesRoute } from "./routes/templates";
 import { auditRoute } from "./routes/audit";
+import { apiKeysRoute } from "./routes/api-keys";
 
 export function buildServer() {
   const app = new Hono();
@@ -60,6 +61,7 @@ export function buildServer() {
   app.route("/v1/branding", brandingRoute);
   app.route("/v1/templates", templatesRoute);
   app.route("/v1/audit", auditRoute);
+  app.route("/v1/api-keys", apiKeysRoute);
 
   app.onError((err, c) => {
     if (isAppError(err)) {

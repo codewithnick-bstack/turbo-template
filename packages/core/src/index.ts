@@ -13,6 +13,7 @@ export * as AI from "./ai";
 export * as Members from "./members";
 export * as Branding from "./branding";
 export * as Templates from "./templates";
+export * as ApiKeys from "./api-keys";
 export { defineContract, type ParityContract } from "./parity";
 export type { ServiceContext, Actor } from "./context";
 export { AppError, isAppError } from "./errors";

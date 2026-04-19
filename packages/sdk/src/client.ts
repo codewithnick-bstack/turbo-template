@@ -48,6 +48,7 @@ export class PlatformClient {
     create: (input: unknown) => this.request<unknown>("POST", "/v1/sites", input),
     get: (id: string) => this.request<unknown>("GET", `/v1/sites/${id}`),
     update: (id: string, input: unknown) => this.request<unknown>("PATCH", `/v1/sites/${id}`, input),
+    delete: (id: string) => this.request<unknown>("DELETE", `/v1/sites/${id}`),
     bindDomain: (id: string, hostname: string) =>
       this.request<unknown>("POST", `/v1/sites/${id}/domain`, { hostname }),
   };
@@ -72,9 +73,16 @@ export class PlatformClient {
   webhooks = {
     listSubscriptions: () => this.request<{ data: unknown[] }>("GET", "/v1/webhooks/subscriptions"),
     subscribe: (input: unknown) => this.request<unknown>("POST", "/v1/webhooks/subscriptions", input),
+    unsubscribe: (id: string) => this.request<unknown>("DELETE", `/v1/webhooks/subscriptions/${id}`),
     listDeliveries: (limit?: number) =>
       this.request<{ data: unknown[] }>("GET", `/v1/webhooks/deliveries${limit ? `?limit=${limit}` : ""}`),
     replay: (input: unknown) => this.request<unknown>("POST", "/v1/webhooks/replay", input),
+  };
+
+  apiKeys = {
+    list: () => this.request<{ data: unknown[] }>("GET", "/v1/api-keys"),
+    create: (input: { name: string; scopes?: string[] }) => this.request<unknown>("POST", "/v1/api-keys", input),
+    revoke: (id: string) => this.request<unknown>("DELETE", `/v1/api-keys/${id}`),
   };
 
   billing = {

@@ -179,6 +179,32 @@ export async function updateSite(ctx: ServiceContext, input: unknown): Promise<T
   return toSite(row);
 }
 
+export async function deleteSite(ctx: ServiceContext, id: string) {
+  const site = await getSite(ctx, id);
+  await ctx.db
+    .delete(schema.sites)
+    .where(and(eq(schema.sites.id, site.id), eq(schema.sites.tenantId, ctx.tenantId)));
+
+  await recordAudit({
+    db: ctx.db,
+    tenantId: ctx.tenantId,
+    actor: ctx.actor,
+    action: "delete",
+    resourceKind: "site",
+    resourceId: site.id,
+    before: site as unknown as Record<string, unknown>,
+  });
+
+  await emitEvent({
+    db: ctx.db,
+    tenantId: ctx.tenantId,
+    event: "site.deleted",
+    payload: { siteId: site.id },
+  });
+
+  return { deleted: site.id };
+}
+
 export async function bindDomain(
   ctx: ServiceContext,
   input: { siteId: string; hostname: string },

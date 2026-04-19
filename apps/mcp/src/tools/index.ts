@@ -800,4 +800,64 @@ export const toolDefinitions: ToolDef[] = [
     },
     handler: (input, ctx) => clientFor(ctx).audit.list(input as { limit?: number; offset?: number; resourceKind?: string; since?: string }),
   },
+
+  // ── API Keys ──────────────────────────────────────────────────────────
+  {
+    name: "list_api_keys",
+    description: "List active API keys for the tenant.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    handler: (_input, ctx) => clientFor(ctx).apiKeys.list(),
+  },
+  {
+    name: "create_api_key",
+    description: "Create a new API key for programmatic or agent access. Returns the plaintext key — save it immediately.",
+    annotations: { requiresConfirmation: true },
+    inputSchema: {
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: { type: "string", description: "Human-readable name for the key (e.g. CI deploy, n8n agent)" },
+        scopes: { type: "array", items: { type: "string" }, description: "Optional scope restrictions" },
+      },
+    },
+    handler: (input, ctx) => clientFor(ctx).apiKeys.create(input as { name: string; scopes?: string[] }),
+  },
+  {
+    name: "revoke_api_key",
+    description: "Permanently revoke an API key.",
+    annotations: { requiresConfirmation: true, destructiveHint: true },
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    handler: (input, ctx) => clientFor(ctx).apiKeys.revoke((input as { id: string }).id),
+  },
+
+  // ── Webhook management ────────────────────────────────────────────────
+  {
+    name: "delete_webhook_subscription",
+    description: "Delete a webhook subscription by ID.",
+    annotations: { requiresConfirmation: true, destructiveHint: true },
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    handler: (input, ctx) => clientFor(ctx).webhooks.unsubscribe((input as { id: string }).id),
+  },
+
+  // ── Site management ───────────────────────────────────────────────────
+  {
+    name: "delete_site",
+    description: "Permanently delete a site and all its content (pages, blog posts, forms, collections).",
+    annotations: { requiresConfirmation: true, destructiveHint: true },
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    handler: (input, ctx) => clientFor(ctx).sites.delete((input as { id: string }).id),
+  },
 ];

@@ -26,6 +26,12 @@ export const webhooksRoute = new Hono<AuthEnv>()
       return c.json({ data });
     } catch (err) { return handleError(err, c); }
   })
+  .delete("/subscriptions/:id", async (c) => {
+    try {
+      const result = await Webhooks.unsubscribeWebhook(buildCtx(c), c.req.param("id"));
+      return c.json(result);
+    } catch (err) { return handleError(err, c); }
+  })
   .post("/replay", async (c) => {
     try {
       const body = await c.req.json();

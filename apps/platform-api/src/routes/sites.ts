@@ -41,6 +41,12 @@ export const sitesRoute = new Hono<AuthEnv>()
       return c.json(site);
     } catch (err) { return handleError(err, c); }
   })
+  .delete("/:id", async (c) => {
+    try {
+      const result = await Sites.deleteSite(buildCtx(c), c.req.param("id"));
+      return c.json(result);
+    } catch (err) { return handleError(err, c); }
+  })
   .post("/:id/domain", async (c) => {
     try {
       const { hostname } = await c.req.json<{ hostname: string }>();

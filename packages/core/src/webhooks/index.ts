@@ -63,6 +63,27 @@ export async function subscribeWebhook(ctx: ServiceContext, input: unknown) {
   return row;
 }
 
+export const unsubscribeWebhookContract = defineContract({
+  operation: "webhooks.unsubscribe",
+  description: "Delete a webhook subscription.",
+  http: { method: "DELETE", path: "/v1/webhooks/subscriptions/:id" },
+  mcp: { tool: "delete_webhook_subscription", requiresApproval: true },
+});
+
+export async function unsubscribeWebhook(ctx: ServiceContext, id: string) {
+  const [row] = await ctx.db
+    .delete(schema.webhookSubscriptions)
+    .where(
+      and(
+        eq(schema.webhookSubscriptions.id, id),
+        eq(schema.webhookSubscriptions.tenantId, ctx.tenantId),
+      ),
+    )
+    .returning({ id: schema.webhookSubscriptions.id });
+  if (!row) throw new AppError("not_found", "Subscription not found", 404);
+  return { deleted: row.id };
+}
+
 export async function listWebhooks(ctx: ServiceContext) {
   return ctx.db
     .select()

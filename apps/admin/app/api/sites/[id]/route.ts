@@ -15,3 +15,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const site = await api.sites.update(id, body);
   return NextResponse.json(site);
 }
+
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const api = getApiClient();
+  await api.sites.delete(id);
+  return NextResponse.json({ ok: true });
+}

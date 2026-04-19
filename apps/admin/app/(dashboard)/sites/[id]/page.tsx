@@ -40,6 +40,7 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
         <Link href={`/sites/${id}/forms`} className="text-sm text-blue-600 hover:underline">Forms</Link>
         <Link href={`/sites/${id}/assistant`} className="text-sm text-blue-600 hover:underline">AI Assistant</Link>
         <Link href={`/sites/${id}/seo`} className="text-sm text-blue-600 hover:underline">SEO</Link>
+        <Link href={`/sites/${id}/settings`} className="text-sm text-[var(--muted-foreground)] hover:underline">Settings</Link>
       </div>
 
       <div className="mt-8 flex items-center justify-between">

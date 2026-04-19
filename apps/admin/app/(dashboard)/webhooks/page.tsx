@@ -54,11 +54,24 @@ export default function WebhooksPage() {
           <h2 className="text-sm font-semibold mb-3">Active subscriptions</h2>
           <div className="space-y-2">
             {subscriptions.map((s) => (
-              <div key={s.id} className="border border-[var(--border)] rounded-xl px-4 py-3">
-                <p className="text-sm font-medium font-mono truncate">{s.url}</p>
-                <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-                  {s.events.join(", ")}
-                </p>
+              <div key={s.id} className="border border-[var(--border)] rounded-xl px-4 py-3 flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-sm font-medium font-mono truncate">{s.url}</p>
+                  <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+                    {s.events.join(", ")}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!confirm("Delete this subscription?")) return;
+                    await fetch(`/api/webhooks/subscriptions/${s.id}`, { method: "DELETE" });
+                    setSubscriptions((prev) => prev.filter((x) => x.id !== s.id));
+                  }}
+                  className="text-xs text-red-500 hover:underline shrink-0"
+                >
+                  Delete
+                </button>
               </div>
             ))}
           </div>
