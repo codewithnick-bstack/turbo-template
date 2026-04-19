@@ -22,6 +22,7 @@ import { blogRoute } from "./routes/blog";
 import { membersRoute } from "./routes/members";
 import { brandingRoute } from "./routes/branding";
 import { templatesRoute } from "./routes/templates";
+import { auditRoute } from "./routes/audit";
 
 export function buildServer() {
   const app = new Hono();
@@ -58,6 +59,7 @@ export function buildServer() {
   app.route("/v1/members", membersRoute);
   app.route("/v1/branding", brandingRoute);
   app.route("/v1/templates", templatesRoute);
+  app.route("/v1/audit", auditRoute);
 
   app.onError((err, c) => {
     if (isAppError(err)) {

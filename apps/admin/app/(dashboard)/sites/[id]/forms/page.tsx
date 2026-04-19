@@ -34,7 +34,12 @@ export default async function SiteFormsPage({ params }: { params: Promise<{ id: 
                   {f.captcha ? " · captcha enabled" : ""}
                 </p>
               </div>
-              <code className="text-xs bg-neutral-100 px-2 py-1 rounded">{f.id}</code>
+              <Link
+                href={`/sites/${siteId}/forms/${f.id}/submissions`}
+                className="text-xs text-blue-600 hover:underline"
+              >
+                View submissions
+              </Link>
             </div>
           ))}
         </div>

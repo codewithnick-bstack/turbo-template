@@ -196,4 +196,19 @@ export class PlatformClient {
         { pageId },
       ),
   };
+
+  audit = {
+    list: (opts?: { limit?: number; offset?: number; resourceKind?: string; since?: string }) => {
+      const params = new URLSearchParams();
+      if (opts?.limit) params.set("limit", String(opts.limit));
+      if (opts?.offset) params.set("offset", String(opts.offset));
+      if (opts?.resourceKind) params.set("resourceKind", opts.resourceKind);
+      if (opts?.since) params.set("since", opts.since);
+      const qs = params.toString();
+      return this.request<{ data: unknown[]; limit: number; offset: number }>(
+        "GET",
+        `/v1/audit${qs ? `?${qs}` : ""}`,
+      );
+    },
+  };
 }

@@ -13,6 +13,7 @@ const NAV = [
     { href: "/settings/billing", label: "Billing" },
     { href: "/settings/compliance", label: "Compliance" },
     { href: "/webhooks", label: "Webhooks" },
+    { href: "/settings/audit-log", label: "Audit Log" },
   ]},
 ];
 

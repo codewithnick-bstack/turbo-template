@@ -783,4 +783,21 @@ export const toolDefinitions: ToolDef[] = [
     },
     handler: (input, ctx) => clientFor(ctx).entries.create(input),
   },
+
+  // ── Audit Log ─────────────────────────────────────────────────────────
+  {
+    name: "list_audit_log",
+    description: "List audit log entries for the tenant, newest first.",
+    annotations: { readOnlyHint: true },
+    inputSchema: {
+      type: "object",
+      properties: {
+        limit: { type: "number", description: "Max entries (default 50, max 200)" },
+        offset: { type: "number" },
+        resourceKind: { type: "string", description: "Filter by resource type (e.g. page, blog_post)" },
+        since: { type: "string", description: "ISO 8601 timestamp — only entries after this date" },
+      },
+    },
+    handler: (input, ctx) => clientFor(ctx).audit.list(input as { limit?: number; offset?: number; resourceKind?: string; since?: string }),
+  },
 ];
