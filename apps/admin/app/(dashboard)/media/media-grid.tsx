@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 type MediaItem = { id: string; originalFilename: string; mimeType: string; sizeBytes: number; kind: string; createdAt: string };
 
@@ -16,8 +17,14 @@ export function MediaGrid({ initialItems }: { initialItems: MediaItem[] }) {
 
   async function handleDelete(id: string, filename: string) {
     if (!confirm(`Delete "${filename}"?`)) return;
-    await fetch(`/api/media/${id}`, { method: "DELETE" });
-    setItems((prev) => prev.filter((i) => i.id !== id));
+    try {
+      const res = await fetch(`/api/media/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      setItems((prev) => prev.filter((i) => i.id !== id));
+      toast.success(`${filename} deleted`);
+    } catch {
+      toast.error("Failed to delete file");
+    }
   }
 
   return (

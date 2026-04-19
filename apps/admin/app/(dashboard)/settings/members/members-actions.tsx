@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function RemoveMemberButton({ userId }: { userId: string }) {
   const router = useRouter();
@@ -10,9 +11,16 @@ export function RemoveMemberButton({ userId }: { userId: string }) {
   async function handle() {
     if (!confirm("Remove this member from the workspace?")) return;
     setLoading(true);
-    await fetch(`/api/members/${userId}`, { method: "DELETE" });
-    router.refresh();
-    setLoading(false);
+    try {
+      const res = await fetch(`/api/members/${userId}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      toast.success("Member removed");
+      router.refresh();
+    } catch {
+      toast.error("Failed to remove member");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -33,9 +41,16 @@ export function RevokeInviteButton({ inviteId }: { inviteId: string }) {
   async function handle() {
     if (!confirm("Revoke this invitation?")) return;
     setLoading(true);
-    await fetch(`/api/members/invites/${inviteId}`, { method: "DELETE" });
-    router.refresh();
-    setLoading(false);
+    try {
+      const res = await fetch(`/api/members/invites/${inviteId}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      toast.success("Invitation revoked");
+      router.refresh();
+    } catch {
+      toast.error("Failed to revoke invite");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

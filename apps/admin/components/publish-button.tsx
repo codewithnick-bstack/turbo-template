@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function PublishButton({ pageId, status }: { pageId: string; status: string }) {
   const router = useRouter();
@@ -15,8 +16,12 @@ export function PublishButton({ pageId, status }: { pageId: string; status: stri
       const endpoint = isPublished
         ? `/api/pages/${pageId}/unpublish`
         : `/api/pages/${pageId}/publish`;
-      await fetch(endpoint, { method: "POST" });
+      const res = await fetch(endpoint, { method: "POST" });
+      if (!res.ok) throw new Error();
+      toast.success(isPublished ? "Page unpublished" : "Page published");
       router.refresh();
+    } catch {
+      toast.error(isPublished ? "Failed to unpublish" : "Failed to publish");
     } finally {
       setLoading(false);
     }
@@ -26,8 +31,12 @@ export function PublishButton({ pageId, status }: { pageId: string; status: stri
     if (!confirm("Delete this page? This cannot be undone.")) return;
     setLoading(true);
     try {
-      await fetch(`/api/pages/${pageId}`, { method: "DELETE" });
+      const res = await fetch(`/api/pages/${pageId}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      toast.success("Page deleted");
       router.refresh();
+    } catch {
+      toast.error("Failed to delete page");
     } finally {
       setLoading(false);
     }

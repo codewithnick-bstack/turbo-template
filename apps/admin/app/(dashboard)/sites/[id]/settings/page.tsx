@@ -3,6 +3,7 @@
 import { useState, use, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
 
 type Site = { id: string; name: string; slug: string; primaryDomain: string | null };
 
@@ -15,11 +16,8 @@ export default function SiteSettingsPage({ params }: { params: Promise<{ id: str
   const [slug, setSlug] = useState("");
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [saved, setSaved] = useState(false);
   const [domain, setDomain] = useState("");
   const [bindingDomain, setBindingDomain] = useState(false);
-  const [domainMsg, setDomainMsg] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`/api/sites/${id}`)
@@ -29,13 +27,12 @@ export default function SiteSettingsPage({ params }: { params: Promise<{ id: str
         setName(s.name ?? "");
         setSlug(s.slug ?? "");
       })
-      .catch(() => setError("Failed to load site"));
+      .catch(() => toast.error("Failed to load site"));
   }, [id]);
 
   async function handleBindDomain(e: React.FormEvent) {
     e.preventDefault();
     setBindingDomain(true);
-    setDomainMsg(null);
     try {
       const res = await fetch(`/api/sites/${id}/domain`, {
         method: "POST",
@@ -46,10 +43,11 @@ export default function SiteSettingsPage({ params }: { params: Promise<{ id: str
         const err = (await res.json()) as { message?: string };
         throw new Error(err.message ?? "Failed to bind domain");
       }
-      setDomainMsg(`Domain "${domain}" binding initiated. Add a CNAME to your DNS.`);
+      toast.success(`Domain "${domain}" binding initiated. Add a CNAME to your DNS.`);
       setDomain("");
+      router.refresh();
     } catch (err) {
-      setDomainMsg(err instanceof Error ? err.message : "Unknown error");
+      toast.error(err instanceof Error ? err.message : "Domain binding failed");
     } finally {
       setBindingDomain(false);
     }
@@ -58,8 +56,6 @@ export default function SiteSettingsPage({ params }: { params: Promise<{ id: str
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
-    setError(null);
-    setSaved(false);
     try {
       const res = await fetch(`/api/sites/${id}`, {
         method: "PATCH",
@@ -70,10 +66,10 @@ export default function SiteSettingsPage({ params }: { params: Promise<{ id: str
         const err = (await res.json()) as { message?: string };
         throw new Error(err.message ?? "Save failed");
       }
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      toast.success("Site settings saved");
+      router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error");
+      toast.error(err instanceof Error ? err.message : "Save failed");
     } finally {
       setSaving(false);
     }
@@ -88,9 +84,10 @@ export default function SiteSettingsPage({ params }: { params: Promise<{ id: str
         const err = (await res.json()) as { message?: string };
         throw new Error(err.message ?? "Delete failed");
       }
+      toast.success("Site deleted");
       router.push("/sites");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error");
+      toast.error(err instanceof Error ? err.message : "Delete failed");
       setDeleting(false);
     }
   }
@@ -104,8 +101,6 @@ export default function SiteSettingsPage({ params }: { params: Promise<{ id: str
         <span className="text-[var(--muted-foreground)]">/</span>
         <h1 className="text-2xl font-bold">Settings</h1>
       </div>
-
-      {error && <div className="mb-4 rounded bg-red-50 px-4 py-2 text-sm text-red-700">{error}</div>}
 
       <form onSubmit={handleSave} className="space-y-4">
         <div>
@@ -131,7 +126,7 @@ export default function SiteSettingsPage({ params }: { params: Promise<{ id: str
           disabled={saving}
           className="rounded bg-[var(--primary)] px-4 py-2 text-sm text-[var(--primary-foreground)] disabled:opacity-50"
         >
-          {saving ? "Saving…" : saved ? "Saved!" : "Save changes"}
+          {saving ? "Saving…" : "Save changes"}
         </button>
       </form>
 
@@ -158,9 +153,6 @@ export default function SiteSettingsPage({ params }: { params: Promise<{ id: str
             {bindingDomain ? "Binding…" : "Bind domain"}
           </button>
         </form>
-        {domainMsg && (
-          <p className="mt-2 text-sm text-[var(--muted-foreground)]">{domainMsg}</p>
-        )}
       </div>
 
       <div className="mt-10 border-t border-red-200 pt-6">

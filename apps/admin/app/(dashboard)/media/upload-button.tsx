@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 function guessKind(mimeType: string): "image" | "video" | "document" {
   if (mimeType.startsWith("image/")) return "image";
@@ -14,12 +15,10 @@ export function UploadButton({ siteId }: { siteId?: string }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState<string>("");
-  const [error, setError] = useState("");
 
   async function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
     setUploading(true);
-    setError("");
 
     for (const file of Array.from(files)) {
       try {
@@ -39,7 +38,6 @@ export function UploadButton({ siteId }: { siteId?: string }) {
           storageKey: string; url: string; method: string; headers: Record<string, string>;
         };
 
-        // Skip actual upload in local dev (stub R2 URL)
         if (!url.includes("local-r2-stub")) {
           setProgress(`Uploading ${file.name}…`);
           const uploadRes = await fetch(url, { method, headers, body: file });
@@ -60,8 +58,9 @@ export function UploadButton({ siteId }: { siteId?: string }) {
           }),
         });
         if (!finalizeRes.ok) throw new Error("Finalize failed");
+        toast.success(`${file.name} uploaded`);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Upload failed");
+        toast.error(err instanceof Error ? err.message : "Upload failed");
         break;
       }
     }
@@ -89,7 +88,6 @@ export function UploadButton({ siteId }: { siteId?: string }) {
       >
         {uploading ? progress || "Uploading…" : "Upload file"}
       </button>
-      {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
     </div>
   );
 }

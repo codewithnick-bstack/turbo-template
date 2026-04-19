@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function BlogPostActions({
   postId,
@@ -16,21 +17,35 @@ export function BlogPostActions({
 
   async function handlePublish() {
     setLoading(true);
-    await fetch(`/api/blog/posts/${postId}`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ action: "publish" }),
-    });
-    router.refresh();
-    setLoading(false);
+    try {
+      const res = await fetch(`/api/blog/posts/${postId}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action: "publish" }),
+      });
+      if (!res.ok) throw new Error();
+      toast.success("Post published");
+      router.refresh();
+    } catch {
+      toast.error("Failed to publish post");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleDelete() {
     if (!confirm("Delete this post? This cannot be undone.")) return;
     setLoading(true);
-    await fetch(`/api/blog/posts/${postId}`, { method: "DELETE" });
-    router.refresh();
-    setLoading(false);
+    try {
+      const res = await fetch(`/api/blog/posts/${postId}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      toast.success("Post deleted");
+      router.refresh();
+    } catch {
+      toast.error("Failed to delete post");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

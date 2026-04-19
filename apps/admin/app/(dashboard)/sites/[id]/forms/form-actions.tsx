@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function DeleteFormButton({ formId }: { formId: string }) {
   const router = useRouter();
@@ -10,9 +11,16 @@ export function DeleteFormButton({ formId }: { formId: string }) {
   async function handleDelete() {
     if (!confirm("Delete this form and all its submissions? This cannot be undone.")) return;
     setLoading(true);
-    await fetch(`/api/forms/${formId}`, { method: "DELETE" });
-    router.refresh();
-    setLoading(false);
+    try {
+      const res = await fetch(`/api/forms/${formId}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      toast.success("Form deleted");
+      router.refresh();
+    } catch {
+      toast.error("Failed to delete form");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
