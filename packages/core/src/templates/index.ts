@@ -97,11 +97,8 @@ export async function useTemplate(ctx: ServiceContext, templateIdOrSlug: string,
   if (existing.length > 0) throw new AppError("conflict", `site slug already exists: ${parsed.slug}`);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [site] = await ctx.db.insert(schema.sites).values({
-    tenantId: ctx.tenantId,
-    slug: parsed.slug,
-    name: parsed.name,
-  } as any).returning();
+  const siteValues = { tenantId: ctx.tenantId, slug: parsed.slug, name: parsed.name } as any;
+  const [site] = await ctx.db.insert(schema.sites).values(siteValues).returning();
   if (!site) throw new AppError("internal", "site insert returned no row");
 
   // Create pages from template tree
@@ -112,14 +109,8 @@ export async function useTemplate(ctx: ServiceContext, templateIdOrSlug: string,
 
   for (const p of pages) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await ctx.db.insert(schema.pages).values({
-      tenantId: ctx.tenantId,
-      siteId: site.id,
-      slug: p.slug ?? "home",
-      title: p.title ?? "Home",
-      locale: "en",
-      content: p.content ?? { version: 1, blocks: [] },
-    } as any);
+    const pageValues = { tenantId: ctx.tenantId, siteId: site.id, slug: p.slug ?? "home", title: p.title ?? "Home", locale: "en", content: p.content ?? { version: 1, blocks: [] } } as any;
+    await ctx.db.insert(schema.pages).values(pageValues);
   }
 
   return { site, templateId: template.id };
@@ -141,10 +132,8 @@ export async function createTemplate(ctx: ServiceContext, input: unknown) {
   const actorId = ctx.actor.kind === "user" ? ctx.actor.userId : undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [row] = await ctx.db.insert(schema.templates).values({
-    ...parsed,
-    createdBy: actorId,
-  } as any).returning();
+  const templateValues = { ...parsed, createdBy: actorId } as any;
+  const [row] = await ctx.db.insert(schema.templates).values(templateValues).returning();
   if (!row) throw new AppError("internal", "template insert returned no row");
   return row;
 }

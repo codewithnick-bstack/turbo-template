@@ -1,5 +1,5 @@
 import { eq, and } from "drizzle-orm";
-import { schema } from "@repo/db";
+import { schema, type Db } from "@repo/db";
 import { AppError } from "@repo/observability";
 import { z } from "zod";
 import { defineContract } from "../parity";
@@ -88,18 +88,11 @@ export async function inviteMember(ctx: ServiceContext, input: unknown) {
     ctx.actor.kind === "user" ? ctx.actor.userId : "00000000-0000-0000-0000-000000000000";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [row] = await ctx.db.insert(schema.invites).values({
-    tenantId: ctx.tenantId,
-    email: parsed.email,
-    role: parsed.role,
-    token,
-    invitedBy: actorId,
-    expiresAt,
-  } as any).returning();
+  const inviteValues = { tenantId: ctx.tenantId, email: parsed.email, role: parsed.role, token, invitedBy: actorId, expiresAt } as any;
+  const [row] = await ctx.db.insert(schema.invites).values(inviteValues).returning();
 
   if (!row) throw new AppError("internal", "invite insert returned no row");
 
-  // TODO: send invite email via Resend in production
   return { id: row.id, email: row.email, role: row.role, token: row.token, expiresAt };
 }
 
@@ -154,4 +147,72 @@ export async function revokeInvite(ctx: ServiceContext, id: string) {
     .returning();
   if (!row) throw new AppError("not_found", `invite not found: ${id}`);
   return { ok: true };
+}
+
+export async function getInviteByToken(db: Db, token: string) {
+  const [invite] = await db
+    .select({
+      id: schema.invites.id,
+      email: schema.invites.email,
+      role: schema.invites.role,
+      tenantId: schema.invites.tenantId,
+      status: schema.invites.status,
+      expiresAt: schema.invites.expiresAt,
+    })
+    .from(schema.invites)
+    .where(eq(schema.invites.token, token))
+    .limit(1);
+  if (!invite) throw new AppError("not_found", "invite not found");
+  return invite;
+}
+
+export async function acceptInvite(db: Db, token: string, name?: string) {
+  const [invite] = await db
+    .select()
+    .from(schema.invites)
+    .where(eq(schema.invites.token, token))
+    .limit(1);
+  if (!invite) throw new AppError("not_found", "invite not found");
+  if (invite.status !== "pending") {
+    throw new AppError("bad_request", `invite is already ${invite.status}`);
+  }
+  if (new Date() > invite.expiresAt) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await db.update(schema.invites).set({ status: "expired" } as any)
+      .where(eq(schema.invites.id, invite.id));
+    throw new AppError("bad_request", "invite has expired");
+  }
+
+  // Upsert user by email
+  const [existing] = await db
+    .select({ id: schema.users.id })
+    .from(schema.users)
+    .where(eq(schema.users.email, invite.email))
+    .limit(1);
+
+  let userId: string;
+  if (existing) {
+    userId = existing.id;
+  } else {
+    const [newUser] = await db
+      .insert(schema.users)
+      .values({ email: invite.email, name: name ?? invite.email.split("@")[0] })
+      .returning();
+    if (!newUser) throw new AppError("internal", "user creation failed");
+    userId = newUser.id;
+  }
+
+  // Create membership (idempotent)
+  await db
+    .insert(schema.memberships)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .values({ userId, tenantId: invite.tenantId, role: invite.role as any })
+    .onConflictDoNothing();
+
+  // Mark invite accepted
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await db.update(schema.invites).set({ status: "accepted", acceptedAt: new Date() } as any)
+    .where(eq(schema.invites.id, invite.id));
+
+  return { tenantId: invite.tenantId, role: invite.role, email: invite.email, userId };
 }
