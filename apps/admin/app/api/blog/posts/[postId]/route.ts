@@ -26,3 +26,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pos
   }
   return NextResponse.json({ code: "bad_request", message: "Unknown action" }, { status: 400 });
 }
+
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
+  const { postId } = await params;
+  const api = getApiClient();
+  await api.blog.deletePost(postId);
+  return NextResponse.json({ ok: true });
+}

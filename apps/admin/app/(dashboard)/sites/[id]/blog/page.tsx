@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getApiClient } from "@/lib/api";
+import { BlogPostActions } from "./blog-post-actions";
 
 type BlogPost = { id: string; title: string; slug: string; status: string; publishedAt: string | null };
 
@@ -42,7 +43,8 @@ export default async function BlogPage({ params }: { params: Promise<{ id: strin
               <th className="pb-2 pr-4">Title</th>
               <th className="pb-2 pr-4">Slug</th>
               <th className="pb-2 pr-4">Status</th>
-              <th className="pb-2">Published</th>
+              <th className="pb-2 pr-4">Published</th>
+              <th className="pb-2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -61,8 +63,11 @@ export default async function BlogPage({ params }: { params: Promise<{ id: strin
                     {post.status}
                   </span>
                 </td>
-                <td className="py-3 text-xs text-[var(--muted-foreground)]">
+                <td className="py-3 pr-4 text-xs text-[var(--muted-foreground)]">
                   {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : "—"}
+                </td>
+                <td className="py-3">
+                  <BlogPostActions postId={post.id} status={post.status} siteId={siteId} />
                 </td>
               </tr>
             ))}
