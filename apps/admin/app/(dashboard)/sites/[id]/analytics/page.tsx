@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { env } from "@/lib/env";
+import { getApiClient } from "../../../../../lib/api";
 
 type AnalyticsData = {
   pageViews: number;
@@ -8,29 +8,16 @@ type AnalyticsData = {
   dailyViews: Array<{ date: string; views: number }>;
 };
 
-async function getAnalytics(siteId: string): Promise<AnalyticsData | null> {
-  try {
-    const res = await fetch(
-      `${env.PLATFORM_API_URL}/v1/analytics?siteId=${siteId}&days=30`,
-      {
-        headers: {
-          "x-tenant-id": env.DEV_TENANT_ID,
-          "x-user-id": env.DEV_USER_ID,
-          "x-role": "owner",
-        },
-        cache: "no-store",
-      },
-    );
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
-    return null;
-  }
-}
-
 export default async function AnalyticsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const data = await getAnalytics(id);
+  const api = getApiClient();
+  let data: AnalyticsData | null = null;
+
+  try {
+    data = await api.analytics.get(id, 30) as AnalyticsData;
+  } catch {
+    // API unavailable or no data yet
+  }
 
   return (
     <div>
@@ -75,6 +62,29 @@ export default async function AnalyticsPage({ params }: { params: Promise<{ id: 
               </table>
             )}
           </div>
+
+          {data.dailyViews.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-lg font-semibold mb-4">Daily Views</h2>
+              <div className="flex items-end gap-1 h-32">
+                {data.dailyViews.map((d, i) => {
+                  const max = Math.max(...data!.dailyViews.map((x) => x.views), 1);
+                  const pct = Math.round((d.views / max) * 100);
+                  return (
+                    <div key={i} className="flex-1 flex flex-col items-center gap-1 group relative">
+                      <div
+                        className="w-full bg-indigo-500 rounded-t"
+                        style={{ height: `${pct}%` }}
+                      />
+                      <span className="hidden group-hover:block absolute -top-6 text-xs bg-black text-white rounded px-1 py-0.5">
+                        {d.views}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

@@ -1,9 +1,7 @@
 import { UseTemplateClient } from "./use-template-client";
+import { getApiClient } from "../../../../../lib/api";
 
 type Props = { params: Promise<{ id: string }> };
-
-const API = process.env.PLATFORM_API_URL ?? "http://localhost:4100";
-const DEV_TENANT = process.env.DEV_TENANT_ID ?? "dev-tenant-id";
 
 type Template = { id: string; name: string; description?: string };
 
@@ -11,10 +9,8 @@ export default async function UseTemplatePage({ params }: Props) {
   const { id } = await params;
   let template: Template | null = null;
   try {
-    const res = await fetch(`${API}/v1/templates/${id}`, {
-      headers: { "x-tenant-id": DEV_TENANT, "x-user-id": "dev-user-id", "x-role": "owner" },
-    });
-    if (res.ok) template = await res.json();
+    const api = getApiClient();
+    template = await api.templates.get(id) as Template;
   } catch {
     // API unavailable
   }

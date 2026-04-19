@@ -92,6 +92,8 @@ export class PlatformClient {
     checkEntitlement: (capability: string) =>
       this.request<unknown>("GET", `/v1/billing/entitlements?capability=${capability}`),
     setPlan: (plan: "starter" | "pro" | "agency") => this.request<unknown>("POST", "/v1/billing/plan", { plan }),
+    createPortalSession: (input: unknown) => this.request<unknown>("POST", "/v1/billing/portal", input),
+    createCheckoutSession: (input: unknown) => this.request<unknown>("POST", "/v1/billing/checkout", input),
   };
 
   collections = {

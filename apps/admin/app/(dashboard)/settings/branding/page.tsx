@@ -1,7 +1,5 @@
 import { BrandingClient } from "./branding-client";
-
-const API = process.env.PLATFORM_API_URL ?? "http://localhost:4100";
-const DEV_TENANT = process.env.DEV_TENANT_ID ?? "dev-tenant-id";
+import { getApiClient } from "../../../../lib/api";
 
 type Branding = {
   logoUrl?: string;
@@ -15,10 +13,8 @@ type Branding = {
 export default async function BrandingPage() {
   let branding: Branding = {};
   try {
-    const res = await fetch(`${API}/v1/branding`, {
-      headers: { "x-tenant-id": DEV_TENANT, "x-user-id": "dev-user-id", "x-role": "owner" },
-    });
-    if (res.ok) branding = await res.json();
+    const api = getApiClient();
+    branding = await api.branding.get() as Branding;
   } catch {
     // API unavailable
   }

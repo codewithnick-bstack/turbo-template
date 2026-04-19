@@ -1,7 +1,6 @@
 import Link from "next/link";
-
-const API = process.env.PLATFORM_API_URL ?? "http://localhost:4100";
-const DEV_TENANT = process.env.DEV_TENANT_ID ?? "dev-tenant-id";
+import Image from "next/image";
+import { getApiClient } from "../../../lib/api";
 
 type Template = {
   id: string;
@@ -16,10 +15,9 @@ type Template = {
 export default async function TemplatesPage() {
   let templates: Template[] = [];
   try {
-    const res = await fetch(`${API}/v1/templates`, {
-      headers: { "x-tenant-id": DEV_TENANT, "x-user-id": "dev-user-id", "x-role": "owner" },
-    });
-    if (res.ok) ({ data: templates } = await res.json());
+    const api = getApiClient();
+    const res = await api.templates.list() as { data: Template[] };
+    templates = res.data ?? [];
   } catch {
     // API unavailable
   }
@@ -43,7 +41,7 @@ export default async function TemplatesPage() {
           {templates.map((t) => (
             <div key={t.id} className="border border-neutral-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
               {t.thumbnailUrl ? (
-                <img src={t.thumbnailUrl} alt={t.name} className="w-full h-40 object-cover" />
+                <Image src={t.thumbnailUrl} alt={t.name} width={400} height={160} className="w-full h-40 object-cover" />
               ) : (
                 <div className="w-full h-40 bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center">
                   <span className="text-4xl">📄</span>
