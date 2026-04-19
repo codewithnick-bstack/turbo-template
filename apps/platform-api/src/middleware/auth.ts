@@ -10,6 +10,10 @@ export async function authMiddleware(c: Context<AuthEnv>, next: Next) {
   try {
     let session: Session;
 
+    if (env.AUTH_PROVIDER === "mock" && process.env.NODE_ENV === "production") {
+      return c.json({ code: "internal", message: "Mock auth provider not permitted in production" }, 500);
+    }
+
     if (env.AUTH_PROVIDER === "mock") {
       const tenantId = c.req.header("x-tenant-id");
       const userId = c.req.header("x-user-id") ?? "mock-user";

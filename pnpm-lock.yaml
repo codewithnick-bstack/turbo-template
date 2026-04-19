@@ -520,6 +520,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@repo/ai':
+        specifier: workspace:*
+        version: link:../ai
       '@repo/billing':
         specifier: workspace:*
         version: link:../billing
@@ -638,6 +641,9 @@ importers:
       '@repo/observability':
         specifier: workspace:*
         version: link:../observability
+      drizzle-orm:
+        specifier: ^0.36.4
+        version: 0.36.4(@types/pg@8.20.0)(@types/react@19.2.14)(pg@8.20.0)(postgres@3.4.9)(react@19.2.5)
       zod:
         specifier: ^3.24.2
         version: 3.25.76

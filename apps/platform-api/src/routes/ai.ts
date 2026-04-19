@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import * as AI from "@repo/core/ai";
 import { authMiddleware, type AuthEnv } from "../middleware/auth";
+import { rateLimit } from "../middleware/rate-limit";
 import { buildCtx, getDb } from "../ctx";
 import { handleError } from "../lib/errors";
 
@@ -41,7 +42,7 @@ export const aiRoute = new Hono<AuthEnv>()
       return c.json(result);
     } catch (err) { return handleError(err, c); }
   })
-  .post("/chatbot", async (c) => {
+  .post("/chatbot", rateLimit({ windowMs: 60_000, max: 20 }), async (c) => {
     try {
       const tid = c.req.query("tid");
       if (!tid) return c.json({ code: "bad_request", message: "tid required" }, 400);

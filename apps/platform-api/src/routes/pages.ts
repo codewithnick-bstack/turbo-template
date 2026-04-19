@@ -3,6 +3,31 @@ import { Pages } from "@repo/core";
 import { authMiddleware, type AuthEnv } from "../middleware/auth";
 import { buildCtx } from "../ctx";
 import { handleError } from "../lib/errors";
+import { createPostgresSearchIndex } from "@repo/search";
+import type { ServiceContext } from "@repo/core";
+import type { TPage } from "@repo/schemas";
+
+async function syncPageToSearch(ctx: ServiceContext, page: TPage) {
+  try {
+    const index = createPostgresSearchIndex(ctx.db);
+    await index.upsert([{
+      id: page.id,
+      tenantId: ctx.tenantId,
+      siteId: page.siteId,
+      kind: "page",
+      title: page.title ?? "",
+      body: page.description ?? "",
+      url: `/${page.slug}`,
+    }]);
+  } catch { /* non-fatal: search index update best-effort */ }
+}
+
+async function removePageFromSearch(ctx: ServiceContext, pageId: string) {
+  try {
+    const index = createPostgresSearchIndex(ctx.db);
+    await index.delete([pageId]);
+  } catch { /* non-fatal */ }
+}
 
 export const pagesRoute = new Hono<AuthEnv>()
   .use("*", authMiddleware)
@@ -49,13 +74,17 @@ export const pagesRoute = new Hono<AuthEnv>()
   })
   .post("/:id/publish", async (c) => {
     try {
-      const page = await Pages.publishPage(buildCtx(c), { id: c.req.param("id") });
+      const ctx = buildCtx(c);
+      const page = await Pages.publishPage(ctx, { id: c.req.param("id") });
+      void syncPageToSearch(ctx, page);
       return c.json(page);
     } catch (err) { return handleError(err, c); }
   })
   .post("/:id/unpublish", async (c) => {
     try {
-      const page = await Pages.unpublishPage(buildCtx(c), { id: c.req.param("id") });
+      const ctx = buildCtx(c);
+      const page = await Pages.unpublishPage(ctx, { id: c.req.param("id") });
+      void removePageFromSearch(ctx, page.id);
       return c.json(page);
     } catch (err) { return handleError(err, c); }
   });

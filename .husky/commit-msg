@@ -1,2 +1,5 @@
 #!/usr/bin/env sh
+if ! command -v pnpm >/dev/null 2>&1; then
+  export PATH="$HOME/.nvm/versions/node/v20.9.0/lib/node_modules/corepack/shims:$PATH"
+fi
 pnpm commitlint --edit "$1"

@@ -3,6 +3,32 @@ import { Blog } from "@repo/core";
 import { authMiddleware, type AuthEnv } from "../middleware/auth";
 import { buildCtx } from "../ctx";
 import { handleError } from "../lib/errors";
+import { createPostgresSearchIndex } from "@repo/search";
+import type { ServiceContext } from "@repo/core";
+
+type BlogPostRow = { id: string; tenantId: string; siteId: string; title: string; slug: string; excerpt?: string | null; content?: string | null };
+
+async function syncPostToSearch(ctx: ServiceContext, post: BlogPostRow) {
+  try {
+    const index = createPostgresSearchIndex(ctx.db);
+    await index.upsert([{
+      id: post.id,
+      tenantId: ctx.tenantId,
+      siteId: post.siteId,
+      kind: "post",
+      title: post.title ?? "",
+      body: post.excerpt ?? post.content?.slice(0, 500) ?? "",
+      url: `/blog/${post.slug}`,
+    }]);
+  } catch { /* non-fatal */ }
+}
+
+async function removePostFromSearch(ctx: ServiceContext, postId: string) {
+  try {
+    const index = createPostgresSearchIndex(ctx.db);
+    await index.delete([postId]);
+  } catch { /* non-fatal */ }
+}
 
 export const blogRoute = new Hono<AuthEnv>()
   .use("*", authMiddleware)
@@ -48,7 +74,9 @@ export const blogRoute = new Hono<AuthEnv>()
   })
   .post("/posts/:id/publish", async (c) => {
     try {
-      const post = await Blog.publishPost(buildCtx(c), c.req.param("id"));
+      const ctx = buildCtx(c);
+      const post = await Blog.publishPost(ctx, c.req.param("id"));
+      void syncPostToSearch(ctx, post);
       return c.json(post);
     } catch (err) {
       return handleError(err, c);
@@ -56,7 +84,9 @@ export const blogRoute = new Hono<AuthEnv>()
   })
   .delete("/posts/:id", async (c) => {
     try {
-      const result = await Blog.deletePost(buildCtx(c), c.req.param("id"));
+      const ctx = buildCtx(c);
+      const result = await Blog.deletePost(ctx, c.req.param("id"));
+      void removePostFromSearch(ctx, result.id);
       return c.json(result);
     } catch (err) {
       return handleError(err, c);

@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { Analytics } from "@repo/core";
 import { authMiddleware, type AuthEnv } from "../middleware/auth";
+import { rateLimit } from "../middleware/rate-limit";
 import { buildCtx, getDb } from "../ctx";
 import { handleError } from "../lib/errors";
 import { createLogger } from "@repo/observability";
@@ -9,7 +10,7 @@ import { env } from "../env";
 const logger = createLogger({ service: "analytics-ingest", env: env.NODE_ENV });
 
 export const analyticsRoute = new Hono<AuthEnv>()
-  .post("/events", async (c) => {
+  .post("/events", rateLimit({ windowMs: 60_000, max: 100 }), async (c) => {
     // Public endpoint — tenant identified via query param
     try {
       const tenantId = c.req.query("tid");
