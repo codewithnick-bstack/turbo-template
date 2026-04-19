@@ -102,7 +102,9 @@ export class PlatformClient {
         "GET",
         `/v1/entries?collectionId=${collectionId}${status ? `&status=${status}` : ""}`,
       ),
+    get: (id: string) => this.request<unknown>("GET", `/v1/entries/${id}`),
     create: (input: unknown) => this.request<unknown>("POST", "/v1/entries", input),
+    update: (id: string, input: unknown) => this.request<unknown>("PATCH", `/v1/entries/${id}`, input),
   };
 
   search = {
@@ -128,6 +130,7 @@ export class PlatformClient {
     },
     presign: (input: unknown) => this.request<unknown>("POST", "/v1/media/presign", input),
     finalize: (input: unknown) => this.request<unknown>("POST", "/v1/media/finalize", input),
+    delete: (id: string) => this.request<unknown>("DELETE", `/v1/media/${id}`),
   };
 
   analytics = {

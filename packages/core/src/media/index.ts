@@ -164,3 +164,12 @@ export async function listMedia(ctx: ServiceContext, filter: { siteId?: string; 
     .orderBy(desc(schema.media.createdAt))
     .limit(Math.min(filter.limit ?? 50, 200));
 }
+
+export async function deleteMedia(ctx: ServiceContext, id: string) {
+  const [row] = await ctx.db
+    .delete(schema.media)
+    .where(and(eq(schema.media.id, id), eq(schema.media.tenantId, ctx.tenantId)))
+    .returning({ id: schema.media.id, storageKey: schema.media.storageKey });
+  if (!row) throw new AppError("not_found", "Media not found", 404);
+  return { deleted: row.id, storageKey: row.storageKey };
+}

@@ -66,6 +66,7 @@ export default async function CollectionEntriesPage({
                   <th key={f.name} className="px-4 py-2 text-left text-xs font-semibold text-[var(--muted-foreground)]">{f.label || f.name}</th>
                 ))}
                 <th className="px-4 py-2 text-left text-xs font-semibold text-[var(--muted-foreground)]">Created</th>
+                <th className="px-4 py-2" />
               </tr>
             </thead>
             <tbody>
@@ -84,6 +85,14 @@ export default async function CollectionEntriesPage({
                   ))}
                   <td className="px-4 py-2 text-xs text-[var(--muted-foreground)]">
                     {new Date(entry.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-4 py-2">
+                    <Link
+                      href={`/sites/${siteId}/collections/${collectionId}/entries/${entry.id}`}
+                      className="text-xs text-blue-600 hover:underline"
+                    >
+                      Edit
+                    </Link>
                   </td>
                 </tr>
               ))}

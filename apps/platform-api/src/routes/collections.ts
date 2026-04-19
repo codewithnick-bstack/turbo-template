@@ -39,4 +39,17 @@ export const entriesRoute = new Hono<AuthEnv>()
       const entry = await Content.createEntry(buildCtx(c), body);
       return c.json(entry, 201);
     } catch (err) { return handleError(err, c); }
+  })
+  .get("/:id", async (c) => {
+    try {
+      const entry = await Content.getEntry(buildCtx(c), c.req.param("id"));
+      return c.json(entry);
+    } catch (err) { return handleError(err, c); }
+  })
+  .patch("/:id", async (c) => {
+    try {
+      const body = await c.req.json();
+      const entry = await Content.updateEntry(buildCtx(c), c.req.param("id"), body);
+      return c.json(entry);
+    } catch (err) { return handleError(err, c); }
   });

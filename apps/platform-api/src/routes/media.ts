@@ -27,4 +27,10 @@ export const mediaRoute = new Hono<AuthEnv>()
       const media = await Media.finalizeMedia(buildCtx(c), body);
       return c.json(media, 201);
     } catch (err) { return handleError(err, c); }
+  })
+  .delete("/:id", async (c) => {
+    try {
+      const result = await Media.deleteMedia(buildCtx(c), c.req.param("id"));
+      return c.json(result);
+    } catch (err) { return handleError(err, c); }
   });

@@ -1,13 +1,8 @@
 import { getApiClient } from "../../../lib/api";
+import { MediaGrid } from "./media-grid";
 import { UploadButton } from "./upload-button";
 
 type MediaItem = { id: string; originalFilename: string; mimeType: string; sizeBytes: number; kind: string; createdAt: string };
-
-function formatBytes(bytes: number) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
-}
 
 export default async function MediaPage() {
   const api = getApiClient();
@@ -32,25 +27,7 @@ export default async function MediaPage() {
           <UploadButton />
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {items.map((item) => (
-            <div key={item.id} className="border border-[var(--border)] rounded-xl overflow-hidden">
-              {item.mimeType.startsWith("image/") ? (
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center text-xs text-neutral-400">
-                  {item.kind}
-                </div>
-              ) : (
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <span className="text-2xl">{item.kind === "video" ? "🎬" : "📄"}</span>
-                </div>
-              )}
-              <div className="px-3 py-2">
-                <p className="text-xs font-medium truncate" title={item.originalFilename}>{item.originalFilename}</p>
-                <p className="text-xs text-[var(--muted-foreground)]">{formatBytes(item.sizeBytes)}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <MediaGrid initialItems={items} />
       )}
     </div>
   );

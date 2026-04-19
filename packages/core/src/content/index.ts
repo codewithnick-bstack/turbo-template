@@ -149,3 +149,43 @@ export async function listEntries(
     .where(and(...conditions))
     .orderBy(desc(schema.entries.updatedAt));
 }
+
+export async function getEntry(ctx: ServiceContext, id: string) {
+  const [row] = await ctx.db
+    .select()
+    .from(schema.entries)
+    .where(and(eq(schema.entries.id, id), eq(schema.entries.tenantId, ctx.tenantId)))
+    .limit(1);
+  if (!row) throw new AppError("not_found", "Entry not found", 404);
+  return row;
+}
+
+const UpdateEntryInput = z.object({
+  slug: z.string().optional(),
+  data: z.record(z.unknown()).optional(),
+  status: z.enum(["draft", "published"]).optional(),
+});
+
+export async function updateEntry(ctx: ServiceContext, id: string, input: unknown) {
+  const parsed = UpdateEntryInput.parse(input);
+  const patch: Partial<typeof schema.entries.$inferInsert> = { updatedAt: new Date() };
+  if (parsed.slug !== undefined) patch.slug = parsed.slug;
+  if (parsed.data !== undefined) patch.data = parsed.data;
+  if (parsed.status !== undefined) patch.status = parsed.status;
+
+  const [row] = await ctx.db
+    .update(schema.entries)
+    .set(patch)
+    .where(and(eq(schema.entries.id, id), eq(schema.entries.tenantId, ctx.tenantId)))
+    .returning();
+  if (!row) throw new AppError("not_found", "Entry not found", 404);
+
+  await emitEvent({
+    db: ctx.db,
+    tenantId: ctx.tenantId,
+    event: "content.updated",
+    payload: { entryId: row.id, collectionId: row.collectionId },
+  });
+
+  return row;
+}
