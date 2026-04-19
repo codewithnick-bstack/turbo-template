@@ -1,4 +1,5 @@
 import { getApiClient } from "../../../lib/api";
+import { UploadButton } from "./upload-button";
 
 type MediaItem = { id: string; originalFilename: string; mimeType: string; sizeBytes: number; kind: string; createdAt: string };
 
@@ -20,30 +21,36 @@ export default async function MediaPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Media</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Media</h1>
+        <UploadButton />
+      </div>
+
       {items.length === 0 ? (
-        <p className="mt-6 text-sm text-[var(--muted-foreground)]">No media uploaded yet.</p>
+        <div className="mt-12 text-center">
+          <p className="text-sm text-[var(--muted-foreground)] mb-4">No media uploaded yet.</p>
+          <UploadButton />
+        </div>
       ) : (
-        <table className="mt-6 w-full text-sm">
-          <thead>
-            <tr className="border-b border-[var(--border)] text-left text-xs text-[var(--muted-foreground)]">
-              <th className="pb-2 pr-4">Filename</th>
-              <th className="pb-2 pr-4">Type</th>
-              <th className="pb-2 pr-4">Size</th>
-              <th className="pb-2">Kind</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id} className="border-b border-[var(--border)]">
-                <td className="py-3 pr-4 font-medium">{item.originalFilename}</td>
-                <td className="py-3 pr-4 text-[var(--muted-foreground)]">{item.mimeType}</td>
-                <td className="py-3 pr-4 text-[var(--muted-foreground)]">{formatBytes(item.sizeBytes)}</td>
-                <td className="py-3 text-[var(--muted-foreground)]">{item.kind}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {items.map((item) => (
+            <div key={item.id} className="border border-[var(--border)] rounded-xl overflow-hidden">
+              {item.mimeType.startsWith("image/") ? (
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center text-xs text-neutral-400">
+                  {item.kind}
+                </div>
+              ) : (
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <span className="text-2xl">{item.kind === "video" ? "🎬" : "📄"}</span>
+                </div>
+              )}
+              <div className="px-3 py-2">
+                <p className="text-xs font-medium truncate" title={item.originalFilename}>{item.originalFilename}</p>
+                <p className="text-xs text-[var(--muted-foreground)]">{formatBytes(item.sizeBytes)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
