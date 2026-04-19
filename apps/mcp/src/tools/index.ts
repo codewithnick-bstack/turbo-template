@@ -202,6 +202,17 @@ export const toolDefinitions: ToolDef[] = [
     annotations: { destructive: true, requiresApproval: true },
     handler: (input, ctx) => clientFor(ctx).pages.unpublish((input as { id: string }).id),
   },
+  {
+    name: "delete_page",
+    description: "Permanently delete a page. Requires approval.",
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    annotations: { destructive: true, requiresApproval: true },
+    handler: (input, ctx) => clientFor(ctx).pages.delete((input as { id: string }).id),
+  },
 
   // ── Forms ─────────────────────────────────────────────────────────────
   {

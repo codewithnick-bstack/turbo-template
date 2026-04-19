@@ -285,3 +285,29 @@ export async function unpublishPage(ctx: ServiceContext, input: unknown): Promis
 
   return toPage(row);
 }
+
+export async function deletePage(ctx: ServiceContext, id: string) {
+  const current = await getPage(ctx, id);
+  await ctx.db
+    .delete(schema.pages)
+    .where(and(eq(schema.pages.id, id), eq(schema.pages.tenantId, ctx.tenantId)));
+
+  await recordAudit({
+    db: ctx.db,
+    tenantId: ctx.tenantId,
+    actor: ctx.actor,
+    action: "delete",
+    resourceKind: "page",
+    resourceId: id,
+    before: current as unknown as Record<string, unknown>,
+  });
+
+  await emitEvent({
+    db: ctx.db,
+    tenantId: ctx.tenantId,
+    event: "page.deleted",
+    payload: { pageId: id, siteId: current.siteId },
+  });
+
+  return { deleted: id };
+}

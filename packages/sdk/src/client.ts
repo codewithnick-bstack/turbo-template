@@ -60,6 +60,7 @@ export class PlatformClient {
     update: (id: string, input: unknown) => this.request<unknown>("PATCH", `/v1/pages/${id}`, input),
     publish: (id: string) => this.request<unknown>("POST", `/v1/pages/${id}/publish`),
     unpublish: (id: string) => this.request<unknown>("POST", `/v1/pages/${id}/unpublish`),
+    delete: (id: string) => this.request<unknown>("DELETE", `/v1/pages/${id}`),
   };
 
   forms = {

@@ -87,4 +87,12 @@ export const pagesRoute = new Hono<AuthEnv>()
       void removePageFromSearch(ctx, page.id);
       return c.json(page);
     } catch (err) { return handleError(err, c); }
+  })
+  .delete("/:id", async (c) => {
+    try {
+      const ctx = buildCtx(c);
+      const result = await Pages.deletePage(ctx, c.req.param("id"));
+      void removePageFromSearch(ctx, c.req.param("id"));
+      return c.json(result);
+    } catch (err) { return handleError(err, c); }
   });
