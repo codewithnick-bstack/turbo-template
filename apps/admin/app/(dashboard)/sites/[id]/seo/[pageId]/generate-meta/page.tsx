@@ -1,31 +1,18 @@
 import Link from "next/link";
+import { getApiClient } from "../../../../../../../lib/api";
 
 type Props = { params: Promise<{ id: string; pageId: string }> };
 
-const API = process.env.PLATFORM_API_URL ?? "http://localhost:4100";
-const DEV_TENANT = process.env.DEV_TENANT_ID ?? "dev-tenant-id";
-
 export default async function GenerateMetaPage({ params }: Props) {
   const { id, pageId } = await params;
+  const api = getApiClient();
   let meta: { metaTitle?: string; metaDescription?: string } = {};
   let error = "";
 
   try {
-    const res = await fetch(`${API}/v1/ai/seo/generate-meta`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-tenant-id": DEV_TENANT,
-        "x-user-id": "dev-user-id",
-        "x-role": "owner",
-      },
-      body: JSON.stringify({ pageId }),
-    });
-    const data = await res.json() as { metaTitle?: string; metaDescription?: string; message?: string };
-    if (res.ok) meta = data;
-    else error = data.message ?? "Generation failed";
-  } catch {
-    error = "API unavailable";
+    meta = await api.aiAssistant.seoGenerateMeta(pageId) as { metaTitle?: string; metaDescription?: string };
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Generation failed";
   }
 
   return (

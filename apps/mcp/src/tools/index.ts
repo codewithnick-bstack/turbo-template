@@ -541,6 +541,36 @@ export const toolDefinitions: ToolDef[] = [
     handler: (input, ctx) => clientFor(ctx).blog.createPost(input),
   },
   {
+    name: "get_blog_post",
+    description: "Get a blog post by ID.",
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    handler: (input, ctx) => clientFor(ctx).blog.getPost((input as { id: string }).id),
+  },
+  {
+    name: "update_blog_post",
+    description: "Update a blog post's title, content, or metadata.",
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: {
+        id: { type: "string" },
+        title: { type: "string" },
+        slug: { type: "string" },
+        content: { type: "string" },
+        excerpt: { type: "string" },
+        tags: { type: "array", items: { type: "string" } },
+      },
+    },
+    handler: (input, ctx) => {
+      const { id, ...patch } = input as { id: string; [k: string]: unknown };
+      return clientFor(ctx).blog.updatePost(id, patch);
+    },
+  },
+  {
     name: "publish_blog_post",
     description: "Publish a blog post by ID.",
     inputSchema: {
@@ -549,6 +579,17 @@ export const toolDefinitions: ToolDef[] = [
       properties: { id: { type: "string" } },
     },
     handler: (input, ctx) => clientFor(ctx).blog.publishPost((input as { id: string }).id),
+  },
+  {
+    name: "delete_blog_post",
+    description: "Permanently delete a blog post. Requires approval.",
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    annotations: { destructive: true, requiresApproval: true },
+    handler: (input, ctx) => clientFor(ctx).blog.deletePost((input as { id: string }).id),
   },
 
   // ── Analytics ─────────────────────────────────────────────────────────
@@ -804,6 +845,34 @@ export const toolDefinitions: ToolDef[] = [
       },
     },
     handler: (input, ctx) => clientFor(ctx).entries.create(input),
+  },
+  {
+    name: "get_entry",
+    description: "Get a content entry by ID.",
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    handler: (input, ctx) => clientFor(ctx).entries.get((input as { id: string }).id),
+  },
+  {
+    name: "update_entry",
+    description: "Update a content entry's data or status.",
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: {
+        id: { type: "string" },
+        slug: { type: "string" },
+        status: { type: "string", enum: ["draft", "published"] },
+        data: { type: "object", additionalProperties: true },
+      },
+    },
+    handler: (input, ctx) => {
+      const { id, ...patch } = input as { id: string; [k: string]: unknown };
+      return clientFor(ctx).entries.update(id, patch);
+    },
   },
 
   // ── Audit Log ─────────────────────────────────────────────────────────

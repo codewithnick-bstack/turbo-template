@@ -1,33 +1,21 @@
 import Link from "next/link";
+import { getApiClient } from "../../../../../../../lib/api";
 
 type Props = { params: Promise<{ id: string; pageId: string }> };
-
-const API = process.env.PLATFORM_API_URL ?? "http://localhost:4100";
-const DEV_TENANT = process.env.DEV_TENANT_ID ?? "dev-tenant-id";
 
 type Finding = { severity: string; rule: string; evidence: string; suggested_fix: string };
 
 export default async function SeoAuditPage({ params }: Props) {
   const { id, pageId } = await params;
+  const api = getApiClient();
   let findings: Finding[] = [];
   let error = "";
 
   try {
-    const res = await fetch(`${API}/v1/ai/seo/audit`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-tenant-id": DEV_TENANT,
-        "x-user-id": "dev-user-id",
-        "x-role": "owner",
-      },
-      body: JSON.stringify({ pageId }),
-    });
-    const data = await res.json() as { findings?: Finding[]; message?: string };
-    if (res.ok) findings = Array.isArray(data.findings) ? data.findings : [];
-    else error = data.message ?? "Audit failed";
-  } catch {
-    error = "API unavailable";
+    const data = await api.aiAssistant.seoAudit(pageId) as { findings?: Finding[] };
+    findings = Array.isArray(data.findings) ? data.findings : [];
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Audit failed";
   }
 
   const severityColor: Record<string, string> = {
