@@ -54,18 +54,28 @@ scripts/
 ## Quick start
 
 ```bash
+# One command — installs deps, copies env files, starts infra, migrates DB
+make setup
+
+# Start all apps
+make dev
+```
+
+Or step by step:
+
+```bash
 pnpm install
 cp .env.example .env
 cp apps/platform-api/.env.example apps/platform-api/.env
-cp apps/worker/.env.example apps/worker/.env
+cp apps/admin/.env.example apps/admin/.env
 cp apps/mcp/.env.example apps/mcp/.env
-cp apps/admin/.env.example apps/admin/.env.local
-pnpm db:up                 # Postgres + Redis + MinIO via docker compose
-pnpm -F @repo/db db:generate
-pnpm db:migrate
-pnpm db:seed
-pnpm dev                   # all apps in parallel
+cp apps/worker/.env.example apps/worker/.env
+make db          # Postgres + Redis + MinIO via docker compose
+make migrate
+pnpm dev
 ```
+
+All third-party credentials (Stripe, Resend, WorkOS, Anthropic, etc.) are **optional in dev** — apps boot with mock/stub adapters and fall back gracefully until real keys are supplied.
 
 Default ports:
 
