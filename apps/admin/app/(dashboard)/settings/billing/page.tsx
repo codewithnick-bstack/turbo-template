@@ -4,10 +4,8 @@ import { PLANS } from "@repo/billing";
 
 export default async function BillingPage() {
   const api = getApiClient();
-  let current: { allowed?: boolean; plan?: string } = {};
-
   try {
-    current = (await api.billing.checkEntitlement("sites.create")) as typeof current;
+    await api.billing.checkEntitlement("sites.create");
   } catch {
     // API unavailable
   }
