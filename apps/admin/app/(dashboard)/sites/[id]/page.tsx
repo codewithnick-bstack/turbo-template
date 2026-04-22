@@ -31,14 +31,24 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
       </div>
       <p className="mt-1 text-sm text-[var(--muted-foreground)]">{site.slug}{site.primaryDomain ? ` · ${site.primaryDomain}` : ""}</p>
 
-      <div className="mt-4 flex flex-wrap gap-3">
-        <Link href={`/sites/${id}/analytics`} className="text-sm text-blue-600 hover:underline">Analytics</Link>
-        <Link href={`/sites/${id}/blog`} className="text-sm text-blue-600 hover:underline">Blog</Link>
-        <Link href={`/sites/${id}/collections`} className="text-sm text-blue-600 hover:underline">Collections</Link>
-        <Link href={`/sites/${id}/forms`} className="text-sm text-blue-600 hover:underline">Forms</Link>
-        <Link href={`/sites/${id}/assistant`} className="text-sm text-blue-600 hover:underline">AI Assistant</Link>
-        <Link href={`/sites/${id}/seo`} className="text-sm text-blue-600 hover:underline">SEO</Link>
-        <Link href={`/sites/${id}/settings`} className="text-sm text-[var(--muted-foreground)] hover:underline">Settings</Link>
+      <div className="mt-5 flex flex-wrap gap-1 border-b border-[var(--border)] pb-0">
+        {[
+          { href: `/sites/${id}/analytics`, label: "Analytics" },
+          { href: `/sites/${id}/blog`, label: "Blog" },
+          { href: `/sites/${id}/collections`, label: "Collections" },
+          { href: `/sites/${id}/forms`, label: "Forms" },
+          { href: `/sites/${id}/seo`, label: "SEO" },
+          { href: `/sites/${id}/assistant`, label: "AI Assistant" },
+          { href: `/sites/${id}/settings`, label: "Settings" },
+        ].map((tab) => (
+          <Link
+            key={tab.href}
+            href={tab.href}
+            className="px-3 py-2 text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] border-b-2 border-transparent hover:border-[var(--foreground)] transition-colors -mb-px"
+          >
+            {tab.label}
+          </Link>
+        ))}
       </div>
 
       <div className="mt-8 flex items-center justify-between">
