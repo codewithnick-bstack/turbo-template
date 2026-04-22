@@ -1,18 +1,17 @@
 import Link from "next/link";
 import { getApiClient } from "../../lib/api";
-
-type Site = { id: string; name: string; status: string };
+import type { TSite } from "@repo/sdk";
 
 export default async function DashboardPage() {
   const api = getApiClient();
 
-  let sites: Site[] = [];
+  let sites: TSite[] = [];
   let mediaCount = 0;
 
   try {
     const [sitesRes, mediaRes] = await Promise.all([
-      api.sites.list() as Promise<{ data: Site[] }>,
-      api.media.list(undefined, 200) as Promise<{ data: unknown[] }>,
+      api.sites.list(),
+      api.media.list(undefined, 200),
     ]);
     sites = sitesRes.data ?? [];
     mediaCount = (mediaRes.data ?? []).length;

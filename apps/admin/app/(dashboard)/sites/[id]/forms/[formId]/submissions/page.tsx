@@ -1,12 +1,6 @@
 import Link from "next/link";
 import { getApiClient } from "@/lib/api";
-
-type Submission = {
-  id: string;
-  data: Record<string, unknown>;
-  ipAddress: string | null;
-  createdAt: string;
-};
+import type { TFormSubmission } from "@repo/sdk";
 
 export default async function FormSubmissionsPage({
   params,
@@ -15,13 +9,13 @@ export default async function FormSubmissionsPage({
 }) {
   const { id: siteId, formId } = await params;
   const api = getApiClient();
-  let submissions: Submission[] = [];
+  let submissions: TFormSubmission[] = [];
   let formName = formId;
 
   try {
     const [subRes, formsRes] = await Promise.all([
-      api.forms.listSubmissions(formId) as Promise<{ data: Submission[] }>,
-      api.forms.list(siteId) as Promise<{ data: Array<{ id: string; name: string }> }>,
+      api.forms.submissions(formId),
+      api.forms.list(siteId),
     ]);
     submissions = subRes.data ?? [];
     const form = (formsRes.data ?? []).find((f) => f.id === formId);

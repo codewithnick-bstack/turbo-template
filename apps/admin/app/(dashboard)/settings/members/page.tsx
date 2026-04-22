@@ -19,8 +19,8 @@ export default async function MembersPage() {
 
   try {
     const [mRes, iRes] = await Promise.all([
-      api.members.list() as Promise<{ data: Member[] }>,
-      api.members.listInvites() as Promise<{ data: Invite[] }>,
+      api.members.list(),
+      api.members.listInvites(),
     ]);
     members = mRes.data ?? [];
     invites = iRes.data ?? [];

@@ -1,20 +1,12 @@
 import { BrandingClient } from "./branding-client";
 import { getApiClient } from "../../../../lib/api";
-
-type Branding = {
-  logoUrl?: string;
-  faviconUrl?: string;
-  primaryColor?: string;
-  accentColor?: string;
-  customCss?: string;
-  supportEmail?: string;
-};
+import type { TBranding } from "@repo/sdk";
 
 export default async function BrandingPage() {
-  let branding: Branding = {};
+  let branding: TBranding = {};
   try {
     const api = getApiClient();
-    branding = await api.branding.get() as Branding;
+    branding = await api.branding.get();
   } catch {
     // API unavailable
   }

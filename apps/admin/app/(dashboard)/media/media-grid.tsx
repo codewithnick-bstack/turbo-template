@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
-
-type MediaItem = { id: string; originalFilename: string; mimeType: string; sizeBytes: number; kind: string; createdAt: string };
+import type { TMedia } from "@repo/sdk";
 
 function formatBytes(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
@@ -12,8 +11,8 @@ function formatBytes(bytes: number) {
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
 
-export function MediaGrid({ initialItems }: { initialItems: MediaItem[] }) {
-  const [items, setItems] = useState<MediaItem[]>(initialItems);
+export function MediaGrid({ initialItems }: { initialItems: TMedia[] }) {
+  const [items, setItems] = useState<TMedia[]>(initialItems);
 
   async function handleDelete(id: string, filename: string) {
     if (!confirm(`Delete "${filename}"?`)) return;

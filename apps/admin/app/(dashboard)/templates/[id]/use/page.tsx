@@ -1,16 +1,15 @@
 import { UseTemplateClient } from "./use-template-client";
 import { getApiClient } from "../../../../../lib/api";
+import type { TTemplate } from "@repo/sdk";
 
 type Props = { params: Promise<{ id: string }> };
 
-type Template = { id: string; name: string; description?: string };
-
 export default async function UseTemplatePage({ params }: Props) {
   const { id } = await params;
-  let template: Template | null = null;
+  let template: TTemplate | null = null;
   try {
     const api = getApiClient();
-    template = await api.templates.get(id) as Template;
+    template = await api.templates.get(id);
   } catch {
     // API unavailable
   }

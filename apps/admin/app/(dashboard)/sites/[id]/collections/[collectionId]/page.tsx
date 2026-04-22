@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { getApiClient } from "../../../../../../lib/api";
-
-type FieldDef = { name: string; label: string; kind: string; required: boolean };
-type Collection = { id: string; slug: string; name: string; fields: FieldDef[] };
-type Entry = { id: string; slug: string; locale: string; status: string; data: Record<string, unknown>; createdAt: string };
+import type { TCollection, TEntry } from "@repo/sdk";
 
 export default async function CollectionEntriesPage({
   params,
@@ -13,16 +10,13 @@ export default async function CollectionEntriesPage({
   const { id: siteId, collectionId } = await params;
   const api = getApiClient();
 
-  let collection: Collection | null = null;
-  let entries: Entry[] = [];
+  let collection: TCollection | null = null;
+  let entries: TEntry[] = [];
 
   try {
     [collection, { data: entries }] = await Promise.all([
-      api.collections.list(siteId).then((r) => {
-        const res = r as { data: Collection[] };
-        return res.data.find((c) => c.id === collectionId) ?? null;
-      }),
-      api.entries.list(collectionId) as Promise<{ data: Entry[] }>,
+      api.collections.list(siteId).then((r) => r.data.find((c) => c.id === collectionId) ?? null),
+      api.entries.list(collectionId),
     ]);
   } catch { /* API unavailable */ }
 

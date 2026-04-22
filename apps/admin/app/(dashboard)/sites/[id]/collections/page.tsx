@@ -1,15 +1,14 @@
 import Link from "next/link";
 import { getApiClient } from "../../../../../lib/api";
 import NewCollectionForm from "./new-collection-form";
-
-type Collection = { id: string; slug: string; name: string; fields: unknown[]; createdAt: string };
+import type { TCollection } from "@repo/sdk";
 
 export default async function CollectionsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: siteId } = await params;
   const api = getApiClient();
-  let collections: Collection[] = [];
+  let collections: TCollection[] = [];
   try {
-    const res = await api.collections.list(siteId) as { data: Collection[] };
+    const res = await api.collections.list(siteId);
     collections = res.data ?? [];
   } catch { /* API unavailable */ }
 
@@ -33,7 +32,7 @@ export default async function CollectionsPage({ params }: { params: Promise<{ id
             >
               <div>
                 <p className="font-medium text-sm">{c.name}</p>
-                <p className="text-xs text-[var(--muted-foreground)]">{c.slug} · {(c.fields as unknown[]).length} field{(c.fields as unknown[]).length === 1 ? "" : "s"}</p>
+                <p className="text-xs text-[var(--muted-foreground)]">{c.slug} · {c.fields.length} field{c.fields.length === 1 ? "" : "s"}</p>
               </div>
               <span className="text-xs text-blue-600">View entries →</span>
             </Link>

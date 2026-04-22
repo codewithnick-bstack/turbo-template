@@ -1,20 +1,13 @@
 import Link from "next/link";
 import { getApiClient } from "../../../../../lib/api";
 
-type AnalyticsData = {
-  pageViews: number;
-  uniqueVisitors: number;
-  topPages: Array<{ path: string | null; views: number }>;
-  dailyViews: Array<{ date: string; views: number }>;
-};
-
 export default async function AnalyticsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const api = getApiClient();
-  let data: AnalyticsData | null = null;
+  let data: Awaited<ReturnType<typeof api.analytics.get>> | null = null;
 
   try {
-    data = await api.analytics.get(id, 30) as AnalyticsData;
+    data = await api.analytics.get(id, 30);
   } catch {
     // API unavailable or no data yet
   }

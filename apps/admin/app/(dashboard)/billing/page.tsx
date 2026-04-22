@@ -1,12 +1,11 @@
 import { getApiClient } from "../../../lib/api";
-
-type Tenant = { id: string; name: string; plan: string; status: string };
+import type { TTenant } from "@repo/sdk";
 
 export default async function BillingPage() {
   const api = getApiClient();
-  let tenant: Tenant | null = null;
+  let tenant: TTenant | null = null;
   try {
-    tenant = (await api.tenants.current()) as Tenant;
+    tenant = await api.tenants.current();
   } catch {
     // API unavailable
   }

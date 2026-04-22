@@ -2,15 +2,14 @@ import Link from "next/link";
 import { getApiClient } from "../../../../../lib/api";
 import NewFormClient from "./new-form-client";
 import { DeleteFormButton } from "./form-actions";
-
-type Form = { id: string; name: string; fields: unknown[]; captcha: boolean; createdAt: string };
+import type { TForm } from "@repo/sdk";
 
 export default async function SiteFormsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: siteId } = await params;
   const api = getApiClient();
-  let forms: Form[] = [];
+  let forms: TForm[] = [];
   try {
-    const res = await api.forms.list(siteId) as { data: Form[] };
+    const res = await api.forms.list(siteId);
     forms = res.data ?? [];
   } catch { /* API unavailable */ }
 
@@ -31,7 +30,7 @@ export default async function SiteFormsPage({ params }: { params: Promise<{ id: 
               <div>
                 <p className="font-medium text-sm">{f.name}</p>
                 <p className="text-xs text-[var(--muted-foreground)]">
-                  {(f.fields as unknown[]).length} field{(f.fields as unknown[]).length === 1 ? "" : "s"}
+                  {f.fields.length} field{f.fields.length === 1 ? "" : "s"}
                   {f.captcha ? " · captcha enabled" : ""}
                 </p>
               </div>

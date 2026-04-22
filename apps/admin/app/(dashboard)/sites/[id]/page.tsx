@@ -1,20 +1,18 @@
 import Link from "next/link";
 import { getApiClient } from "../../../../lib/api";
 import { PublishButton } from "../../../../components/publish-button";
-
-type Site = { id: string; name: string; slug: string; status: string; primaryDomain: string | null };
-type Page = { id: string; title: string; slug: string; status: string; updatedAt: string };
+import type { TSite, TPage } from "@repo/sdk";
 
 export default async function SiteDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const api = getApiClient();
 
-  let site: Site | null = null;
-  let pages: Page[] = [];
+  let site: TSite | null = null;
+  let pages: TPage[] = [];
   try {
     [site, { data: pages }] = await Promise.all([
-      api.sites.get(id) as Promise<Site>,
-      api.pages.list(id) as Promise<{ data: Page[] }>,
+      api.sites.get(id),
+      api.pages.list(id),
     ]);
   } catch {
     // API unavailable during build

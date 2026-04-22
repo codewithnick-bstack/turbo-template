@@ -1,17 +1,16 @@
 import Link from "next/link";
 import { getApiClient } from "@/lib/api";
+import type { TPage } from "@repo/sdk";
 
 type Props = { params: Promise<{ id: string }> };
-
-type Page = { id: string; title: string; slug: string; status: string };
 
 export default async function SeoPage({ params }: Props) {
   const { id } = await params;
   const api = getApiClient();
-  let pages: Page[] = [];
+  let pages: TPage[] = [];
   try {
-    const res = await api.pages.list({ siteId: id });
-    pages = (res.data ?? []) as Page[];
+    const res = await api.pages.list(id);
+    pages = res.data ?? [];
   } catch {
     // API unavailable
   }

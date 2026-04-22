@@ -1,15 +1,14 @@
 import { getApiClient } from "../../../lib/api";
 import { MediaGrid } from "./media-grid";
 import { UploadButton } from "./upload-button";
-
-type MediaItem = { id: string; originalFilename: string; mimeType: string; sizeBytes: number; kind: string; createdAt: string };
+import type { TMedia } from "@repo/sdk";
 
 export default async function MediaPage() {
   const api = getApiClient();
-  let items: MediaItem[] = [];
+  let items: TMedia[] = [];
   try {
     const res = await api.media.list();
-    items = res.data as MediaItem[];
+    items = res.data;
   } catch {
     // API unavailable
   }

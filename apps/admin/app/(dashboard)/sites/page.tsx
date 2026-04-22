@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { getApiClient } from "../../../lib/api";
-
-type Site = { id: string; name: string; slug: string; status: string; primaryDomain: string | null };
+import type { TSite } from "@repo/sdk";
 
 export default async function SitesPage() {
   const api = getApiClient();
-  let sites: Site[] = [];
+  let sites: TSite[] = [];
   try {
     const res = await api.sites.list();
-    sites = res.data as Site[];
+    sites = res.data;
   } catch {
     // API not running in build/preview — show empty state
   }
@@ -61,7 +60,7 @@ export default async function SitesPage() {
   );
 }
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status }: { status: TSite["status"] }) {
   const color = status === "active" ? "text-green-600" : "text-[var(--muted-foreground)]";
   return <span className={`text-xs font-medium ${color}`}>{status}</span>;
 }
