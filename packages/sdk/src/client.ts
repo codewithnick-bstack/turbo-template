@@ -267,6 +267,8 @@ export class PlatformClient {
       this.request<{ content: string }>("POST", "/v1/ai/generate/blog-post", input),
     generateSectionCopy: (input: unknown) =>
       this.request<{ props: unknown }>("POST", "/v1/ai/generate/section-copy", input),
+    generateAltText: (input: { mediaId: string; siteId?: string }) =>
+      this.request<{ altText: string }>("POST", "/v1/ai/generate/alt-text", input),
     seoAudit: (pageId: string) =>
       this.request<{ findings: unknown[] }>("POST", "/v1/ai/seo/audit", { pageId }),
     seoGenerateMeta: (pageId: string) =>

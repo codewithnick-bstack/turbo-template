@@ -1060,8 +1060,10 @@ export const toolDefinitions: ToolDef[] = [
         siteId: { type: "string" },
       },
     },
-    handler: (input, ctx) =>
-      clientFor(ctx).ai.complete({ task: "alt_text", ...input as object }),
+    handler: (input, ctx) => {
+      const { mediaId, siteId } = input as { mediaId: string; siteId?: string };
+      return clientFor(ctx).aiAssistant.generateAltText({ mediaId, siteId });
+    },
   },
   {
     name: "site_chatbot",
