@@ -951,4 +951,100 @@ export const toolDefinitions: ToolDef[] = [
     },
     handler: (input, ctx) => clientFor(ctx).sites.delete((input as { id: string }).id),
   },
+
+  // ── Member management extras ──────────────────────────────────────────
+  {
+    name: "update_member_role",
+    description: "Update an existing member's role in the tenant.",
+    inputSchema: {
+      type: "object",
+      required: ["userId", "role"],
+      properties: {
+        userId: { type: "string" },
+        role: { type: "string", enum: ["owner", "admin", "editor", "viewer"] },
+      },
+    },
+    handler: (input, ctx) => {
+      const { userId, role } = input as { userId: string; role: string };
+      return clientFor(ctx).members.updateRole(userId, role);
+    },
+  },
+  {
+    name: "list_invites",
+    description: "List pending member invitations for the tenant.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    handler: (_input, ctx) => clientFor(ctx).members.listInvites(),
+  },
+  {
+    name: "revoke_invite",
+    description: "Revoke a pending member invitation.",
+    annotations: { destructive: true, requiresApproval: true },
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    handler: (input, ctx) => clientFor(ctx).members.revokeInvite((input as { id: string }).id),
+  },
+
+  // ── Media extras ──────────────────────────────────────────────────────
+  {
+    name: "delete_media",
+    description: "Permanently delete a media file by ID.",
+    annotations: { destructive: true, requiresApproval: true },
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    handler: (input, ctx) => clientFor(ctx).media.delete((input as { id: string }).id),
+  },
+
+  // ── Forms extras ──────────────────────────────────────────────────────
+  {
+    name: "get_form",
+    description: "Get a single form by ID.",
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    handler: (input, ctx) => clientFor(ctx).forms.get((input as { id: string }).id),
+  },
+
+  // ── Templates extras ──────────────────────────────────────────────────
+  {
+    name: "get_template",
+    description: "Get a single template by ID.",
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+    handler: (input, ctx) => clientFor(ctx).templates.get((input as { id: string }).id),
+  },
+
+  // ── AI extras ─────────────────────────────────────────────────────────
+  {
+    name: "generate_section_copy",
+    description: "Generate copy for a page section block using AI.",
+    inputSchema: {
+      type: "object",
+      required: ["siteId", "blockKind"],
+      properties: {
+        siteId: { type: "string" },
+        blockKind: { type: "string" },
+        context: { type: "string" },
+      },
+    },
+    handler: (input, ctx) => clientFor(ctx).aiAssistant.generateSectionCopy(input),
+  },
+
+  // ── Tenant extras ─────────────────────────────────────────────────────
+  {
+    name: "list_child_tenants",
+    description: "List all child tenants (clients) under the current agency tenant.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    handler: (_input, ctx) => clientFor(ctx).tenants.children(),
+  },
 ];
