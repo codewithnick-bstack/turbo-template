@@ -3,7 +3,7 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 
 type Post = {
   id: string;
@@ -31,6 +31,7 @@ export default function EditBlogPostPage({
   const [tags, setTags] = useState("");
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
 
@@ -99,6 +100,29 @@ export default function EditBlogPostPage({
     }
   }
 
+  async function handleGenerate() {
+    if (!title.trim()) { setError("Enter a title first"); return; }
+    setGenerating(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/ai/generate/blog-post", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ siteId, title, tags: tags ? tags.split(",").map((t) => t.trim()).filter(Boolean) : [] }),
+      });
+      if (!res.ok) {
+        const err = await res.json() as { message?: string };
+        throw new Error(err.message ?? "Generation failed");
+      }
+      const data = await res.json() as { content: string };
+      setContent(data.content);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "AI generation failed");
+    } finally {
+      setGenerating(false);
+    }
+  }
+
   if (!post) {
     return (
       <div className="flex items-center gap-2 text-sm text-[var(--muted-foreground)] mt-8">
@@ -145,7 +169,18 @@ export default function EditBlogPostPage({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Content</label>
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-sm font-medium">Content</label>
+            <button
+              type="button"
+              onClick={handleGenerate}
+              disabled={generating || !title.trim()}
+              className="flex items-center gap-1.5 rounded border border-[var(--border)] px-3 py-1 text-xs hover:bg-[var(--border)] disabled:opacity-40 transition-colors"
+            >
+              {generating ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+              {generating ? "Generating…" : "Generate with AI"}
+            </button>
+          </div>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}

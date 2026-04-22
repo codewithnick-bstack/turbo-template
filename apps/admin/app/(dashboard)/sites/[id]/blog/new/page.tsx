@@ -3,7 +3,7 @@
 import { useState, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 
 export default function NewBlogPostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: siteId } = use(params);
@@ -14,7 +14,31 @@ export default function NewBlogPostPage({ params }: { params: Promise<{ id: stri
   const [excerpt, setExcerpt] = useState("");
   const [tags, setTags] = useState("");
   const [loading, setLoading] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  async function handleGenerate() {
+    if (!title.trim()) { setError("Enter a title first"); return; }
+    setGenerating(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/ai/generate/blog-post", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ siteId, title, tags: tags ? tags.split(",").map((t) => t.trim()).filter(Boolean) : [] }),
+      });
+      if (!res.ok) {
+        const err = await res.json() as { message?: string };
+        throw new Error(err.message ?? "Generation failed");
+      }
+      const data = await res.json() as { content: string };
+      setContent(data.content);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "AI generation failed");
+    } finally {
+      setGenerating(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -92,15 +116,26 @@ export default function NewBlogPostPage({ params }: { params: Promise<{ id: stri
             className="w-full rounded border border-[var(--border)] px-3 py-2 text-sm"
           />
         </label>
-        <label className="block space-y-1">
-          <span className="text-sm font-medium">Content</span>
+        <div className="space-y-1">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium">Content</span>
+            <button
+              type="button"
+              onClick={handleGenerate}
+              disabled={generating || !title.trim()}
+              className="flex items-center gap-1.5 rounded border border-[var(--border)] px-3 py-1 text-xs hover:bg-[var(--border)] disabled:opacity-40 transition-colors"
+            >
+              {generating ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+              {generating ? "Generating…" : "Generate with AI"}
+            </button>
+          </div>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             rows={10}
             className="w-full rounded border border-[var(--border)] px-3 py-2 text-sm font-mono"
           />
-        </label>
+        </div>
         <label className="block space-y-1">
           <span className="text-sm font-medium">Tags</span>
           <input
