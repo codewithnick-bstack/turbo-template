@@ -1047,4 +1047,81 @@ export const toolDefinitions: ToolDef[] = [
     inputSchema: { type: "object", properties: {}, additionalProperties: false },
     handler: (_input, ctx) => clientFor(ctx).tenants.children(),
   },
+
+  // ── Parity: missing from contracts ────────────────────────────────────
+  {
+    name: "generate_alt_text",
+    description: "Generate accessible alt text for a media asset using AI.",
+    inputSchema: {
+      type: "object",
+      required: ["mediaId"],
+      properties: {
+        mediaId: { type: "string" },
+        siteId: { type: "string" },
+      },
+    },
+    handler: (input, ctx) =>
+      clientFor(ctx).ai.complete({ task: "alt_text", ...input as object }),
+  },
+  {
+    name: "site_chatbot",
+    description: "Visitor-facing site chatbot — answers questions from site content.",
+    inputSchema: {
+      type: "object",
+      required: ["siteId", "messages"],
+      properties: {
+        siteId: { type: "string" },
+        messages: {
+          type: "array",
+          items: {
+            type: "object",
+            required: ["role", "content"],
+            properties: {
+              role: { type: "string", enum: ["user", "assistant"] },
+              content: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+    handler: (input, ctx) => {
+      const { siteId, messages } = input as { siteId: string; messages: Array<{ role: string; content: string }> };
+      return clientFor(ctx).aiAssistant.chat(siteId, messages);
+    },
+  },
+  {
+    name: "ingest_analytics_event",
+    description: "Ingest a first-party analytics event from a site visitor.",
+    inputSchema: {
+      type: "object",
+      required: ["tenantId", "siteId", "event"],
+      properties: {
+        tenantId: { type: "string" },
+        siteId: { type: "string" },
+        event: { type: "object" },
+      },
+    },
+    handler: (input, ctx) => {
+      const { tenantId, ...rest } = input as { tenantId: string; [k: string]: unknown };
+      return clientFor(ctx).analytics.ingest(tenantId, rest);
+    },
+  },
+  {
+    name: "create_template",
+    description: "Save a site as a reusable template (admin only).",
+    annotations: { requiresApproval: true },
+    inputSchema: {
+      type: "object",
+      required: ["slug", "name", "category"],
+      properties: {
+        slug: { type: "string" },
+        name: { type: "string" },
+        description: { type: "string" },
+        category: { type: "string" },
+        tags: { type: "array", items: { type: "string" } },
+        thumbnailUrl: { type: "string" },
+      },
+    },
+    handler: (input, ctx) => clientFor(ctx).templates.create(input),
+  },
 ];
