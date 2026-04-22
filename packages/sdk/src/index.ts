@@ -1,5 +1,5 @@
 export { PlatformClient } from "./client";
-export type { TBlogPost, TBranding, TTemplate } from "./client";
+export type { TBlogPost, TBranding, TTemplate, TAuditEntry } from "./client";
 export type {
   TSite,
   TPage,

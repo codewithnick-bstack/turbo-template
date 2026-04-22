@@ -1,22 +1,13 @@
 import { getApiClient } from "@/lib/api";
 import { AuditLogClient } from "./audit-log-client";
-
-type AuditEntry = {
-  id: string;
-  actorKind: string;
-  actorId: string;
-  action: string;
-  resourceKind: string;
-  resourceId: string;
-  createdAt: string;
-};
+import type { TAuditEntry } from "@repo/sdk";
 
 export default async function AuditLogPage() {
   const api = getApiClient();
-  let entries: AuditEntry[] = [];
+  let entries: TAuditEntry[] = [];
   try {
-    const res = (await api.audit.list({ limit: 50 })) as { data: AuditEntry[] };
-    entries = res.data ?? [];
+    const res = await api.audit.list({ limit: 50 });
+    entries = res.data;
   } catch {
     // API unavailable during build
   }

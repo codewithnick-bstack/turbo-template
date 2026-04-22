@@ -1,16 +1,15 @@
 import Link from "next/link";
 import { getApiClient } from "@/lib/api";
 import { BlogPostActions } from "./blog-post-actions";
-
-type BlogPost = { id: string; title: string; slug: string; status: string; publishedAt: string | null };
+import type { TBlogPost } from "@repo/sdk";
 
 export default async function BlogPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: siteId } = await params;
   const api = getApiClient();
 
-  let posts: BlogPost[] = [];
+  let posts: TBlogPost[] = [];
   try {
-    const data = (await api.blog.listPosts(siteId)) as { data: BlogPost[] };
+    const data = await api.blog.listPosts(siteId);
     posts = data.data;
   } catch {
     // API unavailable

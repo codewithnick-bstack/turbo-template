@@ -1,20 +1,11 @@
 import { getApiClient } from "@/lib/api";
 import { ApiKeysClient } from "./api-keys-client";
 
-type ApiKey = {
-  id: string;
-  name: string;
-  prefix: string;
-  scopes: string[];
-  lastUsedAt: string | null;
-  createdAt: string;
-};
-
 export default async function ApiKeysPage() {
   const api = getApiClient();
-  let keys: ApiKey[] = [];
+  let keys: Awaited<ReturnType<typeof api.apiKeys.list>>["data"] = [];
   try {
-    const res = (await api.apiKeys.list()) as { data: ApiKey[] };
+    const res = await api.apiKeys.list();
     keys = res.data ?? [];
   } catch {
     // API unavailable during build

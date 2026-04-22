@@ -45,6 +45,16 @@ export type TTemplate = {
   tags: string[];
 };
 
+export type TAuditEntry = {
+  id: string;
+  actorKind: string;
+  actorId: string;
+  action: string;
+  resourceKind: string;
+  resourceId: string;
+  createdAt: string;
+};
+
 type ClientOptions = {
   baseUrl: string;
   apiKey?: string;
@@ -275,7 +285,7 @@ export class PlatformClient {
       if (opts?.resourceKind) params.set("resourceKind", opts.resourceKind);
       if (opts?.since) params.set("since", opts.since);
       const qs = params.toString();
-      return this.request<{ data: unknown[]; limit: number; offset: number }>(
+      return this.request<{ data: TAuditEntry[]; limit: number; offset: number }>(
         "GET",
         `/v1/audit${qs ? `?${qs}` : ""}`,
       );

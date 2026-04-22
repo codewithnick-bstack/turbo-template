@@ -1,16 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-
-type AuditEntry = {
-  id: string;
-  actorKind: string;
-  actorId: string;
-  action: string;
-  resourceKind: string;
-  resourceId: string;
-  createdAt: string;
-};
+import type { TTAuditEntry } from "@repo/sdk";
 
 const RESOURCE_KINDS = ["", "site", "page", "blog_post", "form", "member", "media", "collection", "entry"];
 const ACTION_COLORS: Record<string, string> = {
@@ -26,8 +17,8 @@ function actionColor(action: string) {
   return key ? ACTION_COLORS[key] : "text-neutral-600 bg-neutral-100";
 }
 
-export function AuditLogClient({ initialEntries }: { initialEntries: AuditEntry[] }) {
-  const [entries, setEntries] = useState<AuditEntry[]>(initialEntries);
+export function AuditLogClient({ initialEntries }: { initialEntries: TAuditEntry[] }) {
+  const [entries, setEntries] = useState<TAuditEntry[]>(initialEntries);
   const [resourceKind, setResourceKind] = useState("");
   const [offset, setOffset] = useState(0);
   const [isPending, startTransition] = useTransition();
@@ -37,7 +28,7 @@ export function AuditLogClient({ initialEntries }: { initialEntries: AuditEntry[
     const params = new URLSearchParams({ limit: String(PAGE_SIZE), offset: String(off) });
     if (kind) params.set("resourceKind", kind);
     const res = await fetch(`/api/audit?${params}`);
-    const data = (await res.json()) as { data: AuditEntry[] };
+    const data = (await res.json()) as { data: TAuditEntry[] };
     setEntries(data.data ?? []);
   }
 
