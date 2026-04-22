@@ -11,6 +11,9 @@ const NAV = [
     { href: "/templates", label: "Templates" },
     { href: "/media", label: "Media" },
   ]},
+  { label: "Agency", items: [
+    { href: "/agency", label: "Client Workspaces" },
+  ]},
   { label: "Settings", items: [
     { href: "/settings/members", label: "Members" },
     { href: "/settings/branding", label: "Branding" },

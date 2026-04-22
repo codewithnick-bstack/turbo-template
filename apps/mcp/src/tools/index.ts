@@ -1126,4 +1126,72 @@ export const toolDefinitions: ToolDef[] = [
     },
     handler: (input, ctx) => clientFor(ctx).templates.create(input),
   },
+
+  // ── Agency tools ──────────────────────────────────────────────────────────
+  {
+    name: "list_client_workspaces",
+    description: "List all client workspaces under the current agency tenant.",
+    inputSchema: { type: "object", properties: {} },
+    handler: (_input, ctx) => clientFor(ctx).agency.listClients(),
+  },
+  {
+    name: "create_client_workspace",
+    description: "Create a new client workspace under the current agency tenant.",
+    annotations: { requiresApproval: true },
+    inputSchema: {
+      type: "object",
+      required: ["name", "slug"],
+      properties: {
+        name: { type: "string" },
+        slug: { type: "string" },
+      },
+    },
+    handler: (input, ctx) => {
+      const { name, slug } = input as { name: string; slug: string };
+      return clientFor(ctx).agency.createClient({ name, slug });
+    },
+  },
+  {
+    name: "get_client_workspace",
+    description: "Get a single client workspace by ID.",
+    inputSchema: {
+      type: "object",
+      required: ["clientId"],
+      properties: { clientId: { type: "string" } },
+    },
+    handler: (input, ctx) => {
+      const { clientId } = input as { clientId: string };
+      return clientFor(ctx).agency.getClient(clientId);
+    },
+  },
+  {
+    name: "update_client_workspace",
+    description: "Update a client workspace name.",
+    inputSchema: {
+      type: "object",
+      required: ["clientId"],
+      properties: {
+        clientId: { type: "string" },
+        name: { type: "string" },
+      },
+    },
+    handler: (input, ctx) => {
+      const { clientId, ...rest } = input as { clientId: string; name?: string };
+      return clientFor(ctx).agency.updateClient(clientId, rest);
+    },
+  },
+  {
+    name: "remove_client_workspace",
+    description: "Remove a client workspace from the agency (soft-delete).",
+    annotations: { requiresApproval: true },
+    inputSchema: {
+      type: "object",
+      required: ["clientId"],
+      properties: { clientId: { type: "string" } },
+    },
+    handler: (input, ctx) => {
+      const { clientId } = input as { clientId: string };
+      return clientFor(ctx).agency.removeClient(clientId);
+    },
+  },
 ];

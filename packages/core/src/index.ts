@@ -11,6 +11,7 @@ export * as Analytics from "./analytics";
 export * as Blog from "./blog";
 export * as AI from "./ai";
 export * as Members from "./members";
+export * as Agency from "./agency";
 export * as Branding from "./branding";
 export * as Templates from "./templates";
 export * as ApiKeys from "./api-keys";

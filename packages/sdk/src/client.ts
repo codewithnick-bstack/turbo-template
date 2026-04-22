@@ -100,6 +100,17 @@ export class PlatformClient {
     create: (input: unknown) => this.request<TTenant>("POST", "/v1/tenants", input),
   };
 
+  agency = {
+    listClients: () => this.request<{ data: TTenant[] }>("GET", "/v1/agency/clients"),
+    createClient: (input: { name: string; slug: string }) =>
+      this.request<TTenant>("POST", "/v1/agency/clients", input),
+    getClient: (clientId: string) => this.request<TTenant>("GET", `/v1/agency/clients/${clientId}`),
+    updateClient: (clientId: string, input: { name?: string }) =>
+      this.request<TTenant>("PATCH", `/v1/agency/clients/${clientId}`, input),
+    removeClient: (clientId: string) =>
+      this.request<{ deleted: string }>("DELETE", `/v1/agency/clients/${clientId}`),
+  };
+
   sites = {
     list: () => this.request<{ data: TSite[] }>("GET", "/v1/sites"),
     create: (input: unknown) => this.request<TSite>("POST", "/v1/sites", input),
