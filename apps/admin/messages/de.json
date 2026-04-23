@@ -1,0 +1,108 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "sites": "Websites",
+    "templates": "Vorlagen",
+    "media": "Medien",
+    "agency": "Agentur",
+    "clientWorkspaces": "Kundenbereiche",
+    "members": "Mitglieder",
+    "branding": "Marke",
+    "billing": "Abrechnung",
+    "compliance": "Compliance",
+    "webhooks": "Webhooks",
+    "apiKeys": "API-Schlüssel",
+    "auditLog": "Audit-Protokoll"
+  },
+  "common": {
+    "save": "Speichern",
+    "saving": "Speichern…",
+    "saved": "Gespeichert!",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "loading": "Laden…",
+    "error": "Fehler",
+    "noResults": "Keine Ergebnisse",
+    "search": "Suchen",
+    "actions": "Aktionen"
+  },
+  "sites": {
+    "title": "Websites",
+    "newSite": "Neue Website",
+    "noSites": "Noch keine Websites.",
+    "pages": "Seiten",
+    "newPage": "Neue Seite",
+    "noPages": "Noch keine Seiten."
+  },
+  "templates": {
+    "title": "Vorlagen-Marktplatz",
+    "subtitle": "Starte eine neue Website mit einer Vorlage.",
+    "noTemplates": "Keine Vorlagen verfügbar.",
+    "useTemplate": "Vorlage verwenden"
+  },
+  "media": {
+    "title": "Medienbibliothek",
+    "upload": "Hochladen",
+    "noMedia": "Noch keine Medien."
+  },
+  "agency": {
+    "title": "Kundenbereiche",
+    "subtitle": "Verwalte die Arbeitsbereiche deiner Agenturkunden.",
+    "newClient": "Neuer Kunde",
+    "noClients": "Noch keine Kundenbereiche.",
+    "createFirst": "Erstelle deinen ersten Kundenbereich",
+    "remove": "Entfernen",
+    "removing": "Entfernen…",
+    "clientName": "Kundenname",
+    "slug": "Kennung",
+    "slugHint": "Nur Kleinbuchstaben, Zahlen und Bindestriche.",
+    "creating": "Erstellen…",
+    "createClient": "Kunde erstellen",
+    "upgradePlan": "Plan upgraden",
+    "agencyOnly": "Dein aktueller Plan enthält keine Agenturfunktionen. Upgrade auf den Agentur-Plan, um Kundenbereiche zu verwalten."
+  },
+  "members": {
+    "title": "Teammitglieder",
+    "subtitle": "Verwalte, wer Zugriff auf diesen Bereich hat.",
+    "invite": "Mitglied einladen",
+    "pendingInvites": "Ausstehende Einladungen",
+    "noMembers": "Noch keine Mitglieder.",
+    "role": "Rolle",
+    "expires": "Läuft ab",
+    "pending": "Ausstehend",
+    "remove": "Entfernen"
+  },
+  "branding": {
+    "title": "White-Label Markengestaltung",
+    "subtitle": "Passe das Erscheinungsbild deiner Plattform an.",
+    "preview": "Markenvorschau",
+    "identity": "Identität",
+    "colors": "Farben",
+    "contactLegal": "Kontakt & Rechtliches",
+    "customCss": "Benutzerdefiniertes CSS",
+    "logoUrl": "Logo-URL",
+    "faviconUrl": "Favicon-URL",
+    "primaryColor": "Primärfarbe",
+    "accentColor": "Akzentfarbe",
+    "supportEmail": "Support-E-Mail",
+    "privacyUrl": "URL der Datenschutzerklärung",
+    "termsUrl": "URL der Nutzungsbedingungen",
+    "saveBranding": "Marke speichern",
+    "saveFailed": "Speichern fehlgeschlagen."
+  },
+  "billing": {
+    "title": "Abrechnung & Plan",
+    "currentPlan": "Aktueller Plan",
+    "upgrade": "Upgraden",
+    "manageSubscription": "Abonnement verwalten"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "recentSites": "Neueste Websites",
+    "recentActivity": "Neueste Aktivität",
+    "noActivity": "Keine neueste Aktivität.",
+    "noSites": "Noch keine Websites."
+  }
+}

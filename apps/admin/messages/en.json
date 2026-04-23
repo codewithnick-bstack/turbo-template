@@ -1,0 +1,108 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "sites": "Sites",
+    "templates": "Templates",
+    "media": "Media",
+    "agency": "Agency",
+    "clientWorkspaces": "Client Workspaces",
+    "members": "Members",
+    "branding": "Branding",
+    "billing": "Billing",
+    "compliance": "Compliance",
+    "webhooks": "Webhooks",
+    "apiKeys": "API Keys",
+    "auditLog": "Audit Log"
+  },
+  "common": {
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved!",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "loading": "Loading…",
+    "error": "Error",
+    "noResults": "No results",
+    "search": "Search",
+    "actions": "Actions"
+  },
+  "sites": {
+    "title": "Sites",
+    "newSite": "New site",
+    "noSites": "No sites yet.",
+    "pages": "Pages",
+    "newPage": "New page",
+    "noPages": "No pages yet."
+  },
+  "templates": {
+    "title": "Template Marketplace",
+    "subtitle": "Start a new site from a pre-built template.",
+    "noTemplates": "No templates available yet.",
+    "useTemplate": "Use Template"
+  },
+  "media": {
+    "title": "Media Library",
+    "upload": "Upload",
+    "noMedia": "No media yet."
+  },
+  "agency": {
+    "title": "Client Workspaces",
+    "subtitle": "Manage workspaces for your agency clients.",
+    "newClient": "New client",
+    "noClients": "No client workspaces yet.",
+    "createFirst": "Create your first client workspace",
+    "remove": "Remove",
+    "removing": "Removing…",
+    "clientName": "Client name",
+    "slug": "Slug",
+    "slugHint": "Lowercase letters, numbers, and hyphens only.",
+    "creating": "Creating…",
+    "createClient": "Create client",
+    "upgradePlan": "Upgrade plan",
+    "agencyOnly": "Your current plan does not include agency features. Upgrade to the Agency plan to manage client workspaces."
+  },
+  "members": {
+    "title": "Team Members",
+    "subtitle": "Manage who has access to this workspace.",
+    "invite": "Invite Member",
+    "pendingInvites": "Pending Invites",
+    "noMembers": "No members yet.",
+    "role": "Role",
+    "expires": "Expires",
+    "pending": "Pending",
+    "remove": "Remove"
+  },
+  "branding": {
+    "title": "White-Label Branding",
+    "subtitle": "Customize your platform appearance.",
+    "preview": "Branding preview",
+    "identity": "Identity",
+    "colors": "Colors",
+    "contactLegal": "Contact & Legal",
+    "customCss": "Custom CSS",
+    "logoUrl": "Logo URL",
+    "faviconUrl": "Favicon URL",
+    "primaryColor": "Primary Color",
+    "accentColor": "Accent Color",
+    "supportEmail": "Support Email",
+    "privacyUrl": "Privacy Policy URL",
+    "termsUrl": "Terms of Service URL",
+    "saveBranding": "Save branding",
+    "saveFailed": "Save failed."
+  },
+  "billing": {
+    "title": "Billing & Plan",
+    "currentPlan": "Current Plan",
+    "upgrade": "Upgrade",
+    "manageSubscription": "Manage Subscription"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "recentSites": "Recent Sites",
+    "recentActivity": "Recent Activity",
+    "noActivity": "No recent activity.",
+    "noSites": "No sites yet."
+  }
+}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { NavClient } from "./nav-client";
 import { SearchBar } from "./search-bar";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 
 const NAV = [
   { label: "Overview", items: [
@@ -35,6 +36,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <SearchBar />
         <div className="mt-4 flex-1">
           <NavClient nav={NAV} />
+        </div>
+        <div className="mt-4 pt-4 border-t border-[var(--border)]">
+          <LocaleSwitcher />
         </div>
       </aside>
       <main className="flex-1 overflow-auto px-8 py-8">{children}</main>

@@ -33,6 +33,8 @@ export type TBranding = {
   accentColor?: string | null;
   customCss?: string | null;
   supportEmail?: string | null;
+  privacyUrl?: string | null;
+  termsUrl?: string | null;
 };
 
 export type TTemplate = {

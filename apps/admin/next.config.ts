@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const config: NextConfig = {
   reactStrictMode: true,
@@ -8,4 +11,4 @@ const config: NextConfig = {
   transpilePackages: ["@repo/ui", "@repo/schemas", "@repo/sdk"],
 };
 
-export default config;
+export default withNextIntl(config);
