@@ -39,6 +39,7 @@ export default async function SiteDetailPage({ params }: { params: Promise<{ id:
           { href: `/sites/${id}/forms`, label: "Forms" },
           { href: `/sites/${id}/seo`, label: "SEO" },
           { href: `/sites/${id}/assistant`, label: "AI Assistant" },
+          { href: `/sites/${id}/search`, label: "Search" },
           { href: `/sites/${id}/sandboxes`, label: "Sandboxes" },
           { href: `/sites/${id}/settings`, label: "Settings" },
         ].map((tab) => (

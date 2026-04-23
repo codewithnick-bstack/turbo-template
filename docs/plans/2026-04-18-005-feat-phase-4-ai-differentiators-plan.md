@@ -32,27 +32,27 @@ Ship the AI layer that makes the platform "best in niche": admin copilot that op
   **Files:** `packages/ai/src/{adapters/*,prompts,eval,usage,index}.ts`, `packages/ai/evals/*.json`
   **Test scenarios:** typed response per provider (happy); timeout fallback (error); usage metered (integration); eval golden set baseline (integration); cost cap → `quota_exhausted` (error).
 
-- [ ] **Unit 4.2: Admin AI copilot**
+- [x] **Unit 4.2: Admin AI copilot**
 
   **Files:** `apps/admin/app/(dashboard)/sites/[siteId]/assistant/*`, `packages/ai/src/agents/site-copilot.ts`
   **Test scenarios:** "change hero to X" diff → apply (happy); ambiguous prompts clarify (edge); destructive op requires confirm (edge); audit log attribution (integration); tool failure retry (error).
 
-- [ ] **Unit 4.3: Visitor chatbot block**
+- [x] **Unit 4.3: Visitor chatbot block**
 
   **Files:** `packages/renderer-blocks/src/blocks/chatbot.tsx`, `packages/core/src/ai/chatbot/{session,rag}.ts`
   **Test scenarios:** grounded answer cites source (happy); out-of-scope fallback (edge); model failure → form CTA (error); captured leads → inbox (integration); per-session rate limit (edge).
 
-- [ ] **Unit 4.4: AI content generation**
+- [x] **Unit 4.4: AI content generation**
 
   **Files:** `packages/ai/src/generators/{blog,section,alt}.ts`, inspector affordance
   **Test scenarios:** generate blog draft (happy); regenerate merges with edits (edge); blocked content filtered (error); usage metered (integration).
 
-- [ ] **Unit 4.5: Semantic search**
+- [x] **Unit 4.5: Semantic search**
 
   **Files:** `packages/search/src/{index,query,vector,hybrid}.ts`, `packages/renderer-blocks/src/blocks/search.tsx`, `apps/worker/src/jobs/reindex.ts`
   **Test scenarios:** relevant result with snippet + score (happy); typo tolerated via vector (edge); empty query graceful (error); reindex on publish < 60s (integration); tenant-scoped admin search (edge).
 
-- [ ] **Unit 4.6: SEO autopilot**
+- [x] **Unit 4.6: SEO autopilot**
 
   **Files:** `packages/core/src/seo/{audit,suggest,apply}.ts`, `apps/admin/app/(dashboard)/sites/[siteId]/seo/*`
   **Test scenarios:** audit finds missing alt text → suggest → apply (happy); design-breaking suggestion flagged (edge); history visible (integration); Lighthouse crash → partial audit (error).

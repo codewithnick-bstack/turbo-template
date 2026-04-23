@@ -104,3 +104,46 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm turbo run build --filter=web
       - run: pnpm --filter web exec axe http://localhost:3000 --exit || echo "a11y smoke placeholder"
+
+  perf-budget:
+    name: perf-budget-check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build web + admin
+        run: pnpm turbo run build --filter=web --filter=admin
+      - name: Check bundle budgets
+        run: |
+          node - <<'EOF'
+          const fs = require("fs");
+          const path = require("path");
+          const budget = JSON.parse(fs.readFileSync("infra/perf-budget.json", "utf8"));
+          let failed = false;
+          for (const [app, limits] of Object.entries(budget)) {
+            if (app === "$comment" || app === "cwv") continue;
+            const dir = `apps/${app}/.next/static/chunks`;
+            if (!fs.existsSync(dir)) { console.log(`[${app}] build dir not found, skipping`); continue; }
+            const files = fs.readdirSync(dir);
+            const appBundle = files.find(f => f.match(/^main-app/));
+            if (appBundle) {
+              const size = fs.statSync(path.join(dir, appBundle)).size;
+              const cap = limits["app.js"];
+              if (size > cap) {
+                console.error(`[${app}] app.js ${size} > budget ${cap} bytes (gzip est)`);
+                failed = true;
+              } else {
+                console.log(`[${app}] app.js OK: ${size} / ${cap}`);
+              }
+            }
+          }
+          if (failed) process.exit(1);
+          EOF

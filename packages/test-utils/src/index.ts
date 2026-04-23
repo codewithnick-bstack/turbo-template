@@ -28,3 +28,10 @@ export function userFactory(overrides: Partial<{ email: string; name: string }> 
 export function randomSlug() {
   return `t-${randomUUID().slice(0, 8)}`;
 }
+
+export {
+  summarizeViolations,
+  assertNoViolations,
+  criticalViolations,
+  type A11yViolation,
+} from "./a11y";
