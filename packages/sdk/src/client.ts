@@ -68,6 +68,32 @@ export type TSandbox = {
   updatedAt: string;
 };
 
+export type TExperimentVariant = { id: string; name: string; weight: number };
+
+export type TExperiment = {
+  id: string;
+  tenantId: string;
+  siteId: string;
+  name: string;
+  description: string | null;
+  status: "draft" | "running" | "paused" | "concluded";
+  variants: TExperimentVariant[];
+  trafficPercent: number;
+  goalEvent: string;
+  goalPath: string | null;
+  startedAt: string | null;
+  concludedAt: string | null;
+  createdAt: string;
+};
+
+export type TExperimentResult = {
+  variantId: string;
+  variantName: string;
+  impressions: number;
+  conversions: number;
+  conversionRate: number;
+};
+
 type ClientOptions = {
   baseUrl: string;
   apiKey?: string;
@@ -347,5 +373,24 @@ export class PlatformClient {
         `/v1/audit${qs ? `?${qs}` : ""}`,
       );
     },
+  };
+
+  experiments = {
+    list: (siteId: string) =>
+      this.request<{ data: TExperiment[] }>("GET", `/v1/experiments?siteId=${siteId}`),
+    create: (input: {
+      siteId: string;
+      name: string;
+      description?: string;
+      variants: TExperimentVariant[];
+      trafficPercent?: number;
+      goalEvent?: string;
+      goalPath?: string;
+    }) => this.request<TExperiment>("POST", "/v1/experiments", input),
+    results: (experimentId: string) =>
+      this.request<{ experiment: TExperiment; results: TExperimentResult[] }>(
+        "GET",
+        `/v1/experiments/${experimentId}/results`,
+      ),
   };
 }

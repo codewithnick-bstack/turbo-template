@@ -1,13 +1,19 @@
 import Link from "next/link";
 import { getApiClient } from "../../../../../lib/api";
+import { ExperimentsTab } from "./experiments-tab";
+import type { TExperiment } from "@repo/sdk";
 
 export default async function AnalyticsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const api = getApiClient();
   let data: Awaited<ReturnType<typeof api.analytics.get>> | null = null;
+  let experiments: TExperiment[] = [];
 
   try {
-    data = await api.analytics.get(id, 30);
+    [data, { data: experiments }] = await Promise.all([
+      api.analytics.get(id, 30),
+      api.experiments.list(id),
+    ]);
   } catch {
     // API unavailable or no data yet
   }
@@ -80,6 +86,10 @@ export default async function AnalyticsPage({ params }: { params: Promise<{ id: 
           )}
         </>
       )}
+
+      <div className="mt-12">
+        <ExperimentsTab siteId={id} initial={experiments} />
+      </div>
     </div>
   );
 }

@@ -29,6 +29,7 @@ import { complianceRoute } from "./routes/compliance";
 import { oauthRoute } from "./routes/oauth";
 import { sandboxesRoute } from "./routes/sandboxes";
 import { sloRoute } from "./routes/slo";
+import { experimentsRoute } from "./routes/experiments";
 
 export function buildServer() {
   const app = new Hono();
@@ -71,6 +72,7 @@ export function buildServer() {
   app.route("/v1/compliance", complianceRoute);
   app.route("/v1/oauth", oauthRoute);
   app.route("/v1/sandboxes", sandboxesRoute);
+  app.route("/v1/experiments", experimentsRoute);
   app.route("/internal/slo", sloRoute);
 
   app.onError((err, c) => {

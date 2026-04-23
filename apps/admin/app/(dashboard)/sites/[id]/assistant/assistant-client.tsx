@@ -50,15 +50,15 @@ export function AssistantClient({ siteId }: { siteId: string }) {
             key={i}
             className={`rounded-xl px-4 py-3 text-sm max-w-[85%] whitespace-pre-wrap ${
               m.role === "user"
-                ? "ml-auto bg-indigo-600 text-white"
-                : "bg-neutral-100 text-neutral-900"
+                ? "ml-auto bg-[var(--primary)] text-[var(--primary-foreground)]"
+                : "bg-[var(--muted)] text-[var(--foreground)]"
             }`}
           >
             {m.content}
           </div>
         ))}
         {loading && (
-          <div className="bg-neutral-100 text-[var(--muted-foreground)] rounded-xl px-4 py-3 text-sm max-w-[85%] animate-pulse">
+          <div className="bg-[var(--muted)] text-[var(--muted-foreground)] rounded-xl px-4 py-3 text-sm max-w-[85%] animate-pulse">
             Thinking…
           </div>
         )}
@@ -76,7 +76,7 @@ export function AssistantClient({ siteId }: { siteId: string }) {
         <button
           onClick={send}
           disabled={loading || !input.trim()}
-          className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-sm px-4 py-2 rounded-lg font-medium"
+          className="bg-[var(--primary)] hover:opacity-90 disabled:opacity-50 text-[var(--primary-foreground)] text-sm px-4 py-2 rounded-lg font-medium"
         >
           Send
         </button>
