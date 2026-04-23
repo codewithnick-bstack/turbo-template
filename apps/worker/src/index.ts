@@ -5,6 +5,8 @@ import { indexnowWorker } from "./jobs/indexnow";
 import { webhookWorker } from "./jobs/webhook-deliver";
 import { searchIndexWorker } from "./jobs/search-index";
 import { mediaTransformWorker } from "./jobs/media-transform";
+import { emailSendWorker } from "./jobs/email-send";
+import { aiCompletionWorker } from "./jobs/ai-completion";
 
 async function boot() {
   console.log("worker booted", { env: env.NODE_ENV });
@@ -26,6 +28,8 @@ async function boot() {
       webhookWorker.close(),
       searchIndexWorker.close(),
       mediaTransformWorker.close(),
+      emailSendWorker.close(),
+      aiCompletionWorker.close(),
     ]);
     process.exit(0);
   };

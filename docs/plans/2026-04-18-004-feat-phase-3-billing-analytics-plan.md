@@ -30,7 +30,7 @@ Make the platform a business: Stripe Billing + entitlements gating features and 
 
 ## Implementation Units
 
-- [ ] **Unit 3.1: Billing + entitlements (`packages/billing`)**
+- [x] **Unit 3.1: Billing + entitlements (`packages/billing`)**
 
   **Files:** `packages/billing/src/{stripe,plans,entitlements,usage,index}.ts`, `packages/core/src/billing/checks.ts`, `apps/admin/app/(dashboard)/settings/billing/*`
   **Test scenarios:** upgrade Starter→Pro reflects in ≤ 30s (happy); seat overflow blocks invite with upgrade CTA (error); downgrade archives excess sites (edge); Stripe webhook retry (integration); past_due read-only mode (edge); usage metering per form+AI (integration).

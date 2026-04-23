@@ -27,7 +27,7 @@ Ship the AI layer that makes the platform "best in niche": admin copilot that op
 
 ## Implementation Units
 
-- [ ] **Unit 4.1: `packages/ai` adapter + eval harness**
+- [x] **Unit 4.1: `packages/ai` adapter + eval harness**
 
   **Files:** `packages/ai/src/{adapters/*,prompts,eval,usage,index}.ts`, `packages/ai/evals/*.json`
   **Test scenarios:** typed response per provider (happy); timeout fallback (error); usage metered (integration); eval golden set baseline (integration); cost cap → `quota_exhausted` (error).

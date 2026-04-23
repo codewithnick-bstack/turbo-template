@@ -63,18 +63,18 @@ Turn data CRUD into an authoring experience. Block-based content model, visual b
   **Files:** `apps/worker/src/jobs/revalidate.ts`, `apps/web/app/api/revalidate/route.ts`
   **Test scenarios:** publish → live in < 5s (happy); preview URL token-gated (happy); retry on failure 3× (error); concurrent publishes queued (edge).
 
-- [ ] **Unit 2.6: `apps/worker` (BullMQ) + deprecate `apps/cron`**
+- [x] **Unit 2.6: `apps/worker` (BullMQ) + deprecate `apps/cron`**
 
   **Files:** `apps/worker/src/{server,queues,jobs/*,index}.ts`
   **Test scenarios:** enqueue + execute (happy); retry on transient (error); DLQ on permanent (error); idempotency by jobId (edge); IndexNow parity with cron (integration).
 
-- [ ] **Unit 2.7: `apps/mcp` + parity lint**
+- [x] **Unit 2.7: `apps/mcp` + parity lint**
 
   **Files:** `apps/mcp/src/{server,tools/*,auth,index}.ts`, `packages/schemas/src/mcp/manifest.ts`, `scripts/verify-parity.ts`
   **Execution note:** Write parity lint first — CI fails until compliant.
   **Test scenarios:** agent calls `create_site` → DB + admin (happy); unauthed tool returns MCP error (error); invalid params structured error (edge); update emits same audit+webhook as UI (integration); parity lint passes (integration); rate limit per agent (error).
 
-- [ ] **Unit 2.8: Webhook fabric**
+- [x] **Unit 2.8: Webhook fabric**
 
   **Files:** `packages/core/src/webhooks/{subscriptions,deliver,sign}.ts`, `apps/worker/src/jobs/webhook-deliver.ts`, `apps/admin/app/(dashboard)/settings/webhooks/*`
   **Test scenarios:** delivered with signature (happy); retry + give up after 6 (error); filter by event type (edge); delivery log in admin + API + MCP (integration); replay 48h (edge).
