@@ -292,6 +292,13 @@ export class PlatformClient {
       ),
   };
 
+  compliance = {
+    exportData: () =>
+      this.request<{ data: Record<string, unknown> }>("POST", "/v1/compliance/export"),
+    deleteTenant: () =>
+      this.request<{ scheduled: true; purgeAfterDays: number }>("DELETE", "/v1/compliance/tenant"),
+  };
+
   audit = {
     list: (opts?: { limit?: number; offset?: number; resourceKind?: string; since?: string }) => {
       const params = new URLSearchParams();

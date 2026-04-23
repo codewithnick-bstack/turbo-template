@@ -1127,6 +1127,22 @@ export const toolDefinitions: ToolDef[] = [
     handler: (input, ctx) => clientFor(ctx).templates.create(input),
   },
 
+  // ── Compliance tools ──────────────────────────────────────────────────────
+  {
+    name: "export_tenant_data",
+    description: "Export all tenant data as a JSON archive for GDPR/CCPA data subject requests.",
+    annotations: { requiresApproval: true },
+    inputSchema: { type: "object", properties: {} },
+    handler: (_input, ctx) => clientFor(ctx).compliance.exportData(),
+  },
+  {
+    name: "delete_tenant_data",
+    description: "Schedule permanent deletion of tenant and all associated data (GDPR right to erasure). Purges after 30 days.",
+    annotations: { requiresApproval: true },
+    inputSchema: { type: "object", properties: {} },
+    handler: (_input, ctx) => clientFor(ctx).compliance.deleteTenant(),
+  },
+
   // ── Agency tools ──────────────────────────────────────────────────────────
   {
     name: "list_client_workspaces",

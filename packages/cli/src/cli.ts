@@ -186,4 +186,66 @@ apiOpts(
     }),
 );
 
+// ── agency ─────────────────────────────────────────────────────────────────
+const agency = program.command("agency").description("Agency workspace management.");
+apiOpts(
+  agency
+    .command("list-clients")
+    .description("List client workspaces under the agency.")
+    .action(async (opts) => {
+      const result = await makeClient(opts).agency.listClients();
+      console.log(JSON.stringify(result, null, 2));
+    }),
+);
+apiOpts(
+  agency
+    .command("create-client")
+    .description("Create a client workspace.")
+    .requiredOption("--name <name>", "Client name")
+    .requiredOption("--slug <slug>", "Client slug")
+    .action(async (opts) => {
+      const result = await makeClient(opts).agency.createClient({ name: opts.name, slug: opts.slug });
+      console.log(pc.green("created:"), JSON.stringify(result, null, 2));
+    }),
+);
+apiOpts(
+  agency
+    .command("remove-client <clientId>")
+    .description("Remove a client workspace.")
+    .action(async (clientId: string, opts) => {
+      const result = await makeClient(opts).agency.removeClient(clientId);
+      console.log(pc.yellow("removed:"), JSON.stringify(result, null, 2));
+    }),
+);
+
+// ── audit ──────────────────────────────────────────────────────────────────
+const audit = program.command("audit").description("Audit log operations.");
+apiOpts(
+  audit
+    .command("list")
+    .description("List audit log entries.")
+    .option("--limit <n>", "Max results", "20")
+    .option("--resource <kind>", "Filter by resource kind")
+    .action(async (opts) => {
+      const result = await makeClient(opts).audit.list({
+        limit: Number(opts.limit),
+        resourceKind: opts.resource,
+      });
+      console.log(JSON.stringify(result, null, 2));
+    }),
+);
+
+// ── search ─────────────────────────────────────────────────────────────────
+const search = program.command("search").description("Search across content.");
+apiOpts(
+  search
+    .command("query <q>")
+    .description("Full-text + semantic search.")
+    .option("--limit <n>", "Max results", "10")
+    .action(async (q: string, opts) => {
+      const result = await makeClient(opts).search.query(q, Number(opts.limit));
+      console.log(JSON.stringify(result, null, 2));
+    }),
+);
+
 program.parseAsync(process.argv);
