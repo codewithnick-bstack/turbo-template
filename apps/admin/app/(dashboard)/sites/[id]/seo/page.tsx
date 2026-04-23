@@ -38,7 +38,7 @@ export default async function SeoPage({ params }: Props) {
               </Link>
               <Link
                 href={`/sites/${id}/seo/${page.id}/generate-meta`}
-                className="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-md font-medium"
+                className="text-xs bg-[var(--primary)] hover:opacity-90 text-[var(--primary-foreground)] px-3 py-1.5 rounded-md font-medium"
               >
                 Generate Meta
               </Link>

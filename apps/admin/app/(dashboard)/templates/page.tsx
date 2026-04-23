@@ -55,7 +55,7 @@ export default async function TemplatesPage() {
                 {t.description && <p className="text-xs text-[var(--muted-foreground)] mb-3">{t.description}</p>}
                 <Link
                   href={`/templates/${t.id}/use`}
-                  className="block text-center text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-medium"
+                  className="block text-center text-xs bg-[var(--primary)] hover:opacity-90 text-[var(--primary-foreground)] px-3 py-1.5 rounded-lg font-medium"
                 >
                   Use Template
                 </Link>

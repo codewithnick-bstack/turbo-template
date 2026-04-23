@@ -62,7 +62,7 @@ export default function AcceptInviteClient({ token, invite }: { token: string; i
       <button
         onClick={accept}
         disabled={loading}
-        className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-sm font-semibold px-4 py-2.5 rounded-xl"
+        className="w-full bg-[var(--primary)] hover:opacity-90 disabled:opacity-50 text-[var(--primary-foreground)] text-sm font-semibold px-4 py-2.5 rounded-xl"
       >
         {loading ? "Accepting…" : "Accept invitation"}
       </button>
