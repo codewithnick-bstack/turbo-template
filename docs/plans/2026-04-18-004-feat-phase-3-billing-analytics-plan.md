@@ -40,7 +40,7 @@ Make the platform a business: Stripe Billing + entitlements gating features and 
   **Files:** `packages/core/src/forms/{schema,submit,spam,deliver}.ts`, `apps/admin/app/(dashboard)/sites/[siteId]/forms/*`
   **Test scenarios:** submit → inbox + email + webhook (happy); Turnstile blocks bot (error); dedupe within 60s (edge); attach to block via builder (integration).
 
-- [ ] **Unit 3.3: Analytics + A/B testing**
+- [x] **Unit 3.3: Analytics + A/B testing**
 
   **Files:** `packages/core/src/analytics/{ingest,report,experiments}.ts`, `apps/admin/app/(dashboard)/sites/[siteId]/analytics/*`, `apps/web` client snippet
   **Test scenarios:** pageview → dashboard in ≤ 60s (happy); DNT honored (edge); A/B 50/50 sticky-by-session (integration); invalid payload rejected (error); IP truncated (edge, GDPR).
@@ -50,7 +50,7 @@ Make the platform a business: Stripe Billing + entitlements gating features and 
   **Files:** `packages/core/src/blog/{post,category,tag}.ts`, importer script, `apps/web/app/blog/*`
   **Test scenarios:** existing MDX URLs preserved (happy); frontmatter preserved (edge); publish triggers revalidation (integration); unmigrated → Sentry (error).
 
-- [ ] **Unit 3.5: Sunset `apps/api` + `apps/cron`**
+- [x] **Unit 3.5: Sunset `apps/api` + `apps/cron`**
 
   **Files:** delete both apps, update `turbo.json`, `pnpm-workspace.yaml`, `README.md`, deployment docs
   **Execution note:** require 30 days zero-traffic before delete.

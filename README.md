@@ -4,7 +4,7 @@ Turborepo monorepo for a **multi-tenant, agent-native website platform** with an
 
 Every feature must be reachable through **UI, HTTP API, and MCP tools at parity** (ADR 0005).
 
-> Origin: this repo was bootstrapped from a client-website starter (`apps/web`, `apps/api`, `apps/cron`). The 12–18 month roadmap in `docs/plans/` evolves it into the full platform.
+> This repo is a developer starter template / boilerplate. Clone it, fill in your own domain logic, and you get multi-tenancy, billing, AI, MCP agent parity, and analytics out of the box.
 
 ---
 
@@ -13,13 +13,11 @@ Every feature must be reachable through **UI, HTTP API, and MCP tools at parity*
 ```
 apps/
   web/            Renderer — Next.js 15 marketing/client-site renderer
-  api/            (legacy) Express contact API — deprecated, removed in Phase 3
-  cron/           (legacy) node-cron IndexNow — subsumed by apps/worker in Phase 2
-  admin/          Authoring UI (Next.js 15)              [scaffolded]
-  platform-api/   Primary HTTP + tRPC API (Hono)         [scaffolded]
-  worker/         BullMQ worker                          [scaffolded]
-  mcp/            MCP server (HTTP tools endpoint)       [scaffolded]
-  docs/           Nextra docs site                       [scaffolded]
+  admin/          Authoring UI — Next.js 15 App Router
+  platform-api/   Primary REST API — Hono
+  worker/         Background jobs — BullMQ (email, AI, media, webhooks, search)
+  mcp/            MCP agent server — HTTP tools endpoint
+  docs/           Docs site — Next.js
 packages/
   ui/             Shared UI primitives (shadcn-style)
   config/         tsconfig + tailwind + env helpers
