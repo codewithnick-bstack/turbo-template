@@ -57,6 +57,17 @@ export type TAuditEntry = {
   createdAt: string;
 };
 
+export type TSandbox = {
+  id: string;
+  tenantId: string;
+  parentSiteId: string;
+  name: string;
+  status: "active" | "promoting" | "promoted" | "deleted";
+  promotedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
 type ClientOptions = {
   baseUrl: string;
   apiKey?: string;
@@ -308,6 +319,19 @@ export class PlatformClient {
       this.request<{ data: Record<string, unknown> }>("POST", "/v1/compliance/export"),
     deleteTenant: () =>
       this.request<{ scheduled: true; purgeAfterDays: number }>("DELETE", "/v1/compliance/tenant"),
+  };
+
+  sandboxes = {
+    list: (siteId: string) =>
+      this.request<{ data: TSandbox[] }>("GET", `/v1/sandboxes?siteId=${siteId}`),
+    create: (input: { siteId: string; name: string }) =>
+      this.request<TSandbox>("POST", "/v1/sandboxes", input),
+    get: (sandboxId: string) =>
+      this.request<TSandbox>("GET", `/v1/sandboxes/${sandboxId}`),
+    promote: (sandboxId: string) =>
+      this.request<TSandbox>("POST", `/v1/sandboxes/${sandboxId}/promote`),
+    delete: (sandboxId: string) =>
+      this.request<{ deleted: true }>("DELETE", `/v1/sandboxes/${sandboxId}`),
   };
 
   audit = {

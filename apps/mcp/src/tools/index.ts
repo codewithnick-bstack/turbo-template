@@ -1285,4 +1285,78 @@ export const toolDefinitions: ToolDef[] = [
       return clientFor(ctx).agency.removeClient(clientId);
     },
   },
+
+  // ── Sandboxes ────────────────────────────────────────────────────────────
+  {
+    name: "list_sandboxes",
+    description: "List sandbox environments for a site.",
+    annotations: { idempotent: true },
+    inputSchema: {
+      type: "object",
+      required: ["siteId"],
+      properties: { siteId: { type: "string", description: "Site ID to list sandboxes for." } },
+    },
+    handler: (input, ctx) => {
+      const { siteId } = input as { siteId: string };
+      return clientFor(ctx).sandboxes.list(siteId);
+    },
+  },
+  {
+    name: "create_sandbox",
+    description: "Create a sandbox environment for a site.",
+    inputSchema: {
+      type: "object",
+      required: ["siteId", "name"],
+      properties: {
+        siteId: { type: "string", description: "Parent site ID." },
+        name: { type: "string", description: "Sandbox name (e.g. 'staging', 'preview-feature-x')." },
+      },
+    },
+    handler: (input, ctx) => {
+      const { siteId, name } = input as { siteId: string; name: string };
+      return clientFor(ctx).sandboxes.create({ siteId, name });
+    },
+  },
+  {
+    name: "get_sandbox",
+    description: "Get a sandbox environment by ID.",
+    annotations: { idempotent: true },
+    inputSchema: {
+      type: "object",
+      required: ["sandboxId"],
+      properties: { sandboxId: { type: "string" } },
+    },
+    handler: (input, ctx) => {
+      const { sandboxId } = input as { sandboxId: string };
+      return clientFor(ctx).sandboxes.get(sandboxId);
+    },
+  },
+  {
+    name: "promote_sandbox",
+    description: "Promote a sandbox to production (apply sandbox changes to the parent site).",
+    annotations: { requiresApproval: true },
+    inputSchema: {
+      type: "object",
+      required: ["sandboxId"],
+      properties: { sandboxId: { type: "string" } },
+    },
+    handler: (input, ctx) => {
+      const { sandboxId } = input as { sandboxId: string };
+      return clientFor(ctx).sandboxes.promote(sandboxId);
+    },
+  },
+  {
+    name: "delete_sandbox",
+    description: "Delete a sandbox environment.",
+    annotations: { requiresApproval: true },
+    inputSchema: {
+      type: "object",
+      required: ["sandboxId"],
+      properties: { sandboxId: { type: "string" } },
+    },
+    handler: (input, ctx) => {
+      const { sandboxId } = input as { sandboxId: string };
+      return clientFor(ctx).sandboxes.delete(sandboxId);
+    },
+  },
 ];

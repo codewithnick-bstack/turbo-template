@@ -7,14 +7,39 @@
   --background: #f8fafc;
   --foreground: #0f172a;
   --muted: #475569;
+  --muted-bg: #f1f5f9;
   --card: rgba(255, 255, 255, 0.9);
+  --border: #e2e8f0;
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
 }
 
 .dark {
   --background: #020617;
   --foreground: #f8fafc;
   --muted: #cbd5e1;
+  --muted-bg: #0f172a;
   --card: rgba(15, 23, 42, 0.85);
+  --border: #1e293b;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+}
+
+/* Visible focus indicators (WCAG 2.4.11) */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Respect reduced motion (WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 html {

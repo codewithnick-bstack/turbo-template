@@ -65,7 +65,7 @@ export default function PricingPage() {
     <main className="max-w-5xl mx-auto px-4 py-24">
       <div className="text-center mb-16">
         <h1 className="text-5xl font-bold tracking-tight mb-4">Simple pricing</h1>
-        <p className="text-xl text-neutral-500">Start free. Scale as you grow. No surprises.</p>
+        <p className="text-xl text-[var(--muted)]">Start free. Scale as you grow. No surprises.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -74,34 +74,34 @@ export default function PricingPage() {
             key={plan.name}
             className={`relative rounded-2xl p-8 border ${
               plan.highlighted
-                ? "border-indigo-600 shadow-xl shadow-indigo-100"
-                : "border-neutral-200"
+                ? "border-[var(--primary)] shadow-xl "
+                : "border-[var(--border)]"
             }`}
           >
             {plan.highlighted && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--primary)] text-white text-xs font-semibold px-3 py-1 rounded-full">
                 Most popular
               </span>
             )}
             <h2 className="text-lg font-bold mb-1">{plan.name}</h2>
             <div className="flex items-end gap-1 mb-2">
               <span className="text-4xl font-extrabold">{plan.price}</span>
-              <span className="text-neutral-500 text-sm mb-1">{plan.period}</span>
+              <span className="text-[var(--muted)] text-sm mb-1">{plan.period}</span>
             </div>
-            <p className="text-sm text-neutral-500 mb-6">{plan.description}</p>
+            <p className="text-sm text-[var(--muted)] mb-6">{plan.description}</p>
             <a
               href={plan.ctaHref}
               className={`block text-center text-sm font-semibold px-5 py-2.5 rounded-xl mb-8 ${
                 plan.highlighted
-                  ? "bg-indigo-600 hover:bg-indigo-700 text-white"
-                  : "bg-neutral-100 hover:bg-neutral-200 text-neutral-900"
+                  ? "bg-[var(--primary)] hover:opacity-90 text-white"
+                  : "bg-[var(--muted-bg)] hover:opacity-80 text-[var(--foreground)]"
               }`}
             >
               {plan.cta}
             </a>
             <ul className="space-y-2.5">
               {plan.features.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-neutral-700">
+                <li key={f} className="flex items-center gap-2 text-sm text-[var(--foreground)]/70">
                   <span className="text-green-500">✓</span>
                   {f}
                 </li>
@@ -117,7 +117,7 @@ export default function PricingPage() {
           {FAQ.map((q) => (
             <div key={q.q}>
               <p className="font-semibold text-sm mb-1">{q.q}</p>
-              <p className="text-sm text-neutral-500">{q.a}</p>
+              <p className="text-sm text-[var(--muted)]">{q.a}</p>
             </div>
           ))}
         </div>

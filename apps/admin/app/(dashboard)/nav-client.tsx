@@ -14,27 +14,34 @@ export function NavClient({ nav }: { nav: NavGroup[]; pathname?: string }) {
   }
 
   return (
-    <nav className="space-y-4 text-sm">
+    <ul role="list" className="space-y-4 text-sm">
       {nav.map((group) => (
-        <div key={group.label}>
-          <p className="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">
+        <li key={group.label}>
+          <p
+            id={`nav-group-${group.label.toLowerCase()}`}
+            className="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]"
+          >
             {group.label}
           </p>
-          {group.items.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`block rounded px-3 py-2 transition-colors ${
-                isActive(item.href)
-                  ? "bg-[var(--border)] font-medium text-[var(--foreground)]"
-                  : "hover:bg-[var(--border)] text-[var(--foreground)]"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
+          <ul role="list" aria-labelledby={`nav-group-${group.label.toLowerCase()}`}>
+            {group.items.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className={`block rounded px-3 py-2 transition-colors ${
+                    isActive(item.href)
+                      ? "bg-[var(--border)] font-medium text-[var(--foreground)]"
+                      : "hover:bg-[var(--border)] text-[var(--foreground)]"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </li>
       ))}
-    </nav>
+    </ul>
   );
 }

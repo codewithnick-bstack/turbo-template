@@ -30,19 +30,28 @@ const NAV = [
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-dvh">
-      <aside className="w-56 shrink-0 border-r border-[var(--border)] bg-[var(--background)] px-4 py-6 flex flex-col">
-        <Link href="/" className="flex items-center gap-2 mb-4">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded focus:bg-[var(--primary)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[var(--primary-foreground)]"
+      >
+        Skip to main content
+      </a>
+      <aside
+        aria-label="Sidebar navigation"
+        className="w-56 shrink-0 border-r border-[var(--border)] bg-[var(--background)] px-4 py-6 flex flex-col"
+      >
+        <Link href="/" className="flex items-center gap-2 mb-4" aria-label="Platform home">
           <p className="text-sm font-bold tracking-tight text-[var(--foreground)]">Platform</p>
         </Link>
         <SearchBar />
-        <div className="mt-4 flex-1">
+        <nav aria-label="Main navigation" className="mt-4 flex-1">
           <NavClient nav={NAV} />
-        </div>
+        </nav>
         <div className="mt-4 pt-4 border-t border-[var(--border)]">
           <LocaleSwitcher />
         </div>
       </aside>
-      <main className="flex-1 overflow-auto px-8 py-8">{children}</main>
+      <main id="main-content" tabIndex={-1} className="flex-1 overflow-auto px-8 py-8">{children}</main>
     </div>
   );
 }
