@@ -1127,6 +1127,81 @@ export const toolDefinitions: ToolDef[] = [
     handler: (input, ctx) => clientFor(ctx).templates.create(input),
   },
 
+  // ── OAuth app tools ───────────────────────────────────────────────────────
+  {
+    name: "list_oauth_apps",
+    description: "List OAuth apps registered by the tenant.",
+    inputSchema: { type: "object", properties: {} },
+    handler: (_input, ctx) => clientFor(ctx).oauthApps.list(),
+  },
+  {
+    name: "create_oauth_app",
+    description: "Register a new OAuth app for the developer platform.",
+    annotations: { requiresApproval: true },
+    inputSchema: {
+      type: "object",
+      required: ["name", "redirectUris", "scopes"],
+      properties: {
+        name: { type: "string" },
+        description: { type: "string" },
+        redirectUris: { type: "array", items: { type: "string" } },
+        scopes: { type: "array", items: { type: "string" } },
+        homepageUrl: { type: "string" },
+      },
+    },
+    handler: (input, ctx) => {
+      const { name, description, redirectUris, scopes, homepageUrl } = input as {
+        name: string;
+        description?: string;
+        redirectUris: string[];
+        scopes: string[];
+        homepageUrl?: string;
+      };
+      return clientFor(ctx).oauthApps.create({ name, description, redirectUris, scopes, homepageUrl });
+    },
+  },
+  {
+    name: "get_oauth_app",
+    description: "Get an OAuth app by ID.",
+    inputSchema: {
+      type: "object",
+      required: ["appId"],
+      properties: { appId: { type: "string" } },
+    },
+    handler: (input, ctx) => {
+      const { appId } = input as { appId: string };
+      return clientFor(ctx).oauthApps.get(appId);
+    },
+  },
+  {
+    name: "delete_oauth_app",
+    description: "Delete an OAuth app and revoke all grants.",
+    annotations: { requiresApproval: true },
+    inputSchema: {
+      type: "object",
+      required: ["appId"],
+      properties: { appId: { type: "string" } },
+    },
+    handler: (input, ctx) => {
+      const { appId } = input as { appId: string };
+      return clientFor(ctx).oauthApps.delete(appId);
+    },
+  },
+  {
+    name: "rotate_oauth_secret",
+    description: "Rotate the client secret for an OAuth app.",
+    annotations: { requiresApproval: true },
+    inputSchema: {
+      type: "object",
+      required: ["appId"],
+      properties: { appId: { type: "string" } },
+    },
+    handler: (input, ctx) => {
+      const { appId } = input as { appId: string };
+      return clientFor(ctx).oauthApps.rotateSecret(appId);
+    },
+  },
+
   // ── Compliance tools ──────────────────────────────────────────────────────
   {
     name: "export_tenant_data",

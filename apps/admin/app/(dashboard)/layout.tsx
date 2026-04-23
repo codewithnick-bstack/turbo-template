@@ -22,6 +22,7 @@ const NAV = [
     { href: "/settings/compliance", label: "Compliance" },
     { href: "/webhooks", label: "Webhooks" },
     { href: "/settings/api-keys", label: "API Keys" },
+    { href: "/settings/developers", label: "Developer Platform" },
     { href: "/settings/audit-log", label: "Audit Log" },
   ]},
 ];

@@ -26,6 +26,7 @@ import { auditRoute } from "./routes/audit";
 import { apiKeysRoute } from "./routes/api-keys";
 import { agencyRoute } from "./routes/agency";
 import { complianceRoute } from "./routes/compliance";
+import { oauthRoute } from "./routes/oauth";
 
 export function buildServer() {
   const app = new Hono();
@@ -66,6 +67,7 @@ export function buildServer() {
   app.route("/v1/api-keys", apiKeysRoute);
   app.route("/v1/agency", agencyRoute);
   app.route("/v1/compliance", complianceRoute);
+  app.route("/v1/oauth", oauthRoute);
 
   app.onError((err, c) => {
     if (isAppError(err)) {

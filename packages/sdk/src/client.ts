@@ -292,6 +292,17 @@ export class PlatformClient {
       ),
   };
 
+  oauthApps = {
+    list: () => this.request<{ data: Array<{ id: string; name: string; clientId: string; scopes: string[]; createdAt: string }> }>("GET", "/v1/oauth/apps"),
+    create: (input: { name: string; description?: string; redirectUris: string[]; scopes: string[]; homepageUrl?: string }) =>
+      this.request<{ id: string; name: string; clientId: string; clientSecret: string; scopes: string[]; createdAt: string }>("POST", "/v1/oauth/apps", input),
+    get: (appId: string) =>
+      this.request<{ id: string; name: string; clientId: string; scopes: string[]; redirectUris: string[]; createdAt: string }>("GET", `/v1/oauth/apps/${appId}`),
+    delete: (appId: string) => this.request<{ deleted: string }>("DELETE", `/v1/oauth/apps/${appId}`),
+    rotateSecret: (appId: string) =>
+      this.request<{ clientSecret: string }>("POST", `/v1/oauth/apps/${appId}/rotate-secret`),
+  };
+
   compliance = {
     exportData: () =>
       this.request<{ data: Record<string, unknown> }>("POST", "/v1/compliance/export"),

@@ -13,6 +13,7 @@ export * as AI from "./ai";
 export * as Members from "./members";
 export * as Agency from "./agency";
 export * as Compliance from "./compliance";
+export * as OAuth from "./oauth";
 export * as Branding from "./branding";
 export * as Templates from "./templates";
 export * as ApiKeys from "./api-keys";
