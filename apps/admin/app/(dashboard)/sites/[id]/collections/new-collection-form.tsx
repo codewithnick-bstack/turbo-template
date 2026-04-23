@@ -75,7 +75,7 @@ export default function NewCollectionForm({ siteId }: { siteId: string }) {
             onChange={(e) => setName(e.target.value)}
             required
             placeholder="Products"
-            className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
           />
         </div>
         <div>
@@ -84,7 +84,7 @@ export default function NewCollectionForm({ siteId }: { siteId: string }) {
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
             placeholder="auto-generated"
-            className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
           />
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function NewCollectionForm({ siteId }: { siteId: string }) {
       <div>
         <div className="flex items-center justify-between mb-2">
           <label className="text-xs font-semibold text-[var(--muted-foreground)]">Fields</label>
-          <button type="button" onClick={addField} className="text-xs text-blue-600 hover:underline">+ Add field</button>
+          <button type="button" onClick={addField} className="text-xs text-[var(--primary)] hover:underline">+ Add field</button>
         </div>
         <div className="space-y-2">
           {fields.map((field, i) => (
@@ -102,7 +102,7 @@ export default function NewCollectionForm({ siteId }: { siteId: string }) {
                 onChange={(e) => updateField(i, { name: e.target.value })}
                 required
                 placeholder="field_name"
-                className="border border-[var(--border)] rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="border border-[var(--border)] rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
               />
               <select
                 value={field.kind}
@@ -131,7 +131,7 @@ export default function NewCollectionForm({ siteId }: { siteId: string }) {
         <button type="submit" disabled={loading} className="rounded-xl bg-[var(--primary)] px-4 py-2 text-sm text-[var(--primary-foreground)] disabled:opacity-50">
           {loading ? "Creating…" : "Create"}
         </button>
-        <button type="button" onClick={() => setOpen(false)} className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm hover:bg-neutral-50">
+        <button type="button" onClick={() => setOpen(false)} className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm hover:bg-[var(--muted)]">
           Cancel
         </button>
       </div>

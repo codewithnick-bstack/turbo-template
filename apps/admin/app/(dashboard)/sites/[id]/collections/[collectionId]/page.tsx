@@ -53,7 +53,7 @@ export default async function CollectionEntriesPage({
         <div className="border border-[var(--border)] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[var(--border)] bg-neutral-50">
+              <tr className="border-b border-[var(--border)] bg-[var(--muted)]">
                 <th className="px-4 py-2 text-left text-xs font-semibold text-[var(--muted-foreground)]">Slug</th>
                 <th className="px-4 py-2 text-left text-xs font-semibold text-[var(--muted-foreground)]">Status</th>
                 {collection.fields.slice(0, 2).map((f) => (
@@ -83,7 +83,7 @@ export default async function CollectionEntriesPage({
                   <td className="px-4 py-2">
                     <Link
                       href={`/sites/${siteId}/collections/${collectionId}/entries/${entry.id}`}
-                      className="text-xs text-blue-600 hover:underline"
+                      className="text-xs text-[var(--primary)] hover:underline"
                     >
                       Edit
                     </Link>

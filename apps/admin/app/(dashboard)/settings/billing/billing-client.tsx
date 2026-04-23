@@ -48,7 +48,7 @@ export function BillingClient({ plans }: { plans: Plan[] }) {
           type="button"
           onClick={handlePortal}
           disabled={loading === "portal"}
-          className="flex items-center gap-1.5 rounded-md border border-neutral-200 px-4 py-2 text-sm hover:bg-neutral-50 disabled:opacity-50"
+          className="flex items-center gap-1.5 rounded-md border border-[var(--border)] px-4 py-2 text-sm hover:bg-[var(--muted)] disabled:opacity-50"
         >
           {loading === "portal" && <Loader2 size={14} className="animate-spin" />}
           Manage Subscription
@@ -57,9 +57,9 @@ export function BillingClient({ plans }: { plans: Plan[] }) {
 
       <div className="grid gap-4 md:grid-cols-3">
         {plans.map((plan) => (
-          <div key={plan.id} className="rounded-xl border border-neutral-200 p-6">
+          <div key={plan.id} className="rounded-xl border border-[var(--border)] p-6">
             <h3 className="text-lg font-semibold">{plan.name}</h3>
-            <p className="mt-1 text-sm text-neutral-500">{plan.description}</p>
+            <p className="mt-1 text-sm text-[var(--muted-foreground)]">{plan.description}</p>
             <ul className="mt-4 space-y-2">
               {plan.features.map((f) => (
                 <li key={f} className="flex items-start gap-2 text-sm">
@@ -72,7 +72,7 @@ export function BillingClient({ plans }: { plans: Plan[] }) {
               type="button"
               onClick={() => handleUpgrade(plan.id)}
               disabled={!!loading}
-              className="mt-6 w-full rounded-md bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
+              className="mt-6 w-full rounded-md bg-[var(--primary)] py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading === plan.id && <Loader2 size={14} className="animate-spin" />}
               Get {plan.name}

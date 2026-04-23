@@ -6,7 +6,7 @@ import type { TTAuditEntry } from "@repo/sdk";
 const RESOURCE_KINDS = ["", "site", "page", "blog_post", "form", "member", "media", "collection", "entry"];
 const ACTION_COLORS: Record<string, string> = {
   created: "text-green-600 bg-green-50",
-  updated: "text-blue-600 bg-blue-50",
+  updated: "text-[var(--primary)] bg-blue-50",
   deleted: "text-red-600 bg-red-50",
   published: "text-purple-600 bg-purple-50",
   unpublished: "text-amber-600 bg-amber-50",

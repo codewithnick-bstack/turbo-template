@@ -1,23 +1,48 @@
 @import "tailwindcss";
 
 @layer base {
+  /* Ensure visible focus outlines for keyboard navigation (WCAG 2.4.11) */
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  /* Respect reduced motion preferences (WCAG 2.3.3) */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer base {
   :root {
     --background: #ffffff;
     --foreground: #0b0d10;
+    --muted: #f9fafb;
     --muted-foreground: #6b7280;
     --primary: #111827;
     --primary-foreground: #ffffff;
     --border: #e5e7eb;
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
       --background: #0b0d10;
       --foreground: #f3f4f6;
+      --muted: #111827;
       --muted-foreground: #9ca3af;
       --primary: #f3f4f6;
       --primary-foreground: #0b0d10;
       --border: #1f2937;
+      --destructive: #ef4444;
+      --destructive-foreground: #ffffff;
     }
   }
 }

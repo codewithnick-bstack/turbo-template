@@ -46,7 +46,7 @@ export function UseTemplateClient({ templateId }: { templateId: string }) {
           required
           value={name}
           onChange={(e) => { setName(e.target.value); setSlug(deriveSlug(e.target.value)); }}
-          className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
           placeholder="My Awesome Site"
         />
       </div>
@@ -57,7 +57,7 @@ export function UseTemplateClient({ templateId }: { templateId: string }) {
           required
           value={slug}
           onChange={(e) => setSlug(deriveSlug(e.target.value))}
-          className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
           placeholder="my-awesome-site"
         />
       </div>

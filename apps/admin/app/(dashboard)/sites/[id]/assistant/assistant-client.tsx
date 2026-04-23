@@ -41,7 +41,7 @@ export function AssistantClient({ siteId }: { siteId: string }) {
       <h1 className="text-xl font-bold mb-4">Site Assistant</h1>
       <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-1">
         {messages.length === 0 && (
-          <p className="text-neutral-400 text-sm text-center mt-8">
+          <p className="text-[var(--muted-foreground)] text-sm text-center mt-8">
             Ask anything about your site — pages, forms, analytics, publishing.
           </p>
         )}
@@ -58,7 +58,7 @@ export function AssistantClient({ siteId }: { siteId: string }) {
           </div>
         ))}
         {loading && (
-          <div className="bg-neutral-100 text-neutral-400 rounded-xl px-4 py-3 text-sm max-w-[85%] animate-pulse">
+          <div className="bg-neutral-100 text-[var(--muted-foreground)] rounded-xl px-4 py-3 text-sm max-w-[85%] animate-pulse">
             Thinking…
           </div>
         )}
@@ -66,7 +66,7 @@ export function AssistantClient({ siteId }: { siteId: string }) {
       </div>
       <div className="flex gap-2">
         <input
-          className="flex-1 border border-neutral-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="flex-1 border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
           placeholder="Ask the assistant…"
           value={input}
           onChange={(e) => setInput(e.target.value)}

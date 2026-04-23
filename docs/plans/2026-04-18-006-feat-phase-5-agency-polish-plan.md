@@ -27,7 +27,7 @@ Unlock agencies and harden the product: agency workspaces with client sub-tenant
 
 ## Implementation Units
 
-- [ ] **Unit 5.1: Agency workspaces + client seats**
+- [x] **Unit 5.1: Agency workspaces + client seats**
 
   **Files:** `packages/db/src/schema/tenants.ts` (parent_tenant_id), `packages/core/src/agency/{workspace,client,invite}.ts`, `apps/admin/app/(dashboard)/agency/*`
   **Test scenarios:** agency creates client tenant + invites (happy); client cannot see sibling (error); client cannot sub-nest (edge); billing rollup toggle (integration); remove-agency path (edge).

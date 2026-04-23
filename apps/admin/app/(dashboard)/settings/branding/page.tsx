@@ -14,7 +14,7 @@ export default async function BrandingPage() {
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-1">White-Label Branding</h1>
-      <p className="text-neutral-500 text-sm mb-6">Customize your platform appearance.</p>
+      <p className="text-[var(--muted-foreground)] text-sm mb-6">Customize your platform appearance.</p>
       <BrandingClient initial={branding} />
     </div>
   );

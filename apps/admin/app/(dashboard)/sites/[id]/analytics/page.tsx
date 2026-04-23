@@ -66,7 +66,7 @@ export default async function AnalyticsPage({ params }: { params: Promise<{ id: 
                   return (
                     <div key={i} className="flex-1 flex flex-col items-center gap-1 group relative">
                       <div
-                        className="w-full bg-indigo-500 rounded-t"
+                        className="w-full bg-[var(--primary)] rounded-t"
                         style={{ height: `${pct}%` }}
                       />
                       <span className="hidden group-hover:block absolute -top-6 text-xs bg-black text-white rounded px-1 py-0.5">

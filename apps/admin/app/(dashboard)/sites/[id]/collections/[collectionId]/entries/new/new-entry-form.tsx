@@ -56,7 +56,7 @@ export default function NewEntryForm({
           value={slug}
           onChange={(e) => setSlug(e.target.value)}
           placeholder="auto-generated"
-          className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
         />
       </div>
 
@@ -71,7 +71,7 @@ export default function NewEntryForm({
               onChange={(e) => setField(field.name, e.target.value)}
               required={field.required}
               rows={4}
-              className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-y"
+              className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)] resize-y"
             />
           ) : field.kind === "boolean" ? (
             <input
@@ -85,7 +85,7 @@ export default function NewEntryForm({
               value={data[field.name] ?? ""}
               onChange={(e) => setField(field.name, e.target.value)}
               required={field.required}
-              className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
             />
           ) : field.kind === "date" ? (
             <input
@@ -93,7 +93,7 @@ export default function NewEntryForm({
               value={data[field.name] ?? ""}
               onChange={(e) => setField(field.name, e.target.value)}
               required={field.required}
-              className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
             />
           ) : (
             <input
@@ -101,7 +101,7 @@ export default function NewEntryForm({
               value={data[field.name] ?? ""}
               onChange={(e) => setField(field.name, e.target.value)}
               required={field.required}
-              className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
             />
           )}
         </div>
@@ -125,7 +125,7 @@ export default function NewEntryForm({
         <button type="submit" disabled={loading} className="rounded-xl bg-[var(--primary)] px-5 py-2 text-sm text-[var(--primary-foreground)] disabled:opacity-50">
           {loading ? "Creating…" : "Create entry"}
         </button>
-        <a href={backHref} className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm hover:bg-neutral-50">
+        <a href={backHref} className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm hover:bg-[var(--muted)]">
           Cancel
         </a>
       </div>

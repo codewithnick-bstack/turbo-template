@@ -37,7 +37,7 @@ export default async function SiteFormsPage({ params }: { params: Promise<{ id: 
               <div className="flex items-center gap-3">
                 <Link
                   href={`/sites/${siteId}/forms/${f.id}/submissions`}
-                  className="text-xs text-blue-600 hover:underline"
+                  className="text-xs text-[var(--primary)] hover:underline"
                 >
                   Submissions
                 </Link>

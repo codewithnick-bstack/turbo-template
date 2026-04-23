@@ -97,7 +97,7 @@ export default function EditEntryPage({
           <input
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
-            className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
           />
         </div>
 
@@ -112,7 +112,7 @@ export default function EditEntryPage({
                 onChange={(e) => setField(field.name, e.target.value)}
                 rows={4}
                 required={field.required}
-                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
               />
             ) : field.kind === "boolean" ? (
               <input
@@ -127,7 +127,7 @@ export default function EditEntryPage({
                 value={data[field.name] ?? ""}
                 onChange={(e) => setField(field.name, e.target.value)}
                 required={field.required}
-                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
               />
             ) : field.kind === "date" ? (
               <input
@@ -135,7 +135,7 @@ export default function EditEntryPage({
                 value={data[field.name] ?? ""}
                 onChange={(e) => setField(field.name, e.target.value)}
                 required={field.required}
-                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
               />
             ) : (
               <input
@@ -143,7 +143,7 @@ export default function EditEntryPage({
                 value={data[field.name] ?? ""}
                 onChange={(e) => setField(field.name, e.target.value)}
                 required={field.required}
-                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
               />
             )}
           </div>
@@ -169,7 +169,7 @@ export default function EditEntryPage({
           >
             {saving ? "Saving…" : saved ? "Saved!" : "Save"}
           </button>
-          <Link href={backHref} className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm hover:bg-neutral-50">
+          <Link href={backHref} className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm hover:bg-[var(--muted)]">
             Cancel
           </Link>
         </div>

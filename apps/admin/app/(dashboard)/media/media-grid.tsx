@@ -48,7 +48,7 @@ export function MediaGrid({ initialItems }: { initialItems: TMedia[] }) {
         const isImage = item.mimeType.startsWith("image/");
         return (
           <div key={item.id} className="group border border-[var(--border)] rounded-xl overflow-hidden">
-            <div className="aspect-video bg-neutral-100 flex items-center justify-center relative overflow-hidden">
+            <div className="aspect-video bg-[var(--muted)] flex items-center justify-center relative overflow-hidden">
               {isImage && url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -64,14 +64,14 @@ export function MediaGrid({ initialItems }: { initialItems: TMedia[] }) {
               <div className="absolute top-1 right-1 hidden group-hover:flex gap-1">
                 <button
                   onClick={() => copyUrl(item.storageKey)}
-                  className="bg-white border border-neutral-200 rounded p-1 text-neutral-500 hover:text-neutral-800"
+                  className="bg-white border border-[var(--border)] rounded p-1 text-[var(--muted-foreground)] hover:text-neutral-800"
                   title="Copy URL"
                 >
                   <Copy size={12} />
                 </button>
                 <button
                   onClick={() => handleDelete(item.id, item.originalFilename)}
-                  className="bg-white border border-neutral-200 rounded p-1 text-red-400 hover:text-red-600"
+                  className="bg-white border border-[var(--border)] rounded p-1 text-red-400 hover:text-red-600"
                   title="Delete"
                 >
                   <Trash2 size={12} />

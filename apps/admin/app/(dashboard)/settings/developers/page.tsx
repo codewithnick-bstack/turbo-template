@@ -47,7 +47,7 @@ export default async function DevelopersPage() {
             <p className="text-sm text-[var(--muted-foreground)]">No OAuth apps yet.</p>
             <Link
               href="/settings/developers/new"
-              className="mt-2 inline-block text-sm text-blue-600 hover:underline"
+              className="mt-2 inline-block text-sm text-[var(--primary)] hover:underline"
             >
               Register your first app
             </Link>

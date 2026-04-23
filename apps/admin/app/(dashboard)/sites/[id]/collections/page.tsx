@@ -28,13 +28,13 @@ export default async function CollectionsPage({ params }: { params: Promise<{ id
             <Link
               key={c.id}
               href={`/sites/${siteId}/collections/${c.id}`}
-              className="flex items-center justify-between px-4 py-3 border border-[var(--border)] rounded-xl hover:bg-neutral-50 transition-colors"
+              className="flex items-center justify-between px-4 py-3 border border-[var(--border)] rounded-xl hover:bg-[var(--muted)] transition-colors"
             >
               <div>
                 <p className="font-medium text-sm">{c.name}</p>
                 <p className="text-xs text-[var(--muted-foreground)]">{c.slug} · {c.fields.length} field{c.fields.length === 1 ? "" : "s"}</p>
               </div>
-              <span className="text-xs text-blue-600">View entries →</span>
+              <span className="text-xs text-[var(--primary)]">View entries →</span>
             </Link>
           ))}
         </div>

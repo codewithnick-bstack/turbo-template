@@ -46,7 +46,7 @@ export default async function MembersPage() {
               {m.name && <p className="text-xs text-[var(--muted-foreground)]">{m.email}</p>}
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-xs font-medium bg-neutral-100 px-2 py-1 rounded capitalize">
+              <span className="text-xs font-medium bg-[var(--muted)] px-2 py-1 rounded capitalize">
                 {m.role}
               </span>
               <RemoveMemberButton userId={m.userId} />

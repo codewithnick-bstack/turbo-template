@@ -57,7 +57,7 @@ export default async function AgencyPage() {
           <p className="text-sm text-[var(--muted-foreground)]">No client workspaces yet.</p>
           <Link
             href="/agency/clients/new"
-            className="mt-3 inline-block text-sm text-blue-600 hover:underline"
+            className="mt-3 inline-block text-sm text-[var(--primary)] hover:underline"
           >
             Create your first client workspace
           </Link>

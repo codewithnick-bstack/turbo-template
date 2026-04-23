@@ -17,7 +17,7 @@ export default async function UseTemplatePage({ params }: Props) {
   return (
     <div className="p-6 max-w-lg mx-auto">
       <h1 className="text-2xl font-bold mb-1">Use Template</h1>
-      {template && <p className="text-neutral-500 text-sm mb-6">{template.name}</p>}
+      {template && <p className="text-[var(--muted-foreground)] text-sm mb-6">{template.name}</p>}
       <UseTemplateClient templateId={id} />
     </div>
   );

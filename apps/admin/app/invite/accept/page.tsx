@@ -35,8 +35,8 @@ export default async function InviteAcceptPage({ searchParams }: Props) {
 
   if (error || !invite) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50">
-        <div className="bg-white rounded-2xl border border-neutral-200 p-8 max-w-sm w-full text-center">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--muted)]">
+        <div className="bg-white rounded-2xl border border-[var(--border)] p-8 max-w-sm w-full text-center">
           <p className="text-red-600 text-sm">{error || "Invalid invite link"}</p>
         </div>
       </div>
@@ -45,9 +45,9 @@ export default async function InviteAcceptPage({ searchParams }: Props) {
 
   if (invite.status !== "pending") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50">
-        <div className="bg-white rounded-2xl border border-neutral-200 p-8 max-w-sm w-full text-center">
-          <p className="text-sm text-neutral-500">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--muted)]">
+        <div className="bg-white rounded-2xl border border-[var(--border)] p-8 max-w-sm w-full text-center">
+          <p className="text-sm text-[var(--muted-foreground)]">
             This invite has already been {invite.status}.
           </p>
         </div>
@@ -56,7 +56,7 @@ export default async function InviteAcceptPage({ searchParams }: Props) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-50">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--muted)]">
       <AcceptInviteClient token={token} invite={invite} />
     </div>
   );

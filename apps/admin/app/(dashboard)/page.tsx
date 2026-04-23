@@ -73,7 +73,7 @@ export default async function DashboardPage() {
                 ))}
               </div>
               {sites.length > 5 && (
-                <Link href="/sites" className="mt-3 block text-xs text-blue-600 hover:underline">
+                <Link href="/sites" className="mt-3 block text-xs text-[var(--primary)] hover:underline">
                   View all {sites.length} sites →
                 </Link>
               )}
@@ -101,7 +101,7 @@ export default async function DashboardPage() {
                 </div>
               ))}
             </div>
-            <Link href="/settings/audit-log" className="mt-3 block text-xs text-blue-600 hover:underline">
+            <Link href="/settings/audit-log" className="mt-3 block text-xs text-[var(--primary)] hover:underline">
               View full audit log →
             </Link>
           </div>
