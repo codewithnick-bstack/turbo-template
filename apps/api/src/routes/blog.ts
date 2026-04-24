@@ -16,9 +16,10 @@ export function createBlogRouter(db: Db, authGuard: RequestHandler) {
   const router = Router();
 
   // Public read routes
-  router.get("/", async (_req, res) => {
-    const posts = await blogService.listBlogPosts(db);
-    res.set("Cache-Control", "public, max-age=300, stale-while-revalidate=86400");
+  router.get("/", async (req, res) => {
+    const search = typeof req.query.search === "string" && req.query.search.trim() ? req.query.search.trim() : undefined;
+    const posts = await blogService.listBlogPosts(db, search ? { search } : {});
+    if (!search) res.set("Cache-Control", "public, max-age=300, stale-while-revalidate=86400");
     res.json(posts);
   });
 

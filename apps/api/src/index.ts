@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express, { json, urlencoded } from "express";
+import { logger } from "./lib/logger";
 import { env } from "./env";
 import rateLimit from "express-rate-limit";
 import { createDb } from "@repo/db";
@@ -67,5 +68,5 @@ app.use("/mcp", createMcpRouter(db));
 app.use(errorHandler);
 
 app.listen(env.PORT, () => {
-  console.log(`[api] running on http://localhost:${env.PORT}`);
+  logger.info({ port: env.PORT }, "api running");
 });

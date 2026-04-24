@@ -1,4 +1,4 @@
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, or, ilike, and } from "drizzle-orm";
 import type { Db } from "@repo/db";
 import { schema } from "@repo/db";
 import { AppError } from "@repo/observability";
@@ -6,9 +6,14 @@ import type { CreatePortfolioEntry, UpdatePortfolioEntry } from "../schemas/port
 import { compact } from "../lib/utils";
 import { revalidatePaths } from "../lib/revalidate";
 
-export async function listPortfolioEntries(db: Db, { includeAll = false, limit = 50, offset = 0 } = {}) {
+export async function listPortfolioEntries(db: Db, { includeAll = false, limit = 50, offset = 0, search }: { includeAll?: boolean; limit?: number; offset?: number; search?: string } = {}) {
+  const searchFilter = search
+    ? or(ilike(schema.portfolioEntries.title, `%${search}%`), ilike(schema.portfolioEntries.description, `%${search}%`))
+    : undefined;
+  const statusFilter = includeAll ? undefined : eq(schema.portfolioEntries.status, "published");
+  const where = searchFilter && statusFilter ? and(statusFilter, searchFilter) : searchFilter ?? statusFilter;
   return db.query.portfolioEntries.findMany({
-    where: includeAll ? undefined : eq(schema.portfolioEntries.status, "published"),
+    where,
     orderBy: [asc(schema.portfolioEntries.order)],
     limit,
     offset,

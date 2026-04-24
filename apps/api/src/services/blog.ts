@@ -1,4 +1,4 @@
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, or, ilike, and } from "drizzle-orm";
 import type { Db } from "@repo/db";
 import { schema } from "@repo/db";
 import { AppError } from "@repo/observability";
@@ -6,9 +6,14 @@ import type { CreateBlogPost, UpdateBlogPost } from "../schemas/blog";
 import { compact } from "../lib/utils";
 import { revalidatePaths } from "../lib/revalidate";
 
-export async function listBlogPosts(db: Db, { includeAll = false, limit = 50, offset = 0 } = {}) {
+export async function listBlogPosts(db: Db, { includeAll = false, limit = 50, offset = 0, search }: { includeAll?: boolean; limit?: number; offset?: number; search?: string } = {}) {
+  const searchFilter = search
+    ? or(ilike(schema.blogPosts.title, `%${search}%`), ilike(schema.blogPosts.excerpt, `%${search}%`))
+    : undefined;
+  const statusFilter = includeAll ? undefined : eq(schema.blogPosts.status, "published");
+  const where = searchFilter && statusFilter ? and(statusFilter, searchFilter) : searchFilter ?? statusFilter;
   return db.query.blogPosts.findMany({
-    where: includeAll ? undefined : eq(schema.blogPosts.status, "published"),
+    where,
     orderBy: [desc(schema.blogPosts.publishedAt), desc(schema.blogPosts.createdAt)],
     limit,
     offset,

@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { isAppError } from "@repo/observability";
 import { ZodError } from "zod";
+import { logger } from "../lib/logger";
 
 export function errorHandler(err: unknown, req: Request, res: Response, _next: NextFunction) {
   if (isAppError(err)) {
@@ -17,6 +18,6 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
     return;
   }
 
-  if (process.env.NODE_ENV !== "production") console.error("[api] unhandled error", err);
+  logger.error({ err }, "unhandled error");
   res.status(500).json({ code: "internal", message: "An unexpected error occurred" });
 }

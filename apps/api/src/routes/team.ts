@@ -14,9 +14,10 @@ const writeRateLimit = rateLimit({
 export function createTeamRouter(db: Db, authGuard: RequestHandler) {
   const router = Router();
 
-  router.get("/", async (_req, res) => {
-    const members = await teamService.listTeamMembers(db);
-    res.set("Cache-Control", "public, max-age=300, stale-while-revalidate=86400");
+  router.get("/", async (req, res) => {
+    const search = typeof req.query.search === "string" && req.query.search.trim() ? req.query.search.trim() : undefined;
+    const members = await teamService.listTeamMembers(db, search ? { search } : {});
+    if (!search) res.set("Cache-Control", "public, max-age=300, stale-while-revalidate=86400");
     res.json(members);
   });
 

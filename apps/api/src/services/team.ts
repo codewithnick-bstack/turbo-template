@@ -1,4 +1,4 @@
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, or, ilike } from "drizzle-orm";
 import type { Db } from "@repo/db";
 import { schema } from "@repo/db";
 import { AppError } from "@repo/observability";
@@ -6,8 +6,11 @@ import type { CreateTeamMember, UpdateTeamMember } from "../schemas/team";
 import { compact } from "../lib/utils";
 import { revalidatePaths } from "../lib/revalidate";
 
-export async function listTeamMembers(db: Db, { limit = 100 } = {}) {
-  return db.query.teamMembers.findMany({ orderBy: [asc(schema.teamMembers.order)], limit });
+export async function listTeamMembers(db: Db, { limit = 100, search }: { limit?: number; search?: string } = {}) {
+  const where = search
+    ? or(ilike(schema.teamMembers.name, `%${search}%`), ilike(schema.teamMembers.title, `%${search}%`))
+    : undefined;
+  return db.query.teamMembers.findMany({ where, orderBy: [asc(schema.teamMembers.order)], limit });
 }
 
 export async function getTeamMember(db: Db, id: string) {

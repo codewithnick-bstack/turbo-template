@@ -153,7 +153,7 @@ Admin SearchBar (combobox)
 
 ### Phase 1 — Ship Blockers
 
-- [ ] **Unit 1.1: Markdown rendering for blog posts**
+- [x] **Unit 1.1: Markdown rendering for blog posts**
 
 **Goal:** Blog post content stored as Markdown renders correctly on the public site (headings, lists, code blocks, bold/italic).
 
@@ -195,7 +195,7 @@ Admin SearchBar (combobox)
 
 ---
 
-- [ ] **Unit 1.2: First admin user creation path**
+- [x] **Unit 1.2: First admin user creation path**
 
 **Goal:** A fresh deployer can create the initial admin account by running a documented command — no direct DB access required.
 
@@ -238,7 +238,7 @@ Admin SearchBar (combobox)
 
 ---
 
-- [ ] **Unit 1.3: ISR revalidation webhook triggered from API**
+- [x] **Unit 1.3: ISR revalidation webhook triggered from API**
 
 **Goal:** Publishing, updating, or deleting content in the admin triggers ISR revalidation on the public site. Live site reflects changes within 5 seconds.
 
@@ -289,7 +289,7 @@ Admin SearchBar (combobox)
 
 ---
 
-- [ ] **Unit 1.4: `ai.txt` route**
+- [x] **Unit 1.4: `ai.txt` route**
 
 **Goal:** `GET /ai.txt` returns a machine-readable permissions manifest declaring the site's MCP endpoint and allowed agent operations. Requirement R5 from the vision reset is fulfilled.
 
@@ -344,7 +344,7 @@ Admin SearchBar (combobox)
 
 ---
 
-- [ ] **Unit 1.5: Remove broken scripts and clean up stale config**
+- [x] **Unit 1.5: Remove broken scripts and clean up stale config**
 
 **Goal:** No script in `package.json` crashes immediately. Stale changeset config, dead ADR references, and unused deps are cleaned up.
 

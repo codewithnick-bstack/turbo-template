@@ -1,4 +1,5 @@
 import { env } from "../env";
+import { logger } from "./logger";
 
 export function revalidatePaths(paths: string[]): void {
   if (!env.REVALIDATE_SECRET || !env.WEB_URL) return;
@@ -10,6 +11,8 @@ export function revalidatePaths(paths: string[]): void {
   };
 
   for (const path of paths) {
-    fetch(url, { method: "POST", headers, body: JSON.stringify({ path }) }).catch(() => {});
+    fetch(url, { method: "POST", headers, body: JSON.stringify({ path }) }).catch((err) => {
+      logger.warn({ err, path }, "ISR revalidation failed");
+    });
   }
 }
