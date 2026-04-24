@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
+// OpenTelemetry deps are optional peer deps loaded dynamically at runtime.
 type TracerConfig = {
   service: string;
   env: string;
@@ -15,10 +17,10 @@ export async function initTracer(config: TracerConfig): Promise<void> {
   }
 
   try {
-    const otel = await import("@opentelemetry/sdk-node").catch(() => null);
-    const otlp = await import("@opentelemetry/exporter-trace-otlp-http").catch(() => null);
-    const resources = await import("@opentelemetry/resources").catch(() => null);
-    const semconv = await import("@opentelemetry/semantic-conventions").catch(() => null);
+    const otel = await import("@opentelemetry/sdk-node" as string).catch(() => null) as any;
+    const otlp = await import("@opentelemetry/exporter-trace-otlp-http" as string).catch(() => null) as any;
+    const resources = await import("@opentelemetry/resources" as string).catch(() => null) as any;
+    const semconv = await import("@opentelemetry/semantic-conventions" as string).catch(() => null) as any;
 
     if (!otel || !otlp || !resources || !semconv) {
       console.warn("[observability] OTEL deps not installed; skipping tracer init.");

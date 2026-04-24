@@ -5,9 +5,9 @@ import { siteConfig } from "@/lib/site-data";
 export function SiteFooter() {
   return (
     <footer className="border-t border-slate-200 bg-slate-50/80 dark:border-slate-800 dark:bg-slate-950/70">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
-        <div>
-          <h3 className="text-lg font-semibold">{siteConfig.name}</h3>
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:px-8">
+        <div className="sm:col-span-2 lg:col-span-1">
+          <p className="text-lg font-semibold">{siteConfig.name}</p>
           <p className="mt-3 max-w-md text-sm text-slate-600 dark:text-slate-300">{siteConfig.description}</p>
           <div className="mt-4 space-y-1 text-sm text-slate-600 dark:text-slate-300">
             <p>{siteConfig.email}</p>
@@ -17,7 +17,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h4 className="font-semibold">Pages</h4>
+          <p className="font-semibold">Pages</p>
           <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
             {siteConfig.nav.map((item) => (
               <li key={item.href}>
@@ -30,7 +30,20 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h4 className="font-semibold">Social</h4>
+          <p className="font-semibold">More</p>
+          <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
+            {siteConfig.footerExtra.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className="hover:text-slate-900 dark:hover:text-white">
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <p className="font-semibold">Social</p>
           <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
             {siteConfig.socials.map((item) => (
               <li key={item.label}>

@@ -1,0 +1,46 @@
+import { eq, asc } from "drizzle-orm";
+import type { Db } from "@repo/db";
+import { schema } from "@repo/db";
+import { AppError } from "@repo/observability";
+import type { CreateTeamMember, UpdateTeamMember } from "../schemas/team";
+import { compact } from "../lib/utils";
+
+export async function listTeamMembers(db: Db, { limit = 100 } = {}) {
+  return db.query.teamMembers.findMany({ orderBy: [asc(schema.teamMembers.order)], limit });
+}
+
+export async function getTeamMember(db: Db, id: string) {
+  const member = await db.query.teamMembers.findFirst({ where: eq(schema.teamMembers.id, id) });
+  if (!member) throw new AppError("not_found", `Team member not found: ${id}`);
+  return member;
+}
+
+export async function createTeamMember(db: Db, data: CreateTeamMember) {
+  const [member] = await db.insert(schema.teamMembers).values(compact(data)).returning();
+  if (!member) throw new AppError("internal", "Failed to create team member");
+  return member;
+}
+
+export async function updateTeamMember(db: Db, id: string, data: UpdateTeamMember) {
+  const [updated] = await db
+    .update(schema.teamMembers)
+    .set(compact({ ...data, updatedAt: new Date() }))
+    .where(eq(schema.teamMembers.id, id))
+    .returning();
+  if (!updated) throw new AppError("not_found", `Team member not found: ${id}`);
+  return updated;
+}
+
+export async function deleteTeamMember(db: Db, id: string) {
+  const [deleted] = await db.delete(schema.teamMembers).where(eq(schema.teamMembers.id, id)).returning();
+  if (!deleted) throw new AppError("not_found", `Team member not found: ${id}`);
+  return deleted;
+}
+
+export async function reorderTeamMembers(db: Db, ids: string[]) {
+  await Promise.all(
+    ids.map((id, index) =>
+      db.update(schema.teamMembers).set({ order: index, updatedAt: new Date() }).where(eq(schema.teamMembers.id, id)),
+    ),
+  );
+}

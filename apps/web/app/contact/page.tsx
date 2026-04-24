@@ -8,6 +8,21 @@ import { siteConfig } from "@/lib/site-data";
 export const metadata: Metadata = {
   title: "Contact",
   description: "Send a project inquiry through the integrated Express backend.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact",
+    description: "Send a project inquiry through the integrated Express backend.",
+    url: "/contact",
+    siteName: siteConfig.name,
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Contact" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact",
+    description: "Send a project inquiry through the integrated Express backend.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Contact" }],
+  },
 };
 
 export default function ContactPage() {

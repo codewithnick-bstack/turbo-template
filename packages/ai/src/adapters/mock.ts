@@ -18,7 +18,7 @@ export const mockAdapter: ModelAdapter = {
 
   async complete(req: CompletionRequest): Promise<CompletionResponse> {
     const intent = detectIntent(req);
-    const text = MOCK_RESPONSES[intent] ?? MOCK_RESPONSES.default;
+    const text = MOCK_RESPONSES[intent] ?? MOCK_RESPONSES["default"] ?? "Mock response.";
     return {
       text,
       usage: { inputTokens: 100, outputTokens: text.split(/\s+/).length },

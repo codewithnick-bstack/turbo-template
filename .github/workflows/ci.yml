@@ -56,22 +56,6 @@ jobs:
       - name: Build
         run: pnpm turbo run build
 
-  parity-check:
-    name: agent-parity-lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10.8.0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - name: Parity invariant
-        run: pnpm parity:check
-
   security-audit:
     name: security-audit
     runs-on: ubuntu-latest

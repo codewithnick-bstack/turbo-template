@@ -1,30 +1,29 @@
 import Link from "next/link";
 import { NavClient } from "./nav-client";
-import { SearchBar } from "./search-bar";
-import { LocaleSwitcher } from "@/components/locale-switcher";
 
 const NAV = [
-  { label: "Overview", items: [
-    { href: "/", label: "Dashboard" },
-  ]},
-  { label: "Content", items: [
-    { href: "/sites", label: "Sites" },
-    { href: "/templates", label: "Templates" },
-    { href: "/media", label: "Media" },
-  ]},
-  { label: "Agency", items: [
-    { href: "/agency", label: "Client Workspaces" },
-  ]},
-  { label: "Settings", items: [
-    { href: "/settings/members", label: "Members" },
-    { href: "/settings/branding", label: "Branding" },
-    { href: "/settings/billing", label: "Billing" },
-    { href: "/settings/compliance", label: "Compliance" },
-    { href: "/webhooks", label: "Webhooks" },
-    { href: "/settings/api-keys", label: "API Keys" },
-    { href: "/settings/developers", label: "Developer Platform" },
-    { href: "/settings/audit-log", label: "Audit Log" },
-  ]},
+  {
+    label: "Content",
+    items: [
+      { href: "/blog", label: "Blog" },
+      { href: "/team", label: "Team" },
+      { href: "/testimonials", label: "Testimonials" },
+      { href: "/portfolio", label: "Portfolio" },
+    ],
+  },
+  {
+    label: "Inbox",
+    items: [
+      { href: "/contacts", label: "Contacts" },
+    ],
+  },
+  {
+    label: "Admin",
+    items: [
+      { href: "/settings", label: "Settings" },
+      { href: "/ai", label: "AI Assistant" },
+    ],
+  },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -38,20 +37,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </a>
       <aside
         aria-label="Sidebar navigation"
-        className="w-56 shrink-0 border-r border-[var(--border)] bg-[var(--background)] px-4 py-6 flex flex-col"
+        className="w-52 shrink-0 border-r border-[var(--border)] bg-[var(--background)] px-4 py-6 flex flex-col"
       >
-        <Link href="/" className="flex items-center gap-2 mb-4" aria-label="Platform home">
-          <p className="text-sm font-bold tracking-tight text-[var(--foreground)]">Platform</p>
+        <Link href="/" className="flex items-center gap-2 mb-6" aria-label="Dashboard home">
+          <p className="text-sm font-bold tracking-tight text-[var(--foreground)]">Admin</p>
         </Link>
-        <SearchBar />
-        <nav aria-label="Main navigation" className="mt-4 flex-1">
+        <nav aria-label="Main navigation" className="flex-1">
           <NavClient nav={NAV} />
         </nav>
-        <div className="mt-4 pt-4 border-t border-[var(--border)]">
-          <LocaleSwitcher />
+        <div className="mt-auto pt-4 border-t border-[var(--border)]">
+          <a
+            href="/auth/sign-out"
+            className="block rounded-lg px-3 py-2 text-sm text-[var(--muted-foreground)] hover:bg-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+          >
+            Sign out
+          </a>
         </div>
       </aside>
-      <main id="main-content" tabIndex={-1} className="flex-1 overflow-auto px-8 py-8">{children}</main>
+      <main id="main-content" tabIndex={-1} className="flex-1 overflow-auto px-8 py-8">
+        {children}
+      </main>
     </div>
   );
 }

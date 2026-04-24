@@ -10,9 +10,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/renderer-blocks": "workspace:*",
-    "@repo/schemas": "workspace:*",
     "@hookform/resolvers": "^5.0.1",
+    "@repo/ui": "workspace:*",
+    "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",

@@ -1,3 +1,4 @@
+export { generateTokens, type BrandConfig, type SocialLinks } from "./brand-tokens";
 export * from "./components/avatar";
 export * from "./components/badge";
 export * from "./components/button";

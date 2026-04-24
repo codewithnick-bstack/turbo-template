@@ -9,12 +9,15 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { submitContact } from "@/lib/api";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Please enter your name."),
   email: z.string().email("Enter a valid email."),
-  company: z.string().optional(),
+  phone: z.string().optional(),
+  subject: z.string().optional(),
   message: z.string().min(20, "Tell us a little more about the project."),
+  _trap: z.string().max(0).optional(),
 });
 
 type ContactValues = z.infer<typeof contactSchema>;
@@ -22,12 +25,15 @@ type ContactValues = z.infer<typeof contactSchema>;
 const defaultValues: ContactValues = {
   name: "",
   email: "",
-  company: "",
+  phone: "",
+  subject: "",
   message: "",
+  _trap: "",
 };
 
 export function ContactForm() {
   const [status, setStatus] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
   const {
     register,
     handleSubmit,
@@ -40,54 +46,85 @@ export function ContactForm() {
 
   const onSubmit = async (values: ContactValues) => {
     setStatus(null);
-
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
-    const response = await fetch(`${apiBaseUrl}/api/contact`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
-
-    if (!response.ok) {
-      const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-      setStatus(payload?.error ?? "Something went wrong. Please try again.");
+    if (values._trap) {
+      setIsSuccess(true);
+      setStatus("Thanks — your message is on the way.");
       return;
     }
-
-    reset(defaultValues);
-    setStatus("Thanks — your message is on the way.");
+    const { _trap: _, ...payload } = values;
+    try {
+      await submitContact(payload);
+      reset(defaultValues);
+      setIsSuccess(true);
+      setStatus("Thanks — your message is on the way.");
+    } catch (err) {
+      setIsSuccess(false);
+      setStatus(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    }
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate aria-label="Contact form">
+      {/* Honeypot — hidden from real users, bots fill it in */}
+      <div className="absolute -left-[9999px] -top-[9999px] overflow-hidden" aria-hidden="true">
+        <label htmlFor="_trap">Leave this empty</label>
+        <input id="_trap" type="text" tabIndex={-1} autoComplete="off" {...register("_trap")} />
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className="mb-2 block text-sm font-medium">Name</label>
-          <Input id="name" aria-invalid={!!errors.name} {...register("name")} />
-          {errors.name ? <p className="mt-1 text-xs text-rose-500">{errors.name.message}</p> : null}
+          <Input
+            id="name"
+            aria-invalid={!!errors.name}
+            aria-describedby={errors.name ? "name-error" : undefined}
+            {...register("name")}
+          />
+          {errors.name ? (
+            <p id="name-error" role="alert" className="mt-1 text-xs text-rose-500">{errors.name.message}</p>
+          ) : null}
         </div>
         <div>
           <label htmlFor="email" className="mb-2 block text-sm font-medium">Email</label>
-          <Input id="email" type="email" aria-invalid={!!errors.email} {...register("email")} />
-          {errors.email ? <p className="mt-1 text-xs text-rose-500">{errors.email.message}</p> : null}
+          <Input
+            id="email"
+            type="email"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? "email-error" : undefined}
+            {...register("email")}
+          />
+          {errors.email ? (
+            <p id="email-error" role="alert" className="mt-1 text-xs text-rose-500">{errors.email.message}</p>
+          ) : null}
         </div>
       </div>
       <div>
-        <label htmlFor="company" className="mb-2 block text-sm font-medium">Company</label>
-        <Input id="company" {...register("company")} />
+        <label htmlFor="subject" className="mb-2 block text-sm font-medium">Subject</label>
+        <Input id="subject" {...register("subject")} />
       </div>
       <div>
         <label htmlFor="message" className="mb-2 block text-sm font-medium">Project details</label>
-        <Textarea id="message" aria-invalid={!!errors.message} {...register("message")} />
-        {errors.message ? <p className="mt-1 text-xs text-rose-500">{errors.message.message}</p> : null}
+        <Textarea
+          id="message"
+          aria-invalid={!!errors.message}
+          aria-describedby={errors.message ? "message-error" : undefined}
+          {...register("message")}
+        />
+        {errors.message ? (
+          <p id="message-error" role="alert" className="mt-1 text-xs text-rose-500">{errors.message.message}</p>
+        ) : null}
       </div>
       <Button type="submit" className="w-full sm:w-auto" disabled={isSubmitting}>
-        {isSubmitting ? <Loader2 className="mr-2 size-4 animate-spin" /> : <Send className="mr-2 size-4" />}
+        {isSubmitting ? <Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" /> : <Send className="mr-2 size-4" aria-hidden="true" />}
         Send inquiry
       </Button>
-      {status ? <p className="text-sm text-slate-600 dark:text-slate-300">{status}</p> : null}
+      {status ? (
+        <p
+          role={isSuccess ? "status" : "alert"}
+          className={`text-sm ${isSuccess ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}
+        >
+          {status}
+        </p>
+      ) : null}
     </form>
   );
 }

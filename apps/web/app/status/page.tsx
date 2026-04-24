@@ -4,6 +4,18 @@ import { CheckCircle, AlertCircle, Clock } from "lucide-react";
 export const metadata: Metadata = {
   title: "System Status",
   description: "Real-time status of all Platform services.",
+  alternates: { canonical: "/status" },
+  openGraph: {
+    title: "System Status",
+    description: "Real-time status of all Platform services.",
+    url: "/status",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "System Status",
+    description: "Real-time status of all Platform services.",
+  },
 };
 
 type ServiceStatus = "operational" | "degraded" | "outage" | "maintenance";
@@ -62,9 +74,9 @@ function StatusBadge({ status }: { status: ServiceStatus }) {
   const { label, className } = config[status];
   return (
     <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${className}`}>
-      {status === "operational" && <CheckCircle size={10} />}
-      {(status === "degraded" || status === "outage") && <AlertCircle size={10} />}
-      {status === "maintenance" && <Clock size={10} />}
+      {status === "operational" && <CheckCircle size={10} aria-hidden="true" />}
+      {(status === "degraded" || status === "outage") && <AlertCircle size={10} aria-hidden="true" />}
+      {status === "maintenance" && <Clock size={10} aria-hidden="true" />}
       {label}
     </span>
   );
@@ -174,11 +186,12 @@ export default function StatusPage() {
         <h2 id="uptime-heading" className="text-xl font-semibold mb-4">Historical Uptime</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
+            <caption className="sr-only">Historical uptime by month</caption>
             <thead>
               <tr className="border-b border-[var(--border)]">
-                <th className="text-left pb-2 font-medium text-[var(--muted)]">Month</th>
-                <th className="text-right pb-2 font-medium text-[var(--muted)]">Uptime</th>
-                <th className="text-right pb-2 font-medium text-[var(--muted)] hidden sm:table-cell">Status</th>
+                <th scope="col" className="text-left pb-2 font-medium text-[var(--muted)]">Month</th>
+                <th scope="col" className="text-right pb-2 font-medium text-[var(--muted)]">Uptime</th>
+                <th scope="col" className="text-right pb-2 font-medium text-[var(--muted)] hidden sm:table-cell">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border)]">

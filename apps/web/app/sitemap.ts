@@ -1,24 +1,37 @@
 import type { MetadataRoute } from "next";
 
-import { getAllPosts } from "@/lib/blog";
+import { getBlogPosts } from "@/lib/api";
 import { siteConfig } from "@/lib/site-data";
 
+const staticRoutes = [
+  { path: "", priority: 1.0 },
+  { path: "/about", priority: 0.8 },
+  { path: "/services", priority: 0.8 },
+  { path: "/pricing", priority: 0.8 },
+  { path: "/portfolio", priority: 0.7 },
+  { path: "/team", priority: 0.7 },
+  { path: "/blog", priority: 0.7 },
+  { path: "/testimonials", priority: 0.6 },
+  { path: "/contact", priority: 0.9 },
+  { path: "/status", priority: 0.3 },
+];
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getAllPosts();
-  const routes = ["", "/about", "/services", "/portfolio", "/blog", "/contact"];
+  const posts = await getBlogPosts().catch(() => []);
+  const publishedPosts = posts.filter((p) => p.status === "published");
 
   return [
-    ...routes.map((route) => ({
-      url: `${siteConfig.url}${route}`,
+    ...staticRoutes.map(({ path, priority }) => ({
+      url: `${siteConfig.url}${path}`,
       changeFrequency: "weekly" as const,
-      priority: route === "" ? 1 : 0.7,
-      lastModified: new Date(),
+      priority,
+      lastModified: new Date("2026-01-01"),
     })),
-    ...posts.map((post) => ({
+    ...publishedPosts.map((post) => ({
       url: `${siteConfig.url}/blog/${post.slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.6,
-      lastModified: new Date(post.date),
+      lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date("2026-01-01"),
     })),
   ];
 }

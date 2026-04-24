@@ -1,4 +1,15 @@
 /* Design token defaults — override in consuming app globals.css */
+/* Brand tokens (populated by generateTokens from brand.config.ts) */
+:root {
+  --color-primary: #6366f1;
+  --color-primary-foreground: #ffffff;
+  --color-accent: #8b5cf6;
+  --color-accent-foreground: #ffffff;
+  --font-heading: "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+/* Structural tokens */
 :root {
   /* Spacing scale */
   --space-1: 0.25rem;

@@ -1,12 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Toaster } from "sonner";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Platform Admin",
-  description: "Build, manage, and ship agent-native sites.",
+  title: { default: "Admin", template: "%s | Admin" },
+  description: "Content management for your website.",
+  robots: { index: false, follow: false },
 };
 
 export const viewport: Viewport = {
@@ -18,17 +17,12 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const locale = await getLocale();
-  const messages = await getMessages();
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={locale}>
-      <body className="min-h-dvh bg-background text-foreground antialiased">
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
-          <Toaster richColors position="bottom-right" />
-        </NextIntlClientProvider>
+    <html lang="en">
+      <body className="min-h-dvh bg-[var(--background)] text-[var(--foreground)] antialiased">
+        {children}
+        <Toaster richColors position="bottom-right" />
       </body>
     </html>
   );

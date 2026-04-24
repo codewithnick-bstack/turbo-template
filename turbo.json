@@ -32,9 +32,6 @@
     },
     "db:seed": {
       "cache": false
-    },
-    "generate:openapi": {
-      "outputs": ["packages/sdk/generated/**"]
     }
   }
 }

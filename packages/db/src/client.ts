@@ -9,11 +9,12 @@ type ClientOptions = {
 };
 
 export function createDb(options: ClientOptions) {
-  const sql = postgres(options.url, {
+  const sqlOptions: Parameters<typeof postgres>[1] = {
     max: options.poolMax ?? 10,
-    ssl: options.ssl ? "require" : undefined,
     prepare: false,
-  });
+  };
+  if (options.ssl) sqlOptions.ssl = "require";
+  const sql = postgres(options.url, sqlOptions);
 
   return {
     db: drizzle(sql, { schema }),

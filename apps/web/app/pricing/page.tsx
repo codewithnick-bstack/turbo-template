@@ -1,146 +1,123 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { services, faqs } from "@/lib/site-data";
+import { siteConfig } from "@/lib/site-data";
+import { formatCurrency } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Pricing",
-  description: "Simple, transparent pricing. Start free.",
+  description: "Transparent pricing for website design, development, and growth services.",
+  alternates: { canonical: "/pricing" },
+  openGraph: {
+    title: "Pricing",
+    description: "Transparent pricing for website design, development, and growth services.",
+    url: "/pricing",
+    siteName: siteConfig.name,
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Pricing" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pricing",
+    description: "Transparent pricing for website design, development, and growth services.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Pricing" }],
+  },
 };
 
-const PLANS = [
-  {
-    name: "Starter",
-    price: "$0",
-    period: "forever",
-    description: "Perfect for personal projects and experiments.",
-    features: [
-      "1 site",
-      "5 pages per site",
-      "100 form submissions / month",
-      "Analytics (30-day window)",
-      "Community support",
-    ],
-    cta: "Get started free",
-    ctaHref: "/onboarding",
-    highlighted: false,
-  },
-  {
-    name: "Pro",
-    price: "$29",
-    period: "/ month",
-    description: "For growing businesses that need more power.",
-    features: [
-      "10 sites",
-      "Unlimited pages",
-      "10,000 form submissions / month",
-      "Analytics (90-day window)",
-      "AI content generation",
-      "Custom domains",
-      "Priority support",
-    ],
-    cta: "Start free trial",
-    ctaHref: "/onboarding",
-    highlighted: true,
-  },
-  {
-    name: "Agency",
-    price: "$99",
-    period: "/ month",
-    description: "For agencies managing multiple clients.",
-    features: [
-      "Unlimited sites",
-      "White-label branding",
-      "Template marketplace",
-      "Client seat management",
-      "Reseller billing",
-      "MCP / agent API access",
-      "Dedicated support",
-    ],
-    cta: "Contact sales",
-    ctaHref: "/contact",
-    highlighted: false,
-  },
-];
+const servicesJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": services.map((service) => ({
+    "@type": "Service",
+    name: service.title,
+    description: service.summary,
+    provider: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
+    offers: {
+      "@type": "Offer",
+      price: service.priceFrom,
+      priceCurrency: "USD",
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: service.priceFrom,
+        priceCurrency: "USD",
+        description: "starting from",
+      },
+      url: `${siteConfig.url}/contact`,
+    },
+  })),
+};
 
 export default function PricingPage() {
   return (
-    <main className="max-w-5xl mx-auto px-4 py-24">
-      <div className="text-center mb-16">
-        <h1 className="text-5xl font-bold tracking-tight mb-4">Simple pricing</h1>
-        <p className="text-xl text-[var(--muted)]">Start free. Scale as you grow. No surprises.</p>
+    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesJsonLd) }}
+      />
+      <div className="text-center">
+        <Badge>Pricing</Badge>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight">Simple, honest pricing</h1>
+        <p className="mt-4 text-base text-slate-600 dark:text-slate-300">
+          Fixed-scope packages with clear deliverables. No hourly surprises.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {PLANS.map((plan) => (
-          <div
-            key={plan.name}
-            className={`relative rounded-2xl p-8 border ${
-              plan.highlighted
-                ? "border-[var(--primary)] shadow-xl "
-                : "border-[var(--border)]"
-            }`}
-          >
-            {plan.highlighted && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--primary)] text-white text-xs font-semibold px-3 py-1 rounded-full">
-                Most popular
-              </span>
-            )}
-            <h2 className="text-lg font-bold mb-1">{plan.name}</h2>
-            <div className="flex items-end gap-1 mb-2">
-              <span className="text-4xl font-extrabold">{plan.price}</span>
-              <span className="text-[var(--muted)] text-sm mb-1">{plan.period}</span>
-            </div>
-            <p className="text-sm text-[var(--muted)] mb-6">{plan.description}</p>
-            <a
-              href={plan.ctaHref}
-              className={`block text-center text-sm font-semibold px-5 py-2.5 rounded-xl mb-8 ${
-                plan.highlighted
-                  ? "bg-[var(--primary)] hover:opacity-90 text-white"
-                  : "bg-[var(--muted-bg)] hover:opacity-80 text-[var(--foreground)]"
-              }`}
-            >
-              {plan.cta}
-            </a>
-            <ul className="space-y-2.5">
-              {plan.features.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-[var(--foreground)]/70">
-                  <span className="text-green-500">✓</span>
-                  {f}
+      <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {services.map((service, i) => (
+          <Card key={service.slug} className={i === 1 ? "ring-2 ring-indigo-500" : ""}>
+            {i === 1 ? (
+              <div className="-mt-2 mb-3">
+                <Badge className="bg-indigo-600 text-white">Most popular</Badge>
+              </div>
+            ) : null}
+            <h2 className="text-xl font-semibold">{service.title}</h2>
+            <p className="mt-1 text-2xl font-bold">
+              {formatCurrency(service.priceFrom)}
+              <span className="ml-1 text-sm font-normal text-slate-500 dark:text-slate-400">starting from</span>
+            </p>
+            <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">{service.summary}</p>
+            <ul className="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-300">
+              {service.bullets.map((bullet) => (
+                <li key={bullet} className="flex items-center gap-2">
+                  <span className="text-indigo-500">✓</span>
+                  {bullet}
                 </li>
               ))}
             </ul>
-          </div>
+            <div className="mt-6">
+              <Link href="/contact">
+                <Button className="w-full" variant={i === 1 ? "default" : "secondary"}>
+                  Get started
+                </Button>
+              </Link>
+            </div>
+          </Card>
         ))}
       </div>
 
-      <div className="mt-20 text-center">
-        <h2 className="text-2xl font-bold mb-4">Frequently asked questions</h2>
-        <div className="max-w-2xl mx-auto space-y-6 text-left">
-          {FAQ.map((q) => (
-            <div key={q.q}>
-              <p className="font-semibold text-sm mb-1">{q.q}</p>
-              <p className="text-sm text-[var(--muted)]">{q.a}</p>
-            </div>
+      <section className="mt-16">
+        <h2 className="text-2xl font-semibold">Common questions</h2>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {faqs.map((faq) => (
+            <Card key={faq.question}>
+              <h3 className="font-semibold">{faq.question}</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{faq.answer}</p>
+            </Card>
           ))}
         </div>
+      </section>
+
+      <div className="mt-12 text-center">
+        <p className="text-slate-600 dark:text-slate-300">Not sure which package fits? Let&apos;s talk.</p>
+        <div className="mt-4">
+          <Link href="/contact">
+            <Button size="lg">Book a free consultation</Button>
+          </Link>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
-
-const FAQ = [
-  {
-    q: "Can I switch plans at any time?",
-    a: "Yes. Upgrade or downgrade immediately. Prorated charges apply.",
-  },
-  {
-    q: "What happens if I exceed my plan limits?",
-    a: "You'll see an upgrade prompt in the admin. Existing features keep working until the next billing cycle.",
-  },
-  {
-    q: "Is there a free trial for Pro?",
-    a: "Yes — 14 days free, no credit card required.",
-  },
-  {
-    q: "Can agents (Claude, GPT-4) operate my sites?",
-    a: "Yes. Every plan includes the MCP server and full agent parity. Agency plan unlocks the complete API surface.",
-  },
-];

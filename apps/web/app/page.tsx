@@ -1,12 +1,62 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+
+import type { Metadata } from "next";
 
 import { HeroSection } from "@/components/hero-section";
 import { TestimonialCarousel } from "@/components/testimonial-carousel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { faqs, features } from "@/lib/site-data";
+import { getTestimonials } from "@/lib/api";
+import { faqs, features, siteConfig } from "@/lib/site-data";
+
+export const metadata: Metadata = {
+  title: { absolute: `${siteConfig.name} — ${siteConfig.description}` },
+  description: siteConfig.description,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: siteConfig.name,
+    description: siteConfig.description,
+    url: "/",
+    siteName: siteConfig.name,
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+  },
+};
+
+async function TestimonialsSection() {
+  const testimonials = await getTestimonials().catch(() => []);
+  if (testimonials.length === 0) return null;
+  return (
+    <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+      <div className="mb-6">
+        <Badge>Testimonials</Badge>
+        <h2 className="mt-3 text-3xl font-semibold tracking-tight">Trusted by modern service brands</h2>
+      </div>
+      <TestimonialCarousel testimonials={testimonials} />
+    </section>
+  );
+}
+
+function TestimonialsSkeleton() {
+  return (
+    <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+      <div className="animate-pulse space-y-4">
+        <div className="h-5 w-28 rounded-full bg-slate-200 dark:bg-slate-800" />
+        <div className="h-8 w-1/2 rounded-xl bg-slate-200 dark:bg-slate-800" />
+        <div className="h-36 rounded-[2rem] bg-slate-200 dark:bg-slate-800" />
+      </div>
+    </section>
+  );
+}
 
 export default function HomePage() {
   return (
@@ -30,13 +80,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-        <div className="mb-6">
-          <Badge>Testimonials</Badge>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight">Trusted by modern service brands</h2>
-        </div>
-        <TestimonialCarousel />
-      </section>
+      <Suspense fallback={<TestimonialsSkeleton />}>
+        <TestimonialsSection />
+      </Suspense>
 
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">

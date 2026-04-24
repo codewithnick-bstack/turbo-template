@@ -2,20 +2,32 @@
 
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { stats } from "@/lib/site-data";
 
 export function HeroSection() {
+  const reduced = useReducedMotion();
+
+  // No opacity in initial — hero text must be visible immediately for LCP.
+  // Only animate the y-offset so the h1 is painted on first render.
+  const fadeUp = reduced
+    ? {}
+    : { initial: { y: 18 }, animate: { y: 0 }, transition: { duration: 0.5, ease: "easeOut" } };
+
+  const fadeScale = reduced
+    ? {}
+    : { initial: { opacity: 0, scale: 0.96 }, animate: { opacity: 1, scale: 1 }, transition: { duration: 0.5, delay: 0.1 } };
+
   return (
     <section className="relative overflow-hidden px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.16),transparent_24%)]" />
       <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <motion.div {...fadeUp}>
           <Badge className="mb-4 gap-2">
-            <Sparkles className="size-3.5" />
+            <Sparkles className="size-3.5" aria-hidden="true" />
             Client-ready starter template
           </Badge>
           <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl dark:text-white">
@@ -25,22 +37,20 @@ export function HeroSection() {
             A premium monorepo starter with Next.js, Express, cron automation, Tailwind v4, and a polished marketing UI ready for fast swaps.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href="/contact">
-              <Button size="lg">
+            <Link href="/contact" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full">
                 Launch your next site
-                <ArrowRight className="ml-2 size-4" />
+                <ArrowRight className="ml-2 size-4" aria-hidden="true" />
               </Button>
             </Link>
-            <Link href="/portfolio">
-              <Button variant="secondary" size="lg">Browse examples</Button>
+            <Link href="/portfolio" className="w-full sm:w-auto">
+              <Button variant="secondary" size="lg" className="w-full">Browse examples</Button>
             </Link>
           </div>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          {...fadeScale}
           className="rounded-[2rem] border border-white/60 bg-white/80 p-4 shadow-2xl shadow-indigo-500/10 backdrop-blur dark:border-slate-800 dark:bg-slate-950/70"
         >
           <div className="rounded-[1.5rem] bg-slate-950 p-5 text-white">

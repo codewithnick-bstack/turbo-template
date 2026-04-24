@@ -1,32 +1,49 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const MUTATING_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
+const PUBLIC_PATHS = ["/login", "/favicon.ico", "/_next"];
+
+function isOriginSafe(origin: string | null, host: string | null): boolean {
+  if (!origin || !host) return true;
+  try {
+    return new URL(origin).host === host;
+  } catch {
+    return false;
+  }
+}
 
 export function middleware(req: NextRequest) {
-  if (process.env.NODE_ENV !== "production") return NextResponse.next();
-  if (!MUTATING_METHODS.has(req.method)) return NextResponse.next();
+  const { pathname } = req.nextUrl;
 
-  const origin = req.headers.get("origin");
-  const host = req.headers.get("host");
-
-  if (!origin) {
-    return NextResponse.json({ code: "forbidden", message: "Origin header required" }, { status: 403 });
+  // Allow public paths
+  if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
+    return NextResponse.next();
   }
 
-  let originHost: string;
-  try {
-    originHost = new URL(origin).host;
-  } catch {
-    return NextResponse.json({ code: "forbidden", message: "CSRF check failed" }, { status: 403 });
+  // CSRF protection for all mutating requests
+  if (["POST", "PUT", "PATCH", "DELETE"].includes(req.method)) {
+    const origin = req.headers.get("origin");
+    const host = req.headers.get("host");
+    if (!isOriginSafe(origin, host)) {
+      return NextResponse.json({ code: "forbidden", message: "CSRF check failed" }, { status: 403 });
+    }
   }
 
-  if (originHost !== host) {
-    return NextResponse.json({ code: "forbidden", message: "CSRF check failed" }, { status: 403 });
+  // Check for better-auth session cookie
+  const sessionCookie =
+    req.cookies.get("better-auth.session_token") ??
+    req.cookies.get("__Secure-better-auth.session_token");
+
+  if (!sessionCookie) {
+    const loginUrl = new URL("/login", req.url);
+    // Validate callbackUrl stays on-origin
+    const callbackUrl = pathname.startsWith("/") ? pathname : "/";
+    loginUrl.searchParams.set("callbackUrl", callbackUrl);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: "/api/:path*",
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

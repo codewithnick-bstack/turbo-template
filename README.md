@@ -1,10 +1,22 @@
-# Agent-Native Website Platform
+# AI-First Business Website Template
 
-Turborepo monorepo for a **multi-tenant, agent-native website platform** with an **agency reseller tier**. Serves both self-serve small businesses and agencies operating many client sites.
+A Turborepo monorepo for a **single-business website** with an AI-powered chatbot, CMS, and MCP agent interface. Clone it, edit `brand.config.ts`, and deploy.
 
-Every feature must be reachable through **UI, HTTP API, and MCP tools at parity** (ADR 0005).
+---
 
-> This repo is a developer starter template / boilerplate. Clone it, fill in your own domain logic, and you get multi-tenancy, billing, AI, MCP agent parity, and analytics out of the box.
+## Stack
+
+| Layer        | Technology                              |
+| ------------ | --------------------------------------- |
+| Web frontend | Next.js 15 (App Router, Turbopack)      |
+| Admin CMS    | Next.js 15 (App Router, Turbopack)      |
+| API          | Express 5 + TypeScript                  |
+| Database     | Postgres 16 + Drizzle ORM               |
+| Auth         | better-auth (email + password)          |
+| AI           | Anthropic Claude (claude-haiku-4-5)     |
+| MCP server   | `@modelcontextprotocol/sdk` over HTTP   |
+| Styling      | Tailwind CSS v4 + CSS custom properties |
+| Monorepo     | Turborepo + pnpm workspaces             |
 
 ---
 
@@ -12,39 +24,24 @@ Every feature must be reachable through **UI, HTTP API, and MCP tools at parity*
 
 ```
 apps/
-  web/            Renderer — Next.js 15 marketing/client-site renderer
-  admin/          Authoring UI — Next.js 15 App Router
-  platform-api/   Primary REST API — Hono
-  worker/         Background jobs — BullMQ (email, AI, media, webhooks, search)
-  mcp/            MCP agent server — HTTP tools endpoint
-  docs/           Docs site — Next.js
+  web/       Marketing website — Next.js 15, port 3000
+  admin/     Content management — Next.js 15, port 4000
+  api/       REST API + MCP server — Express 5, port 3001
 packages/
-  ui/             Shared UI primitives (shadcn-style)
-  config/         tsconfig + tailwind + env helpers
-  eslint-config/  Shared ESLint config
-  schemas/        Zod schemas — single source of truth   [scaffolded]
-  core/           Domain services (parity invariant)     [scaffolded]
-  db/             Postgres + Drizzle                     [scaffolded]
-  sdk/            Typed client for the API               [scaffolded]
-  auth/           Auth adapter (WorkOS / Clerk / mock)   [scaffolded]
-  billing/        Stripe + entitlements                  [scaffolded]
-  ai/             Model adapters + prompts               [scaffolded]
-  search/         Hybrid BM25 + vector search            [scaffolded]
-  flags/          OpenFeature wrapper                    [scaffolded]
-  observability/  Logger, tracer, AppError taxonomy      [scaffolded]
-  renderer-blocks/ Page-builder blocks                   [scaffolded]
-  test-utils/     Shared fixtures                        [scaffolded]
-  cli/            `platform` CLI                         [scaffolded]
-infra/            docker-compose for local Postgres + Redis + MinIO, perf budget, SLOs
+  ui/            Shared UI components + brand token generator
+  config/        tsconfig + ESLint base configs
+  eslint-config/ Shared ESLint rules
+  db/            Postgres schema + Drizzle client
+  auth/          better-auth configuration wrapper
+  ai/            Anthropic model adapter
+  observability/ Logger + error taxonomy
+infra/
+  docker-compose.yml  Local Postgres
+  perf-budget.json    CI bundle size limits
 docs/
-  plans/          Roadmap + per-phase plans
-  adr/            Architecture Decision Records
-  brainstorms/    Feature-level requirements seeds
-  runbooks/       On-call playbooks
-  solutions/      Institutional memory
-scripts/
-  verify-parity.ts     CI lint for ADR 0005
-  generate-openapi.ts  Stub; full in Phase 1 Unit 1.6
+  plans/       Implementation plans
+  brainstorms/ Feature requirements docs
+  adr/         Architecture Decision Records
 ```
 
 ---
@@ -52,76 +49,151 @@ scripts/
 ## Quick start
 
 ```bash
-# One command — installs deps, copies env files, starts infra, migrates DB
+# 1. Clone
+git clone <repo-url> my-site && cd my-site
+
+# 2. Install + setup infra
 make setup
 
-# Start all apps
+# 3. Customize your brand
+#    Edit brand.config.ts at the repo root — change business name,
+#    colors, fonts, contact info, social links.
+
+# 4. Start all three apps
 make dev
 ```
 
-Or step by step:
+Apps start at:
 
-```bash
-pnpm install
-cp .env.example .env
-cp apps/platform-api/.env.example apps/platform-api/.env
-cp apps/admin/.env.example apps/admin/.env
-cp apps/mcp/.env.example apps/mcp/.env
-cp apps/worker/.env.example apps/worker/.env
-make db          # Postgres + Redis + MinIO via docker compose
-make migrate
-pnpm dev
+- `http://localhost:3000` — website
+- `http://localhost:4000` — admin CMS
+- `http://localhost:3001` — API (health: `/health`)
+
+---
+
+## Branding
+
+Edit `brand.config.ts` at the repo root:
+
+```ts
+const brand: BrandConfig = {
+  businessName: "Acme Studio",
+  tagline: "We build digital experiences that grow businesses.",
+  primaryColor: "#6366f1",
+  accentColor: "#8b5cf6",
+  fontHeading: "Inter",
+  fontBody: "Inter",
+  email: "hello@acmestudio.com",
+  phone: "+1 (555) 123-4567",
+  address: "123 Main St, San Francisco CA 94105",
+  socialLinks: {
+    twitter: "https://twitter.com/acmestudio",
+    linkedin: "https://linkedin.com/company/acmestudio",
+    github: "https://github.com/acmestudio",
+  },
+};
 ```
 
-All third-party credentials (Stripe, Resend, WorkOS, Anthropic, etc.) are **optional in dev** — apps boot with mock/stub adapters and fall back gracefully until real keys are supplied.
-
-Default ports:
-
-| Service       | URL                   |
-| ------------- | --------------------- |
-| renderer      | http://localhost:3000 |
-| admin         | http://localhost:4000 |
-| platform-api  | http://localhost:4100 |
-| mcp           | http://localhost:4200 |
-| docs          | http://localhost:4300 |
-| postgres      | localhost:5432        |
-| redis         | localhost:6379        |
-| minio console | http://localhost:9001 |
-
-Third-party credentials (WorkOS/Clerk, Stripe, Resend, Anthropic, etc.) are optional in dev: apps boot with placeholder-safe defaults and fall back to dry-run or mock behavior until real keys are supplied.
+`primaryColor` and `accentColor` are injected as CSS custom properties at build time via `generateTokens()` from `@repo/ui`. Color changes require a redeploy (or `next dev` restart).
 
 ---
 
-## Verify
+## Architecture
+
+```
+apps/web   ──► apps/api  /api/v1/*  (REST)
+apps/admin ──►           /auth/*    (better-auth)
+                         /mcp       (MCP over HTTP)
+                              │
+                    packages/{db,auth,ai,observability}
+```
+
+**Constraint:** `apps/web` and `apps/admin` import zero business-logic packages. Only `@repo/ui` (components + tokens) and `@repo/config` (tsconfig/eslint) are shared. All data access, auth, and AI logic live in `apps/api`.
+
+---
+
+## Environment variables
+
+Copy `.env.example` files and fill in values:
 
 ```bash
-pnpm typecheck
-pnpm lint
-pnpm test
-pnpm build
-pnpm parity:check
+# apps/api/.env
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/app_dev
+ANTHROPIC_API_KEY=sk-ant-...
+RESEND_API_KEY=re_...
+BETTER_AUTH_SECRET=...
+CORS_ORIGIN=http://localhost:3000,http://localhost:4000
+
+# apps/web/.env.local
+NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# apps/admin/.env.local
+NEXT_PUBLIC_API_URL=http://localhost:3001
+API_URL=http://localhost:3001
 ```
 
 ---
 
-## Roadmap
+## API
 
-Full strategic roadmap: [`docs/plans/2026-04-18-001-feat-agent-native-platform-roadmap-plan.md`](docs/plans/2026-04-18-001-feat-agent-native-platform-roadmap-plan.md).
+| Method | Path                   | Auth          | Description                 |
+| ------ | ---------------------- | ------------- | --------------------------- |
+| GET    | `/health`              | —             | Health check                |
+| GET    | `/api/v1/settings`     | —             | Site settings               |
+| GET    | `/api/v1/blog`         | —             | Published posts             |
+| GET    | `/api/v1/blog/:slug`   | —             | Single post                 |
+| GET    | `/api/v1/team`         | —             | Team members                |
+| GET    | `/api/v1/testimonials` | —             | Testimonials                |
+| GET    | `/api/v1/portfolio`    | —             | Published portfolio entries |
+| POST   | `/api/v1/contact`      | —             | Submit contact form         |
+| POST   | `/api/v1/chat`         | —             | Chat with site AI           |
+| POST   | `/auth/sign-in/email`  | —             | Admin sign in               |
+| GET    | `/mcp`                 | Admin session | MCP server (SSE)            |
 
-Phase plans:
-
-- [Phase 1 — Multi-tenancy, auth, API shell](docs/plans/2026-04-18-002-feat-phase-1-multitenancy-auth-plan.md)
-- [Phase 2 — Builder, CMS, media, MCP, webhooks](docs/plans/2026-04-18-003-feat-phase-2-builder-cms-mcp-plan.md)
-- [Phase 3 — Billing, forms, analytics, legacy sunset](docs/plans/2026-04-18-004-feat-phase-3-billing-analytics-plan.md)
-- [Phase 4 — AI differentiators](docs/plans/2026-04-18-005-feat-phase-4-ai-differentiators-plan.md)
-- [Phase 5 — Agency layer + polish](docs/plans/2026-04-18-006-feat-phase-5-agency-polish-plan.md)
-- [Phase 6 — Ecosystem, compliance, GTM](docs/plans/2026-04-18-007-feat-phase-6-ecosystem-compliance-plan.md)
+Admin endpoints (require session cookie) under `/api/v1/{blog,team,testimonials,portfolio,contacts,settings,ai}` expose full CRUD.
 
 ---
 
-## Core principles
+## MCP
 
-- **Agent parity invariant** — ADR 0005. Enforced by `scripts/verify-parity.ts` in CI.
-- **Contract-first** — ADR 0004. `packages/schemas` is the single source of truth; OpenAPI, SDK, MCP manifest, and webhook payloads are generated.
-- **Tenant isolation at the DB** — Drizzle + Postgres RLS. Handlers cannot bypass.
-- **Safe-by-default** — missing third-party creds degrade to dry-run or mock, never crash at boot.
+The API exposes an MCP server at `/mcp` (Server-Sent Events transport). Connect Claude Desktop or any MCP client:
+
+```json
+{
+  "mcpServers": {
+    "website": {
+      "url": "http://localhost:3001/mcp"
+    }
+  }
+}
+```
+
+Available tools mirror the REST API: `create_blog_post`, `update_blog_post`, `list_contacts`, `get_site_settings`, `update_site_settings`, etc.
+
+---
+
+## Deployment
+
+1. Deploy `apps/api` to any Node.js host (Railway, Render, Fly.io). Set `DATABASE_URL`, `ANTHROPIC_API_KEY`, `RESEND_API_KEY`, `BETTER_AUTH_SECRET`.
+2. Deploy `apps/web` to Vercel. Set `NEXT_PUBLIC_API_URL` to your API URL.
+3. Deploy `apps/admin` to Vercel. Set `NEXT_PUBLIC_API_URL` and `API_URL`.
+4. Run `pnpm db:migrate` against your production database.
+
+---
+
+## Make targets
+
+```
+make setup      Install deps, copy env files, start Postgres, run migrations
+make dev        Start api + web + admin in parallel
+make dev-api    Start only api (:3001)
+make dev-web    Start only web (:3000)
+make dev-admin  Start only admin (:4000)
+make typecheck  Type-check all apps and packages
+make lint       Lint all apps and packages
+make db         Start Postgres via docker compose
+make migrate    Run Drizzle migrations
+make seed       Seed dev fixtures
+make reset      Wipe DB + remigrate + reseed
+```

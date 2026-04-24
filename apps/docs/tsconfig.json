@@ -1,5 +1,0 @@
-{
-  "extends": "@repo/config/tsconfig/nextjs",
-  "include": ["next-env.d.ts", "app/**/*", "content/**/*", "next.config.ts"],
-  "exclude": ["node_modules", ".next"]
-}
