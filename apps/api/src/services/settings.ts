@@ -3,6 +3,7 @@ import { schema } from "@repo/db";
 import { AppError } from "@repo/observability";
 import type { UpdateSettings } from "../schemas/settings";
 import { compact } from "../lib/utils";
+import { revalidatePaths } from "../lib/revalidate";
 
 export async function getSettings(db: Db) {
   const settings = await db.query.siteSettings.findFirst();
@@ -28,5 +29,6 @@ export async function updateSettings(db: Db, data: UpdateSettings) {
     .set(compact({ ...data, updatedAt: new Date() }))
     .returning();
   if (!updated) throw new AppError("internal", "Failed to update settings");
+  revalidatePaths(["/", "/about", "/services", "/pricing", "/contact"]);
   return updated;
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
+import { MDXRemote } from "next-mdx-remote/rsc";
 
 import { Badge } from "@/components/ui/badge";
 import { getBlogPost, getBlogPosts } from "@/lib/api";
@@ -88,8 +89,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {post.excerpt ? (
         <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-300">{post.excerpt}</p>
       ) : null}
-      <div className="prose prose-slate mt-10 max-w-none dark:prose-invert whitespace-pre-wrap">
-        {post.content}
+      <div className="prose prose-slate mt-10 max-w-none dark:prose-invert">
+        {post.content ? <MDXRemote source={post.content} /> : null}
       </div>
     </article>
   );

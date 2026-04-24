@@ -4,6 +4,7 @@ import { schema } from "@repo/db";
 import { AppError } from "@repo/observability";
 import type { CreateBlogPost, UpdateBlogPost } from "../schemas/blog";
 import { compact } from "../lib/utils";
+import { revalidatePaths } from "../lib/revalidate";
 
 export async function listBlogPosts(db: Db, { includeAll = false, limit = 50, offset = 0 } = {}) {
   return db.query.blogPosts.findMany({
@@ -29,6 +30,7 @@ export async function getBlogPostById(db: Db, id: string) {
 export async function createBlogPost(db: Db, data: CreateBlogPost) {
   const [post] = await db.insert(schema.blogPosts).values(compact(data)).returning();
   if (!post) throw new AppError("internal", "Failed to create blog post");
+  revalidatePaths(["/blog", "/"]);
   return post;
 }
 
@@ -39,6 +41,7 @@ export async function updateBlogPost(db: Db, id: string, data: UpdateBlogPost) {
     .where(eq(schema.blogPosts.id, id))
     .returning();
   if (!updated) throw new AppError("not_found", `Blog post not found: ${id}`);
+  revalidatePaths([`/blog/${updated.slug}`, "/blog", "/"]);
   return updated;
 }
 
@@ -49,6 +52,7 @@ export async function publishBlogPost(db: Db, id: string) {
     .where(eq(schema.blogPosts.id, id))
     .returning();
   if (!updated) throw new AppError("not_found", `Blog post not found: ${id}`);
+  revalidatePaths([`/blog/${updated.slug}`, "/blog", "/"]);
   return updated;
 }
 
@@ -59,11 +63,13 @@ export async function unpublishBlogPost(db: Db, id: string) {
     .where(eq(schema.blogPosts.id, id))
     .returning();
   if (!updated) throw new AppError("not_found", `Blog post not found: ${id}`);
+  revalidatePaths([`/blog/${updated.slug}`, "/blog", "/"]);
   return updated;
 }
 
 export async function deleteBlogPost(db: Db, id: string) {
   const [deleted] = await db.delete(schema.blogPosts).where(eq(schema.blogPosts.id, id)).returning();
   if (!deleted) throw new AppError("not_found", `Blog post not found: ${id}`);
+  revalidatePaths([`/blog/${deleted.slug}`, "/blog", "/"]);
   return deleted;
 }

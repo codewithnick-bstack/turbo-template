@@ -15,6 +15,8 @@ const envSchema = z.object({
   RESEND_API_KEY: z.string().optional(),
   FROM_EMAIL: z.string().email().default("noreply@example.com"),
   MCP_API_KEY: z.string().optional(),
+  REVALIDATE_SECRET: z.string().optional(),
+  ADMIN_PASSWORD: z.string().min(8).optional(),
 });
 
 function parseEnv() {

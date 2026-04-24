@@ -1,6 +1,6 @@
 # ADR 0008: Feature Flags via OpenFeature
 
-- **Status:** Accepted
+- **Status:** Superseded (2026-04-24 — feature flags not needed for single-tenant website template; use env vars for toggling optional features)
 - **Date:** 2026-04-18
 
 ## Context

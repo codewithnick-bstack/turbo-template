@@ -1,6 +1,6 @@
 # ADR 0005: Agent Parity Invariant
 
-- **Status:** Accepted
+- **Status:** Superseded (2026-04-24 — this ADR described the multi-tenant platform template; the website template uses a simpler model where `apps/api` serves both HTTP and MCP, without `platform-api`, `mcp`, or `verify-parity.ts`)
 - **Date:** 2026-04-18
 
 ## Context

@@ -1,6 +1,6 @@
 # ADR 0007: BullMQ Worker Replaces node-cron
 
-- **Status:** Accepted
+- **Status:** Superseded (2026-04-24 — neither `apps/worker` nor `apps/cron` exist in the website template; background jobs are out of scope for this use case)
 - **Date:** 2026-04-18
 
 ## Context

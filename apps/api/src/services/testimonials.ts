@@ -4,6 +4,7 @@ import { schema } from "@repo/db";
 import { AppError } from "@repo/observability";
 import type { CreateTestimonial, UpdateTestimonial } from "../schemas/testimonials";
 import { compact } from "../lib/utils";
+import { revalidatePaths } from "../lib/revalidate";
 
 export async function listTestimonials(db: Db, { featuredOnly = false, limit = 100 } = {}) {
   return db.query.testimonials.findMany({
@@ -22,6 +23,7 @@ export async function getTestimonial(db: Db, id: string) {
 export async function createTestimonial(db: Db, data: CreateTestimonial) {
   const [t] = await db.insert(schema.testimonials).values(compact(data)).returning();
   if (!t) throw new AppError("internal", "Failed to create testimonial");
+  revalidatePaths(["/testimonials", "/"]);
   return t;
 }
 
@@ -32,11 +34,13 @@ export async function updateTestimonial(db: Db, id: string, data: UpdateTestimon
     .where(eq(schema.testimonials.id, id))
     .returning();
   if (!updated) throw new AppError("not_found", `Testimonial not found: ${id}`);
+  revalidatePaths(["/testimonials", "/"]);
   return updated;
 }
 
 export async function deleteTestimonial(db: Db, id: string) {
   const [deleted] = await db.delete(schema.testimonials).where(eq(schema.testimonials.id, id)).returning();
   if (!deleted) throw new AppError("not_found", `Testimonial not found: ${id}`);
+  revalidatePaths(["/testimonials", "/"]);
   return deleted;
 }

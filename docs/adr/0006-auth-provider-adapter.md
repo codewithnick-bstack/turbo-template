@@ -1,6 +1,6 @@
 # ADR 0006: Auth Provider Adapter
 
-- **Status:** Proposed
+- **Status:** Superseded (2026-04-24 — website template uses better-auth with email+password, not WorkOS/Clerk; the B2B multi-tenant auth described here is not applicable)
 - **Date:** 2026-04-18
 
 ## Context
