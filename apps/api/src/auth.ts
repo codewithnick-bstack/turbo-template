@@ -8,7 +8,7 @@ export function initAuth(db: Db) {
   const opts = {
     db,
     secret: env.AUTH_SECRET,
-    baseUrl: env.API_URL,
+    baseUrl: `${env.API_URL}/auth`,
     fromEmail: env.FROM_EMAIL,
     ...(env.RESEND_API_KEY ? { resendApiKey: env.RESEND_API_KEY } : {}),
   };
