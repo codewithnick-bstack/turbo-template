@@ -10,12 +10,14 @@ interface ConsentContextValue {
   consent: Consent;
   grantConsent: () => void;
   denyConsent: () => void;
+  resetConsent: () => void;
 }
 
 const ConsentContext = createContext<ConsentContextValue>({
   consent: null,
   grantConsent: () => {},
   denyConsent: () => {},
+  resetConsent: () => {},
 });
 
 export function useConsent() {
@@ -44,8 +46,13 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
     setConsent("denied");
   }, []);
 
+  const resetConsent = useCallback(() => {
+    try { localStorage.removeItem(STORAGE_KEY); } catch { /* localStorage unavailable */ }
+    setConsent(null);
+  }, []);
+
   return (
-    <ConsentContext.Provider value={{ consent, grantConsent, denyConsent }}>
+    <ConsentContext.Provider value={{ consent, grantConsent, denyConsent, resetConsent }}>
       {children}
     </ConsentContext.Provider>
   );

@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { CookieSettingsButton } from "@/components/cookie-settings-button";
 import { siteConfig } from "@/lib/site-data";
 
 export function SiteFooter() {
@@ -56,7 +57,9 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-slate-200 px-4 py-4 text-center text-sm text-slate-500 dark:border-slate-800">
-        © {new Date().getFullYear()} {siteConfig.name}. Built with Next.js, Express, and Turborepo.
+        <span>© {new Date().getFullYear()} {siteConfig.name}. Built with Next.js, Express, and Turborepo.</span>
+        <span className="mx-2">·</span>
+        <CookieSettingsButton />
       </div>
     </footer>
   );

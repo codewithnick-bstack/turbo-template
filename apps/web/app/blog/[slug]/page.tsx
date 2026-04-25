@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 import { Badge } from "@/components/ui/badge";
+import { BlogReadTracker } from "@/components/blog-read-tracker";
 import { getBlogPost, getBlogPosts } from "@/lib/api";
 import { siteConfig } from "@/lib/site-data";
 
@@ -79,6 +80,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <BlogReadTracker slug={post.slug} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

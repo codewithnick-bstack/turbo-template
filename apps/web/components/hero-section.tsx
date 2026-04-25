@@ -7,7 +7,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { stats } from "@/lib/site-data";
-import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
+import { ANALYTICS_EVENTS, trackClarityEvent, trackEvent } from "@/lib/analytics";
 
 export function HeroSection() {
   const reduced = useReducedMotion();
@@ -41,7 +41,10 @@ export function HeroSection() {
             <Link
               href="/contact"
               className="w-full sm:w-auto"
-              onClick={() => trackEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED, { button: "primary", href: "/contact" })}
+              onClick={() => {
+                trackEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED, { button: "primary", href: "/contact" });
+                trackClarityEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED);
+              }}
             >
               <Button size="lg" className="w-full">
                 Launch your next site

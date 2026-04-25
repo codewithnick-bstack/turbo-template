@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { PricingCta } from "@/components/pricing-cta";
 import { services, faqs } from "@/lib/site-data";
 import { siteConfig } from "@/lib/site-data";
 import { formatCurrency } from "@/lib/utils";
@@ -88,11 +87,11 @@ export default function PricingPage() {
               ))}
             </ul>
             <div className="mt-6">
-              <Link href="/contact">
-                <Button className="w-full" variant={i === 1 ? "default" : "secondary"}>
-                  Get started
-                </Button>
-              </Link>
+              <PricingCta
+                label="Get started"
+                variant={i === 1 ? "default" : "secondary"}
+                serviceTitle={service.title}
+              />
             </div>
           </Card>
         ))}
@@ -112,10 +111,8 @@ export default function PricingPage() {
 
       <div className="mt-12 text-center">
         <p className="text-slate-600 dark:text-slate-300">Not sure which package fits? Let&apos;s talk.</p>
-        <div className="mt-4">
-          <Link href="/contact">
-            <Button size="lg">Book a free consultation</Button>
-          </Link>
+        <div className="mt-4 inline-block">
+          <PricingCta label="Book a free consultation" variant="default" size="lg" />
         </div>
       </div>
     </div>

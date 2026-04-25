@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 import { services } from "@/lib/site-data";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 
 export function ServicesShowcase() {
   const [selected, setSelected] = useState<(typeof services)[number] | null>(null);
@@ -74,6 +75,7 @@ export function ServicesShowcase() {
                 onClick={(e) => {
                   openTriggerRef.current = e.currentTarget;
                   setSelected(service);
+                  trackEvent(ANALYTICS_EVENTS.SERVICE_VIEWED, { service: service.title });
                 }}
               >
                 View package

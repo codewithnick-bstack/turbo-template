@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 
 import { HeroSection } from "@/components/hero-section";
+import { ScrollDepthTracker } from "@/components/scroll-depth-tracker";
 import { TestimonialCarousel } from "@/components/testimonial-carousel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -112,6 +113,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <ScrollDepthTracker page="/" />
     </div>
   );
 }

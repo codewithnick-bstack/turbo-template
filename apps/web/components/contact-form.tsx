@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Send } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { submitContact } from "@/lib/api";
-import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
+import { ANALYTICS_EVENTS, trackClarityEvent, trackEvent } from "@/lib/analytics";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Please enter your name."),
@@ -36,6 +36,16 @@ export function ContactForm() {
   const [status, setStatus] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const startedRef = useRef(false);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (startedRef.current && !isSuccess) {
+        trackEvent(ANALYTICS_EVENTS.CONTACT_FORM_ABANDONED, { form_name: "contact" });
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isSuccess]);
   const {
     register,
     handleSubmit,
@@ -60,6 +70,7 @@ export function ContactForm() {
       setIsSuccess(true);
       setStatus("Thanks — your message is on the way.");
       trackEvent(ANALYTICS_EVENTS.CONTACT_FORM_SUBMITTED, { form_name: "contact" });
+      trackClarityEvent(ANALYTICS_EVENTS.CONTACT_FORM_SUBMITTED);
     } catch (err) {
       setIsSuccess(false);
       setStatus(err instanceof Error ? err.message : "Something went wrong. Please try again.");

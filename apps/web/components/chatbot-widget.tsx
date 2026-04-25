@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useId } from "react";
 import { chatWithSite } from "@/lib/api";
 import type { ChatMessage } from "@/lib/types";
-import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
+import { ANALYTICS_EVENTS, trackClarityEvent, trackEvent } from "@/lib/analytics";
 
 const GREETING = "Hi! How can I help you today?";
 
@@ -196,7 +196,10 @@ export function ChatbotWidget() {
         ref={toggleButtonRef}
         onClick={() => {
         setOpen((v) => {
-          if (!v) trackEvent(ANALYTICS_EVENTS.CHATBOT_OPENED);
+          if (!v) {
+            trackEvent(ANALYTICS_EVENTS.CHATBOT_OPENED);
+            trackClarityEvent(ANALYTICS_EVENTS.CHATBOT_OPENED);
+          }
           return !v;
         });
       }}
