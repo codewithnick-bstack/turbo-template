@@ -7,6 +7,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { stats } from "@/lib/site-data";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 
 export function HeroSection() {
   const reduced = useReducedMotion();
@@ -37,13 +38,21 @@ export function HeroSection() {
             A premium monorepo starter with Next.js, Express, cron automation, Tailwind v4, and a polished marketing UI ready for fast swaps.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href="/contact" className="w-full sm:w-auto">
+            <Link
+              href="/contact"
+              className="w-full sm:w-auto"
+              onClick={() => trackEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED, { button: "primary", href: "/contact" })}
+            >
               <Button size="lg" className="w-full">
                 Launch your next site
                 <ArrowRight className="ml-2 size-4" aria-hidden="true" />
               </Button>
             </Link>
-            <Link href="/portfolio" className="w-full sm:w-auto">
+            <Link
+              href="/portfolio"
+              className="w-full sm:w-auto"
+              onClick={() => trackEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED, { button: "secondary", href: "/portfolio" })}
+            >
               <Button variant="secondary" size="lg" className="w-full">Browse examples</Button>
             </Link>
           </div>

@@ -7,6 +7,7 @@ import { ExternalLink, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { PortfolioEntry } from "@/lib/types";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 
 type Props = { entries: PortfolioEntry[] };
 
@@ -111,6 +112,7 @@ export function PortfolioShowcase({ entries }: Props) {
                 onClick={(e) => {
                   openTriggerRef.current = e.currentTarget;
                   setSelected(entry);
+                  trackEvent(ANALYTICS_EVENTS.PORTFOLIO_ITEM_CLICKED, { item_id: entry.id, item_title: entry.title });
                 }}
                 aria-haspopup="dialog"
               >

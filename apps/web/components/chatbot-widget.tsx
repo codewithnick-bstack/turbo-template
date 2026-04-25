@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useId } from "react";
 import { chatWithSite } from "@/lib/api";
 import type { ChatMessage } from "@/lib/types";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 
 const GREETING = "Hi! How can I help you today?";
 
@@ -62,6 +63,7 @@ export function ChatbotWidget() {
     setMessages(next);
     setInput("");
     setLoading(true);
+    trackEvent(ANALYTICS_EVENTS.CHAT_MESSAGE_SENT);
     try {
       const data = await chatWithSite(next);
       setMessages([...next, { role: "assistant", content: data.text ?? "Sorry, I'm unavailable right now." }]);
@@ -192,7 +194,12 @@ export function ChatbotWidget() {
       {/* Toggle button */}
       <button
         ref={toggleButtonRef}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+        setOpen((v) => {
+          if (!v) trackEvent(ANALYTICS_EVENTS.CHATBOT_OPENED);
+          return !v;
+        });
+      }}
         className="fixed bottom-4 right-4 z-[9999] flex size-14 items-center justify-center rounded-full text-white shadow-lg shadow-black/20 transition-transform hover:scale-105 active:scale-95"
         style={{ backgroundColor: primary }}
         aria-label={open ? "Close chat" : "Open chat"}

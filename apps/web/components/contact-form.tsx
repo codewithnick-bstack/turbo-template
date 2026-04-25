@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Send } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { submitContact } from "@/lib/api";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Please enter your name."),
@@ -34,6 +35,7 @@ const defaultValues: ContactValues = {
 export function ContactForm() {
   const [status, setStatus] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const startedRef = useRef(false);
   const {
     register,
     handleSubmit,
@@ -57,6 +59,7 @@ export function ContactForm() {
       reset(defaultValues);
       setIsSuccess(true);
       setStatus("Thanks — your message is on the way.");
+      trackEvent(ANALYTICS_EVENTS.CONTACT_FORM_SUBMITTED, { form_name: "contact" });
     } catch (err) {
       setIsSuccess(false);
       setStatus(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -64,7 +67,17 @@ export function ContactForm() {
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate aria-label="Contact form">
+    <form
+      className="space-y-4"
+      onSubmit={handleSubmit(onSubmit)}
+      onFocus={() => {
+        if (startedRef.current) return;
+        startedRef.current = true;
+        trackEvent(ANALYTICS_EVENTS.CONTACT_FORM_STARTED, { form_name: "contact" });
+      }}
+      noValidate
+      aria-label="Contact form"
+    >
       {/* Honeypot — hidden from real users, bots fill it in */}
       <div className="absolute -left-[9999px] -top-[9999px] overflow-hidden" aria-hidden="true">
         <label htmlFor="_trap">Leave this empty</label>

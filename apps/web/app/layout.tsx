@@ -7,6 +7,9 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ChatbotLoader } from "@/components/chatbot-loader";
+import { ConsentProvider } from "@/components/consent-provider";
+import { CookieConsentBanner } from "@/components/cookie-consent-banner";
+import { AnalyticsScripts } from "@/components/analytics-scripts";
 import { siteConfig } from "@/lib/site-data";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
@@ -68,21 +71,25 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
-        <ThemeProvider>
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-slate-900 focus:shadow-lg focus:outline-none dark:focus:bg-slate-900 dark:focus:text-slate-50"
-          >
-            Skip to main content
-          </a>
-          <div className="relative flex min-h-screen flex-col">
-            <SiteHeader />
-            <main id="main-content" className="flex-1">{children}</main>
-            <SiteFooter />
-          </div>
-          <ChatbotLoader />
-        </ThemeProvider>
-        <Analytics />
+        <ConsentProvider>
+          <ThemeProvider>
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-slate-900 focus:shadow-lg focus:outline-none dark:focus:bg-slate-900 dark:focus:text-slate-50"
+            >
+              Skip to main content
+            </a>
+            <div className="relative flex min-h-screen flex-col">
+              <SiteHeader />
+              <main id="main-content" className="flex-1">{children}</main>
+              <SiteFooter />
+            </div>
+            <ChatbotLoader />
+          </ThemeProvider>
+          <Analytics />
+          <AnalyticsScripts />
+          <CookieConsentBanner />
+        </ConsentProvider>
       </body>
     </html>
   );
