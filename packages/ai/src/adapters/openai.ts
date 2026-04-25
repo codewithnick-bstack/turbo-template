@@ -3,6 +3,7 @@ import type { ModelAdapter, CompletionRequest, CompletionResponse } from "../ada
 export function createOpenAIAdapter(apiKey: string, defaultModel = "gpt-4o"): ModelAdapter {
   return {
     name: "openai",
+    defaultModel,
 
     async complete(req: CompletionRequest): Promise<CompletionResponse> {
       // Flatten complex AdapterMessage content to strings for OpenAI compatibility

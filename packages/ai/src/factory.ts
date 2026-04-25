@@ -2,12 +2,16 @@ import type { ModelAdapter } from "./adapter";
 import { mockAdapter } from "./adapters/mock";
 import { createAnthropicAdapter } from "./adapters/anthropic";
 import { createOpenAIAdapter } from "./adapters/openai";
+import { createOpenRouterAdapter } from "./adapters/openrouter";
 
 type AdapterOptions = {
-  provider?: "anthropic" | "openai" | "mock";
+  provider?: "anthropic" | "openai" | "openrouter" | "mock";
   anthropicApiKey?: string;
   openaiApiKey?: string;
+  openrouterApiKey?: string;
   defaultModel?: string;
+  siteUrl?: string;
+  siteName?: string;
 };
 
 export function createModelAdapter(options: AdapterOptions = {}): ModelAdapter {
@@ -27,6 +31,19 @@ export function createModelAdapter(options: AdapterOptions = {}): ModelAdapter {
       return mockAdapter;
     }
     return createOpenAIAdapter(options.openaiApiKey, options.defaultModel);
+  }
+
+  if (provider === "openrouter") {
+    if (!options.openrouterApiKey) {
+      console.warn("[ai] OPENROUTER_API_KEY not set — falling back to mock adapter");
+      return mockAdapter;
+    }
+    return createOpenRouterAdapter(
+      options.openrouterApiKey,
+      options.defaultModel,
+      options.siteUrl,
+      options.siteName,
+    );
   }
 
   return mockAdapter;

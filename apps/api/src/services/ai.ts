@@ -19,7 +19,9 @@ const adapter = createModelAdapter({
   provider: env.AI_PROVIDER,
   ...(env.ANTHROPIC_API_KEY ? { anthropicApiKey: env.ANTHROPIC_API_KEY } : {}),
   ...(env.OPENAI_API_KEY ? { openaiApiKey: env.OPENAI_API_KEY } : {}),
-  defaultModel: "claude-haiku-4-5",
+  ...(env.OPENROUTER_API_KEY ? { openrouterApiKey: env.OPENROUTER_API_KEY } : {}),
+  ...(env.AI_MODEL ? { defaultModel: env.AI_MODEL } : {}),
+  siteUrl: env.WEB_URL,
 });
 
 async function buildContextDocs(db: Db): Promise<string[]> {
@@ -152,8 +154,8 @@ export async function chatWithSiteContext(db: Db, messages: ChatMessage[]) {
     Promise.resolve(buildTools(db)),
   ]);
 
-  // Use tool-calling loop only when provider supports it (Anthropic)
-  if (adapter.name === "anthropic" && tools.length > 0) {
+  // Use tool-calling loop for providers that support it
+  if ((adapter.name === "anthropic" || adapter.name === "openrouter") && tools.length > 0) {
     return chatWithTools(adapter, messages, contextDocs, tools);
   }
 

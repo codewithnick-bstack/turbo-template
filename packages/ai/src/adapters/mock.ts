@@ -28,6 +28,7 @@ function detectIntent(req: CompletionRequest): string {
 
 export const mockAdapter: ModelAdapter = {
   name: "mock",
+  defaultModel: "mock-v1",
 
   async complete(req: CompletionRequest): Promise<CompletionResponse> {
     const intent = detectIntent(req);

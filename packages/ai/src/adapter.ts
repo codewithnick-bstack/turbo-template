@@ -37,7 +37,8 @@ export type CompletionResponse = {
 };
 
 export interface ModelAdapter {
-  name: "anthropic" | "openai" | "mock";
+  name: "anthropic" | "openai" | "openrouter" | "mock";
+  defaultModel: string;
   complete(req: CompletionRequest): Promise<CompletionResponse>;
   embed(input: string | string[]): Promise<number[][]>;
 }

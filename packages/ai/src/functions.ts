@@ -16,7 +16,7 @@ export async function chatWithContext(
   const system = CHATBOT_SYSTEM + context;
 
   const response = await adapter.complete({
-    model: adapter.name === "anthropic" ? "claude-haiku-4-5" : "gpt-4o-mini",
+    model: adapter.defaultModel,
     system,
     messages,
     maxTokens: 1024,
@@ -40,7 +40,7 @@ export async function chatWithTools(
   // Up to 5 tool-use rounds before forcing a final response
   for (let round = 0; round < 5; round++) {
     const response = await adapter.complete({
-      model: adapter.name === "anthropic" ? "claude-haiku-4-5" : "gpt-4o-mini",
+      model: adapter.defaultModel,
       system,
       messages: history,
       maxTokens: 1024,
@@ -80,7 +80,7 @@ export async function chatWithTools(
 
   // Max rounds reached — get final text response without tools
   const final = await adapter.complete({
-    model: adapter.name === "anthropic" ? "claude-haiku-4-5" : "gpt-4o-mini",
+    model: adapter.defaultModel,
     system,
     messages: history,
     maxTokens: 1024,
@@ -99,7 +99,7 @@ export async function generateBlogDraft(
     : `Title: ${title}`;
 
   const response = await adapter.complete({
-    model: adapter.name === "anthropic" ? "claude-haiku-4-5" : "gpt-4o-mini",
+    model: adapter.defaultModel,
     system: BLOG_GENERATOR_SYSTEM,
     messages: [{ role: "user", content: userPrompt }],
     maxTokens: 2048,
@@ -117,7 +117,7 @@ export async function generateMetaDescription(
   const userPrompt = `Page title: ${pageTitle}\n\nContent preview:\n${contentPreview.slice(0, 500)}`;
 
   const response = await adapter.complete({
-    model: adapter.name === "anthropic" ? "claude-haiku-4-5" : "gpt-4o-mini",
+    model: adapter.defaultModel,
     system: META_GENERATOR_SYSTEM,
     messages: [{ role: "user", content: userPrompt }],
     maxTokens: 100,

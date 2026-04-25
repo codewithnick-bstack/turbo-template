@@ -3,6 +3,7 @@ import type { ModelAdapter, CompletionRequest, CompletionResponse, ContentBlock 
 export function createAnthropicAdapter(apiKey: string, defaultModel = "claude-opus-4-7"): ModelAdapter {
   return {
     name: "anthropic",
+    defaultModel,
 
     async complete(req: CompletionRequest): Promise<CompletionResponse> {
       const body: Record<string, unknown> = {
