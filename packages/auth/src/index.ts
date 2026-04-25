@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import type { Db } from "@repo/db";
+import { type Db, schema } from "@repo/db";
 
 export type BetterAuthOptions = {
   db: Db;
@@ -14,7 +14,7 @@ export function createBetterAuth(options: BetterAuthOptions) {
   return betterAuth({
     secret: options.secret,
     baseURL: options.baseUrl,
-    database: drizzleAdapter(options.db, { provider: "pg" }),
+    database: drizzleAdapter(options.db, { provider: "pg", schema }),
     emailAndPassword: {
       enabled: true,
     },
