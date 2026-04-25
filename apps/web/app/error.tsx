@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { ANALYTICS_EVENTS, trackClarityEvent, trackEvent } from "@/lib/analytics";
 
 export default function Error({
   error,
@@ -12,6 +13,11 @@ export default function Error({
 }) {
   useEffect(() => {
     console.error(error);
+    trackEvent(ANALYTICS_EVENTS.JS_ERROR, {
+      message: error.message.slice(0, 100),
+      ...(error.digest ? { digest: error.digest } : {}),
+    });
+    trackClarityEvent(ANALYTICS_EVENTS.JS_ERROR);
   }, [error]);
 
   return (

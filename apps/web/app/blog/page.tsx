@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { format } from "date-fns";
 
 import { Badge } from "@/components/ui/badge";
+import { BlogPostLink } from "@/components/blog-post-link";
 import { Card } from "@/components/ui/card";
 import { getBlogPosts } from "@/lib/api";
 import { siteConfig } from "@/lib/site-data";
@@ -47,7 +47,7 @@ async function BlogPostsList() {
   return (
     <>
       {posts.map((post) => (
-        <Link key={post.slug} href={`/blog/${post.slug}`}>
+        <BlogPostLink key={post.slug} href={`/blog/${post.slug}`} slug={post.slug} title={post.title}>
           <Card className="transition hover:-translate-y-0.5 hover:shadow-md">
             <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
               {post.author ? <span>{post.author}</span> : null}
@@ -59,7 +59,7 @@ async function BlogPostsList() {
               <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{post.excerpt}</p>
             ) : null}
           </Card>
-        </Link>
+        </BlogPostLink>
       ))}
     </>
   );

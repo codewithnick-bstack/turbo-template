@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
+import { OutboundLink } from "@/components/outbound-link";
 import { siteConfig } from "@/lib/site-data";
 
 export function SiteFooter() {
@@ -48,9 +49,9 @@ export function SiteFooter() {
           <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
             {siteConfig.socials.map((item) => (
               <li key={item.label}>
-                <a href={item.href} target="_blank" rel="noreferrer" className="hover:text-slate-900 dark:hover:text-white">
+                <OutboundLink href={item.href} source="footer_social" className="hover:text-slate-900 dark:hover:text-white">
                   {item.label}
-                </a>
+                </OutboundLink>
               </li>
             ))}
           </ul>

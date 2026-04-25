@@ -10,6 +10,10 @@ export const ANALYTICS_EVENTS = {
   SERVICE_VIEWED: "service_viewed",
   SCROLL_DEPTH: "scroll_depth",
   BLOG_POST_READ: "blog_post_read",
+  BLOG_POST_CLICKED: "blog_post_clicked",
+  OUTBOUND_LINK_CLICKED: "outbound_link_clicked",
+  PAGE_NOT_FOUND: "page_not_found",
+  JS_ERROR: "js_error",
 } as const;
 
 export function trackEvent(

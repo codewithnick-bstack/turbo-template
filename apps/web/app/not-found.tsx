@@ -1,10 +1,12 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { NotFoundTracker } from "@/components/not-found-tracker";
 
 export default function NotFound() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col items-center px-4 py-24 text-center sm:px-6 lg:px-8">
+      <NotFoundTracker />
       <p className="rounded-full bg-indigo-50 px-4 py-1 text-sm font-semibold text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-200">
         404 — Page not found
       </p>
