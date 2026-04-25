@@ -5,9 +5,17 @@ export function createOpenAIAdapter(apiKey: string, defaultModel = "gpt-4o"): Mo
     name: "openai",
 
     async complete(req: CompletionRequest): Promise<CompletionResponse> {
+      // Flatten complex AdapterMessage content to strings for OpenAI compatibility
       const messages = [
         ...(req.system ? [{ role: "system", content: req.system }] : []),
-        ...req.messages,
+        ...req.messages.map((m) => ({
+          role: m.role,
+          content: typeof m.content === "string"
+            ? m.content
+            : Array.isArray(m.content)
+              ? m.content.map((b) => ("text" in b ? b.text : JSON.stringify(b))).join("\n")
+              : "",
+        })),
       ];
 
       const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -39,6 +47,7 @@ export function createOpenAIAdapter(apiKey: string, defaultModel = "gpt-4o"): Mo
       const finishReason = data.choices[0]?.finish_reason;
       return {
         text,
+        content: [{ type: "text", text }],
         usage: { inputTokens: data.usage.prompt_tokens, outputTokens: data.usage.completion_tokens },
         model: data.model,
         finishReason: finishReason === "stop" ? "stop" : finishReason === "length" ? "length" : "stop",

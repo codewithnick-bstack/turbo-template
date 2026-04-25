@@ -6,8 +6,21 @@ const MOCK_RESPONSES: Record<string, string> = {
   seo: JSON.stringify([{ severity: "info", rule: "mock", evidence: "mock mode active", suggested_fix: "Set ANTHROPIC_API_KEY" }]),
 };
 
+function getLastText(req: CompletionRequest): string {
+  const last = req.messages.at(-1);
+  if (!last) return "";
+  const c = last.content;
+  if (typeof c === "string") return c.toLowerCase();
+  if (Array.isArray(c)) {
+    for (const b of c) {
+      if ("text" in b && typeof b.text === "string") return b.text.toLowerCase();
+    }
+  }
+  return "";
+}
+
 function detectIntent(req: CompletionRequest): string {
-  const last = req.messages.at(-1)?.content.toLowerCase() ?? "";
+  const last = getLastText(req);
   if (last.includes("blog") || last.includes("post") || req.system?.includes("blog")) return "blog";
   if (last.includes("seo") || last.includes("audit") || req.system?.includes("seo")) return "seo";
   return "default";
@@ -21,6 +34,7 @@ export const mockAdapter: ModelAdapter = {
     const text = MOCK_RESPONSES[intent] ?? MOCK_RESPONSES["default"] ?? "Mock response.";
     return {
       text,
+      content: [{ type: "text", text }],
       usage: { inputTokens: 100, outputTokens: text.split(/\s+/).length },
       model: "mock-v1",
       finishReason: "stop",

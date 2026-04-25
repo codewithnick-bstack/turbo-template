@@ -1,6 +1,6 @@
-export type { ModelAdapter, CompletionRequest, CompletionResponse } from "./adapter";
+export type { ModelAdapter, CompletionRequest, CompletionResponse, Tool, ContentBlock, TextBlock, ToolUseBlock, ToolResultBlock, AdapterMessage } from "./adapter";
 export { mockAdapter } from "./adapters/mock";
 export { createAnthropicAdapter } from "./adapters/anthropic";
 export { createOpenAIAdapter } from "./adapters/openai";
 export { createModelAdapter } from "./factory";
-export { chatWithContext, generateBlogDraft, generateMetaDescription, type ChatMessage } from "./functions";
+export { chatWithContext, chatWithTools, generateBlogDraft, generateMetaDescription, type ChatMessage, type ToolDefinition } from "./functions";

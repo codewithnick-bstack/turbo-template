@@ -17,6 +17,8 @@ const envSchema = z.object({
   MCP_API_KEY: z.string().optional(),
   REVALIDATE_SECRET: z.string().optional(),
   ADMIN_PASSWORD: z.string().min(8).optional(),
+  CAL_API_KEY: z.string().optional(),
+  CAL_EVENT_TYPE_ID: z.coerce.number().optional(),
 });
 
 function parseEnv() {

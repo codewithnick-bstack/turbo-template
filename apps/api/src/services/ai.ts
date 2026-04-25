@@ -1,10 +1,19 @@
 import { sql } from "drizzle-orm";
 import type { Db } from "@repo/db";
-import { createModelAdapter, chatWithContext, generateBlogDraft, generateMetaDescription, type ChatMessage } from "@repo/ai";
+import {
+  createModelAdapter,
+  chatWithContext,
+  chatWithTools,
+  generateBlogDraft,
+  generateMetaDescription,
+  type ChatMessage,
+  type ToolDefinition,
+} from "@repo/ai";
 import { env } from "../env";
 import * as teamService from "./team";
 import * as portfolioService from "./portfolio";
 import * as testimonialsService from "./testimonials";
+import * as calService from "./cal";
 
 const adapter = createModelAdapter({
   provider: env.AI_PROVIDER,
@@ -13,26 +22,16 @@ const adapter = createModelAdapter({
   defaultModel: "claude-haiku-4-5",
 });
 
-export async function chatWithSiteContext(db: Db, messages: ChatMessage[]) {
-  const lastMessage = messages.at(-1)?.content ?? "";
-
-  const [settingsResult, teamResult, portfolioResult, testimonialsResult, blogFtsResult, blogRecentResult] =
+async function buildContextDocs(db: Db): Promise<string[]> {
+  const [settingsResult, teamResult, portfolioResult, testimonialsResult] =
     await Promise.allSettled([
       db.query.siteSettings.findFirst(),
       teamService.listTeamMembers(db, { limit: 20 }),
       portfolioService.listPortfolioEntries(db, { limit: 20 }),
       testimonialsService.listTestimonials(db, { featuredOnly: true, limit: 10 }),
-      lastMessage
-        ? db.execute(
-            sql`SELECT title, excerpt, content FROM blog_posts WHERE status = 'published' AND to_tsvector('english', title || ' ' || COALESCE(excerpt, '') || ' ' || content) @@ plainto_tsquery('english', ${lastMessage.slice(0, 200)}) LIMIT 4`,
-          )
-        : Promise.resolve(null),
-      db.execute(
-        sql`SELECT title, excerpt, slug FROM blog_posts WHERE status = 'published' ORDER BY published_at DESC NULLS LAST LIMIT 3`,
-      ),
     ]);
 
-  const contextDocs: string[] = [];
+  const docs: string[] = [];
 
   if (settingsResult.status === "fulfilled" && settingsResult.value) {
     const s = settingsResult.value;
@@ -42,14 +41,14 @@ export async function chatWithSiteContext(db: Db, messages: ChatMessage[]) {
     if (s.phone) parts.push(`Phone: ${s.phone}`);
     if (s.address) parts.push(`Address: ${s.address}`);
     if (s.seoDescription) parts.push(`About: ${s.seoDescription}`);
-    contextDocs.push(parts.join("\n"));
+    docs.push(parts.join("\n"));
   }
 
   if (teamResult.status === "fulfilled" && teamResult.value.length > 0) {
     const members = teamResult.value
       .map((m) => `- ${m.name}, ${m.title}${m.bio ? `: ${m.bio.slice(0, 120)}` : ""}`)
       .join("\n");
-    contextDocs.push(`Team members:\n${members}`);
+    docs.push(`Team members:\n${members}`);
   }
 
   if (portfolioResult.status === "fulfilled" && portfolioResult.value.length > 0) {
@@ -62,43 +61,100 @@ export async function chatWithSiteContext(db: Db, messages: ChatMessage[]) {
         return parts.join(" ");
       })
       .join("\n");
-    contextDocs.push(`Portfolio work:\n${entries}`);
+    docs.push(`Portfolio work:\n${entries}`);
   }
 
   if (testimonialsResult.status === "fulfilled" && testimonialsResult.value.length > 0) {
     const quotes = testimonialsResult.value
       .map((t) => `- "${t.quote.slice(0, 150)}" — ${t.authorName}${t.company ? `, ${t.company}` : ""}`)
       .join("\n");
-    contextDocs.push(`Client testimonials:\n${quotes}`);
+    docs.push(`Client testimonials:\n${quotes}`);
   }
 
-  const ftsRows = blogFtsResult.status === "fulfilled" && blogFtsResult.value
-    ? (() => {
-        const r = blogFtsResult.value as { rows?: unknown[] } | unknown[];
-        return Array.isArray(r) ? r : (r as { rows?: unknown[] }).rows ?? [];
-      })()
-    : [];
+  return docs;
+}
 
-  const recentRows = blogRecentResult.status === "fulfilled"
-    ? (() => {
-        const r = blogRecentResult.value as { rows?: unknown[] } | unknown[];
-        return Array.isArray(r) ? r : (r as { rows?: unknown[] }).rows ?? [];
-      })()
-    : [];
+function buildTools(db: Db): ToolDefinition[] {
+  const tools: ToolDefinition[] = [
+    {
+      name: "search_blog_posts",
+      description: "Search published blog posts by keyword. Use when the visitor asks about a specific topic covered in the blog.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          query: { type: "string", description: "Search keywords" },
+        },
+        required: ["query"],
+      },
+      async execute({ query }) {
+        const q = String(query).slice(0, 200);
+        const result = await db.execute(
+          sql`SELECT title, excerpt, slug FROM blog_posts WHERE status = 'published' AND to_tsvector('english', title || ' ' || COALESCE(excerpt, '') || ' ' || content) @@ plainto_tsquery('english', ${q}) LIMIT 4`,
+        );
+        const rows = (Array.isArray(result) ? result : (result as { rows?: unknown[] }).rows ?? []) as { title?: unknown; excerpt?: unknown; slug?: unknown }[];
+        if (rows.length === 0) return "No blog posts found matching that topic.";
+        return rows.map((r) => `- "${r.title}": ${r.excerpt ?? ""}`.trim()).join("\n");
+      },
+    },
+  ];
 
-  const seenTitles = new Set<string>();
-  const blogSnippets: string[] = [];
+  // Scheduling tools — only added when Cal.com is configured
+  if (env.CAL_API_KEY && env.CAL_EVENT_TYPE_ID) {
+    const calKey = env.CAL_API_KEY;
+    const calEventTypeId = env.CAL_EVENT_TYPE_ID;
 
-  for (const row of [...ftsRows, ...recentRows] as { title?: unknown; excerpt?: unknown; content?: unknown; slug?: unknown }[]) {
-    const title = String(row.title ?? "");
-    if (!title || seenTitles.has(title)) continue;
-    seenTitles.add(title);
-    const excerpt = row.excerpt ? String(row.excerpt) : String(row.content ?? "").slice(0, 200);
-    blogSnippets.push(`- "${title}": ${excerpt}`);
+    tools.push({
+      name: "check_availability",
+      description: "Check available meeting slots for a given date range. Use when the visitor asks about booking a call or meeting.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          start_date: { type: "string", description: "Start date in YYYY-MM-DD format" },
+          end_date: { type: "string", description: "End date in YYYY-MM-DD format (max 7 days after start)" },
+        },
+        required: ["start_date", "end_date"],
+      },
+      async execute({ start_date, end_date }) {
+        return calService.getAvailableSlots(calKey, calEventTypeId, String(start_date), String(end_date));
+      },
+    });
+
+    tools.push({
+      name: "book_meeting",
+      description: "Book a meeting slot. Only call this after the visitor has confirmed their name, email, and chosen a specific time slot from check_availability.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          name: { type: "string", description: "Visitor's full name" },
+          email: { type: "string", description: "Visitor's email address" },
+          start_time: { type: "string", description: "ISO 8601 datetime of the chosen slot (e.g. 2026-04-28T09:00:00.000Z)" },
+          notes: { type: "string", description: "Optional notes about the meeting purpose" },
+        },
+        required: ["name", "email", "start_time"],
+      },
+      async execute({ name, email, start_time, notes }) {
+        return calService.createBooking(calKey, calEventTypeId, {
+          name: String(name),
+          email: String(email),
+          startTime: String(start_time),
+          ...(notes ? { notes: String(notes) } : {}),
+        });
+      },
+    });
   }
 
-  if (blogSnippets.length > 0) {
-    contextDocs.push(`Published blog posts:\n${blogSnippets.join("\n")}`);
+  return tools;
+}
+
+export async function chatWithSiteContext(db: Db, messages: ChatMessage[]) {
+  const [contextDocs, tools] = await Promise.all([
+    buildContextDocs(db),
+    Promise.resolve(buildTools(db)),
+  ]);
+
+  // Use tool-calling loop only when provider supports it (Anthropic)
+  if (adapter.name === "anthropic" && tools.length > 0) {
+    return chatWithTools(adapter, messages, contextDocs, tools);
   }
 
   return chatWithContext(adapter, messages, contextDocs);

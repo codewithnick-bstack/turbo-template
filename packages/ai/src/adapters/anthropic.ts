@@ -1,10 +1,26 @@
-import type { ModelAdapter, CompletionRequest, CompletionResponse } from "../adapter";
+import type { ModelAdapter, CompletionRequest, CompletionResponse, ContentBlock } from "../adapter";
 
 export function createAnthropicAdapter(apiKey: string, defaultModel = "claude-opus-4-7"): ModelAdapter {
   return {
     name: "anthropic",
 
     async complete(req: CompletionRequest): Promise<CompletionResponse> {
+      const body: Record<string, unknown> = {
+        model: req.model || defaultModel,
+        max_tokens: req.maxTokens ?? 2048,
+        temperature: req.temperature,
+        system: req.system,
+        messages: req.messages,
+      };
+
+      if (req.tools?.length) {
+        body.tools = req.tools.map((t) => ({
+          name: t.name,
+          description: t.description,
+          input_schema: t.inputSchema,
+        }));
+      }
+
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
@@ -12,33 +28,43 @@ export function createAnthropicAdapter(apiKey: string, defaultModel = "claude-op
           "anthropic-version": "2023-06-01",
           "content-type": "application/json",
         },
-        body: JSON.stringify({
-          model: req.model || defaultModel,
-          max_tokens: req.maxTokens ?? 2048,
-          temperature: req.temperature,
-          system: req.system,
-          messages: req.messages,
-        }),
+        body: JSON.stringify(body),
       });
 
       if (!res.ok) {
-        const body = await res.text();
-        throw new Error(`Anthropic API error ${res.status}: ${body}`);
+        const errBody = await res.text();
+        throw new Error(`Anthropic API error ${res.status}: ${errBody}`);
       }
 
       const data = await res.json() as {
-        content: Array<{ type: string; text: string }>;
+        content: Array<{ type: string; text?: string; id?: string; name?: string; input?: Record<string, unknown> }>;
         usage: { input_tokens: number; output_tokens: number };
         model: string;
         stop_reason: string;
       };
 
-      const text = data.content.filter((b) => b.type === "text").map((b) => b.text).join("");
+      const content: ContentBlock[] = data.content.map((b) => {
+        if (b.type === "tool_use") {
+          return { type: "tool_use", id: b.id!, name: b.name!, input: b.input ?? {} };
+        }
+        return { type: "text", text: b.text ?? "" };
+      });
+
+      const text = content.filter((b): b is { type: "text"; text: string } => b.type === "text").map((b) => b.text).join("");
+
+      const stopReason = data.stop_reason;
+      const finishReason =
+        stopReason === "end_turn" ? "stop"
+        : stopReason === "tool_use" ? "tool_use"
+        : stopReason === "max_tokens" ? "length"
+        : "stop";
+
       return {
         text,
+        content,
         usage: { inputTokens: data.usage.input_tokens, outputTokens: data.usage.output_tokens },
         model: data.model,
-        finishReason: data.stop_reason === "end_turn" ? "stop" : (data.stop_reason as CompletionResponse["finishReason"]),
+        finishReason,
       };
     },
 
