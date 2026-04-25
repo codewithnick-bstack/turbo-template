@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ContactDetailLink } from "@/components/contact-detail-link";
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
 import { OutboundLink } from "@/components/outbound-link";
 import { siteConfig } from "@/lib/site-data";
@@ -12,9 +13,17 @@ export function SiteFooter() {
           <p className="text-lg font-semibold">{siteConfig.name}</p>
           <p className="mt-3 max-w-md text-sm text-slate-600 dark:text-slate-300">{siteConfig.description}</p>
           <div className="mt-4 space-y-1 text-sm text-slate-600 dark:text-slate-300">
-            <p>{siteConfig.email}</p>
-            <p>{siteConfig.phone}</p>
-            <p>{siteConfig.location}</p>
+            {siteConfig.email ? (
+              <ContactDetailLink href={`mailto:${siteConfig.email}`} type="email" className="hover:text-slate-900 dark:hover:text-white">
+                {siteConfig.email}
+              </ContactDetailLink>
+            ) : null}
+            {siteConfig.phone ? (
+              <ContactDetailLink href={`tel:${siteConfig.phone}`} type="phone" className="hover:text-slate-900 dark:hover:text-white">
+                {siteConfig.phone}
+              </ContactDetailLink>
+            ) : null}
+            {siteConfig.location ? <p>{siteConfig.location}</p> : null}
           </div>
         </div>
 

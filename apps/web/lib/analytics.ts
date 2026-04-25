@@ -14,6 +14,9 @@ export const ANALYTICS_EVENTS = {
   OUTBOUND_LINK_CLICKED: "outbound_link_clicked",
   PAGE_NOT_FOUND: "page_not_found",
   JS_ERROR: "js_error",
+  NAV_LINK_CLICKED: "nav_link_clicked",
+  TESTIMONIAL_VIEWED: "testimonial_viewed",
+  CONTACT_DETAIL_CLICKED: "contact_detail_clicked",
 } as const;
 
 export function trackEvent(

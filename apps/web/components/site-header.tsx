@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { siteConfig } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +30,7 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               className="rounded-full px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
+              onClick={() => trackEvent(ANALYTICS_EVENTS.NAV_LINK_CLICKED, { href: item.href, label: item.label, source: "desktop" })}
             >
               {item.label}
             </Link>
@@ -63,7 +65,10 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setOpen(false);
+                  trackEvent(ANALYTICS_EVENTS.NAV_LINK_CLICKED, { href: item.href, label: item.label, source: "mobile" });
+                }}
                 className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-900"
               >
                 {item.label}

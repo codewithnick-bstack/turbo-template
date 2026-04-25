@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { ContactDetailLink } from "@/components/contact-detail-link";
 import { ContactForm } from "@/components/contact-form";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -35,9 +36,17 @@ export default function ContactPage() {
           The form posts to the Express backend at <code>/api/contact</code>, validates the payload, and can forward emails through Resend or Nodemailer.
         </p>
         <div className="mt-5 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-          <p>{siteConfig.email}</p>
-          <p>{siteConfig.phone}</p>
-          <p>{siteConfig.location}</p>
+          {siteConfig.email ? (
+              <ContactDetailLink href={`mailto:${siteConfig.email}`} type="email" className="text-indigo-600 hover:underline dark:text-indigo-400">
+                {siteConfig.email}
+              </ContactDetailLink>
+            ) : null}
+            {siteConfig.phone ? (
+              <ContactDetailLink href={`tel:${siteConfig.phone}`} type="phone" className="text-indigo-600 hover:underline dark:text-indigo-400">
+                {siteConfig.phone}
+              </ContactDetailLink>
+            ) : null}
+            {siteConfig.location ? <p>{siteConfig.location}</p> : null}
         </div>
       </Card>
 

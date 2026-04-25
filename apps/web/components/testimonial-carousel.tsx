@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pause, Play, Quote } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import type { Testimonial } from "@/lib/types";
 
 type Props = { testimonials: Testimonial[] };
@@ -11,6 +12,13 @@ type Props = { testimonials: Testimonial[] };
 export function TestimonialCarousel({ testimonials }: Props) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const mountedRef = useRef(false);
+
+  useEffect(() => {
+    if (!mountedRef.current) { mountedRef.current = true; return; }
+    const t = testimonials[index];
+    if (t) trackEvent(ANALYTICS_EVENTS.TESTIMONIAL_VIEWED, { author: t.authorName, index });
+  }, [index, testimonials]);
 
   useEffect(() => {
     if (testimonials.length < 2 || paused) return;
