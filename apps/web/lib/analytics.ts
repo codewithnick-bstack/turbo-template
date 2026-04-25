@@ -17,6 +17,7 @@ export const ANALYTICS_EVENTS = {
   NAV_LINK_CLICKED: "nav_link_clicked",
   TESTIMONIAL_VIEWED: "testimonial_viewed",
   CONTACT_DETAIL_CLICKED: "contact_detail_clicked",
+  LEAD_CAPTURED: "lead_captured",
 } as const;
 
 export function trackEvent(
