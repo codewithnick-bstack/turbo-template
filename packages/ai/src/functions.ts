@@ -15,7 +15,7 @@ export async function chatWithContext(
     model: adapter.name === "anthropic" ? "claude-haiku-4-5" : "gpt-4o-mini",
     system,
     messages,
-    maxTokens: 512,
+    maxTokens: 1024,
     temperature: 0.7,
   });
 
