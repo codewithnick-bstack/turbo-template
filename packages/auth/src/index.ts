@@ -6,6 +6,7 @@ export type BetterAuthOptions = {
   db: Db;
   secret: string;
   baseUrl: string;
+  trustedOrigins?: string[];
   resendApiKey?: string;
   fromEmail?: string;
 };
@@ -14,6 +15,7 @@ export function createBetterAuth(options: BetterAuthOptions) {
   return betterAuth({
     secret: options.secret,
     baseURL: options.baseUrl,
+    trustedOrigins: options.trustedOrigins ?? [],
     database: drizzleAdapter(options.db, { provider: "pg", schema }),
     emailAndPassword: {
       enabled: true,

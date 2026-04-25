@@ -9,6 +9,7 @@ export function initAuth(db: Db) {
     db,
     secret: env.AUTH_SECRET,
     baseUrl: `${env.API_URL}/auth`,
+    trustedOrigins: [env.WEB_URL, env.ADMIN_URL],
     fromEmail: env.FROM_EMAIL,
     ...(env.RESEND_API_KEY ? { resendApiKey: env.RESEND_API_KEY } : {}),
   };
