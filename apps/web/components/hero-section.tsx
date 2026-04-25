@@ -15,7 +15,7 @@ export function HeroSection() {
   // Only animate the y-offset so the h1 is painted on first render.
   const fadeUp = reduced
     ? {}
-    : { initial: { y: 18 }, animate: { y: 0 }, transition: { duration: 0.5, ease: "easeOut" } };
+    : { initial: { y: 18 }, animate: { y: 0 }, transition: { duration: 0.5, ease: "easeOut" as const } };
 
   const fadeScale = reduced
     ? {}

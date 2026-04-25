@@ -7,6 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { getBlogPost, getBlogPosts } from "@/lib/api";
 import { siteConfig } from "@/lib/site-data";
 
+function isHtml(content: string) {
+  return /^\s*</.test(content);
+}
+
 export async function generateStaticParams() {
   const posts = await getBlogPosts().catch(() => []);
   return posts
@@ -89,8 +93,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {post.excerpt ? (
         <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-300">{post.excerpt}</p>
       ) : null}
-      <div className="prose prose-slate mt-10 max-w-none dark:prose-invert">
-        {post.content ? <MDXRemote source={post.content} /> : null}
+      <div className="prose prose-slate mt-10 max-w-none dark:prose-invert [&_iframe]:w-full [&_iframe]:rounded-lg [&_.iframe-wrapper]:w-full">
+        {post.content
+          ? isHtml(post.content)
+            ? <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            : <MDXRemote source={post.content} />
+          : null}
       </div>
     </article>
   );
