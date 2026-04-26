@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { NavClient } from "./nav-client";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const NAV = [
   {
@@ -45,7 +46,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <nav aria-label="Main navigation" className="flex-1">
           <NavClient nav={NAV} />
         </nav>
-        <div className="mt-auto pt-4 border-t border-[var(--border)]">
+        <div className="mt-auto pt-4 border-t border-[var(--border)] space-y-1">
+          <ThemeToggle />
           <a
             href="/auth/sign-out"
             className="block rounded-lg px-3 py-2 text-sm text-[var(--muted-foreground)] hover:bg-[var(--muted)] hover:text-[var(--foreground)] transition-colors"

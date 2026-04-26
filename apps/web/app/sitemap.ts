@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { getBlogPosts } from "@/lib/api";
+import { getBlogPosts, getPortfolio } from "@/lib/api";
 import { siteConfig } from "@/lib/site-data";
 
 const staticRoutes = [
@@ -17,8 +17,12 @@ const staticRoutes = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getBlogPosts().catch(() => []);
+  const [posts, portfolio] = await Promise.all([
+    getBlogPosts().catch(() => []),
+    getPortfolio().catch(() => []),
+  ]);
   const publishedPosts = posts.filter((p) => p.status === "published");
+  const publishedPortfolio = portfolio.filter((e) => e.status === "published");
 
   return [
     ...staticRoutes.map(({ path, priority }) => ({
@@ -32,6 +36,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.6,
       lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date("2026-01-01"),
+    })),
+    ...publishedPortfolio.map((entry) => ({
+      url: `${siteConfig.url}/portfolio/${entry.id}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+      lastModified: entry.updatedAt ? new Date(entry.updatedAt) : new Date("2026-01-01"),
     })),
   ];
 }

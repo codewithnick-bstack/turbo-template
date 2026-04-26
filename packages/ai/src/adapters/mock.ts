@@ -21,7 +21,7 @@ function getLastText(req: CompletionRequest): string {
 
 function detectIntent(req: CompletionRequest): string {
   const last = getLastText(req);
-  if (last.includes("blog") || last.includes("post") || req.system?.includes("blog")) return "blog";
+  if (last.includes("blog") || last.includes("post") || req.system?.includes("write first-draft")) return "blog";
   if (last.includes("seo") || last.includes("audit") || req.system?.includes("seo")) return "seo";
   return "default";
 }

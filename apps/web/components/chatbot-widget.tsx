@@ -24,11 +24,26 @@ function TypingDots() {
 
 type LeadForm = { name: string; email: string; note: string };
 
+const CHAT_STORAGE_KEY = "chatbot-history";
+const MAX_STORED_MESSAGES = 20;
+
+function loadStoredMessages(): ChatMessage[] {
+  try {
+    const raw = localStorage.getItem(CHAT_STORAGE_KEY);
+    if (!raw) return [{ role: "assistant", content: GREETING }];
+    const parsed = JSON.parse(raw) as ChatMessage[];
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : [{ role: "assistant", content: GREETING }];
+  } catch {
+    return [{ role: "assistant", content: GREETING }];
+  }
+}
+
 export function ChatbotWidget() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: "assistant", content: GREETING },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    if (typeof window === "undefined") return [{ role: "assistant", content: GREETING }];
+    return loadStoredMessages();
+  });
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -42,6 +57,13 @@ export function ChatbotWidget() {
   const toggleButtonRef = useRef<HTMLButtonElement>(null);
   const inputId = useId();
   const labelId = useId();
+
+  useEffect(() => {
+    try {
+      const toStore = messages.slice(-MAX_STORED_MESSAGES);
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(toStore));
+    } catch { /* localStorage unavailable */ }
+  }, [messages]);
 
   useEffect(() => {
     if (open) {
@@ -249,6 +271,7 @@ export function ChatbotWidget() {
               <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">Your details</p>
               <input
                 ref={nameRef}
+                aria-label="Your name (required)"
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
                 placeholder="Your name *"
                 value={leadForm.name}
@@ -256,6 +279,7 @@ export function ChatbotWidget() {
                 disabled={leadSubmitting}
               />
               <input
+                aria-label="Email address (required)"
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
                 placeholder="Email address *"
                 type="email"
@@ -264,6 +288,7 @@ export function ChatbotWidget() {
                 disabled={leadSubmitting}
               />
               <input
+                aria-label="Brief note (optional)"
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
                 placeholder="Brief note (optional)"
                 value={leadForm.note}

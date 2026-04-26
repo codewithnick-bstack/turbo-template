@@ -35,6 +35,18 @@ export function getPortfolio() {
   return apiFetch<PortfolioEntry[]>("/portfolio", { next: { revalidate: 300 } });
 }
 
+export function getPortfolioEntry(id: string) {
+  return apiFetch<PortfolioEntry>(`/portfolio/${encodeURIComponent(id)}`, { next: { revalidate: 300 } });
+}
+
+export function searchContent(query: string) {
+  const q = encodeURIComponent(query.slice(0, 200));
+  return Promise.all([
+    apiFetch<BlogPost[]>(`/blog?search=${q}`, { cache: "no-store" }).catch(() => [] as BlogPost[]),
+    apiFetch<PortfolioEntry[]>(`/portfolio?search=${q}`, { cache: "no-store" }).catch(() => [] as PortfolioEntry[]),
+  ]);
+}
+
 export async function submitContact(data: ContactPayload) {
   const res = await fetch(`${API_URL}/api/v1/contacts`, {
     method: "POST",

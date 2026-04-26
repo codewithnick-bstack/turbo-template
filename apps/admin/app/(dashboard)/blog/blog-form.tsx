@@ -140,6 +140,16 @@ export function BlogForm({ post }: Props) {
             Publish
           </button>
         )}
+        {post && values.slug && (
+          <a
+            href={`${process.env.NEXT_PUBLIC_WEB_URL ?? "http://localhost:3000"}/blog/${values.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium hover:bg-[var(--muted)] disabled:opacity-50"
+          >
+            Preview ↗
+          </a>
+        )}
         {post && (
           <button
             type="button"

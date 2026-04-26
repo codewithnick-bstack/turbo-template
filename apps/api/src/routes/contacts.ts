@@ -4,6 +4,8 @@ import rateLimit from "express-rate-limit";
 import type { Db } from "@repo/db";
 import { CreateContactSchema } from "../schemas/contacts";
 import * as contactsService from "../services/contacts";
+import { sendContactNotification } from "../services/email";
+import { env } from "../env";
 
 const contactRateLimit = rateLimit({
   windowMs: 60 * 1000,
@@ -18,6 +20,9 @@ export function createContactsRouter(db: Db, authGuard: RequestHandler) {
   router.post("/", contactRateLimit, async (req, res) => {
     const data = CreateContactSchema.parse(req.body);
     const contact = await contactsService.createContact(db, data);
+    if (env.NOTIFICATION_EMAIL) {
+      void sendContactNotification(contact, env.NOTIFICATION_EMAIL);
+    }
     res.status(201).json({ id: contact.id, message: "Your message has been received." });
   });
 

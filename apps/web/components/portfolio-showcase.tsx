@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ExternalLink, X } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -151,20 +152,29 @@ export function PortfolioShowcase({ entries }: Props) {
             {selected.description ? (
               <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">{selected.description}</p>
             ) : null}
-            {selected.url ? (
-              <a
-                href={selected.url}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 dark:text-indigo-300"
-                onClick={() => {
-                  trackEvent(ANALYTICS_EVENTS.OUTBOUND_LINK_CLICKED, { url: selected.url!, source: "portfolio" });
-                  trackClarityEvent(ANALYTICS_EVENTS.OUTBOUND_LINK_CLICKED);
-                }}
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <Link
+                href={`/portfolio/${selected.id}`}
+                className="text-sm font-semibold text-indigo-600 hover:underline dark:text-indigo-300"
+                onClick={close}
               >
-                Visit project <ExternalLink className="size-4" aria-hidden="true" />
-              </a>
-            ) : null}
+                View full case study →
+              </Link>
+              {selected.url && (
+                <a
+                  href={selected.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                  onClick={() => {
+                    trackEvent(ANALYTICS_EVENTS.OUTBOUND_LINK_CLICKED, { url: selected.url!, source: "portfolio" });
+                    trackClarityEvent(ANALYTICS_EVENTS.OUTBOUND_LINK_CLICKED);
+                  }}
+                >
+                  Visit project <ExternalLink className="size-3.5" aria-hidden="true" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
       ) : null}

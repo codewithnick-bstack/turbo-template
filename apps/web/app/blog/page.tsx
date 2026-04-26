@@ -20,7 +20,10 @@ const blogJsonLd = {
 export const metadata: Metadata = {
   title: "Blog",
   description: "Articles, insights, and updates from our team.",
-  alternates: { canonical: "/blog" },
+  alternates: {
+    canonical: "/blog",
+    types: { "application/rss+xml": `${siteConfig.url}/blog/feed.xml` },
+  },
   openGraph: {
     title: "Blog",
     description: "Articles, insights, and updates from our team.",

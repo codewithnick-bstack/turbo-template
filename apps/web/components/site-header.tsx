@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import { useState } from "react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -19,7 +19,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3 font-semibold tracking-tight" aria-label={`${siteConfig.name} — home`}>
           <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-400 text-white shadow-lg shadow-indigo-500/30">
-            N
+            {siteConfig.name.charAt(0).toUpperCase()}
           </span>
           <span>{siteConfig.name}</span>
         </Link>
@@ -38,6 +38,9 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          <Link href="/search" aria-label="Search" className="rounded-full p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white transition">
+            <Search size={16} aria-hidden="true" />
+          </Link>
           <ThemeToggle />
           <Link href="/contact">
             <Button size="sm">Start a project</Button>
@@ -74,6 +77,14 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
+            <Link
+              href="/search"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-900"
+            >
+              <Search size={14} aria-hidden="true" />
+              Search
+            </Link>
             <div className="flex items-center justify-between gap-3 pt-2">
               <ThemeToggle />
               <Link href="/contact" onClick={() => setOpen(false)}>

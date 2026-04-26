@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { serverFetch } from "@/lib/api";
 import type { Contact } from "@/lib/types";
 import { ContactActions } from "./contact-actions";
+import { ExportCsvButton } from "./export-csv-button";
 
 export const metadata: Metadata = { title: "Contacts" };
 
@@ -28,6 +29,7 @@ export default async function ContactsPage() {
             </span>
           )}
         </h1>
+        <ExportCsvButton contacts={contacts} />
       </div>
 
       {contacts.length === 0 ? (

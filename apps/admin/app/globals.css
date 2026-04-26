@@ -52,4 +52,16 @@
       --destructive-foreground: #ffffff;
     }
   }
+
+  .dark {
+    --background: #0b0d10;
+    --foreground: #f3f4f6;
+    --muted: #111827;
+    --muted-foreground: #9ca3af;
+    --primary: #f3f4f6;
+    --primary-foreground: #0b0d10;
+    --border: #1f2937;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+  }
 }
