@@ -231,6 +231,7 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your post
       IframeNode,
     ],
     content: value,
+    immediatelyRender: false,
     editorProps: {
       attributes: {
         class: "min-h-[320px] p-3 focus:outline-none prose prose-sm max-w-none dark:prose-invert [&_iframe]:w-full [&_iframe]:rounded [&_.iframe-wrapper]:w-full",

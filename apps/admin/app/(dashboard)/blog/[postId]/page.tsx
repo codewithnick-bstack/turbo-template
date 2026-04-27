@@ -11,8 +11,9 @@ export default async function EditBlogPostPage({ params }: { params: Promise<{ p
 
   let post: BlogPost;
   try {
-    post = await serverFetch<BlogPost>(`/blog/${postId}`);
-  } catch {
+    post = await serverFetch<BlogPost>(`/blog/admin/${postId}`);
+  } catch (err) {
+    console.error("Failed to fetch blog post:", err);
     notFound();
   }
 
