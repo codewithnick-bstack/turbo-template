@@ -63,6 +63,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   if (post.status !== "published") notFound();
 
+  const wordCount = post.content ? post.content.split(/\s+/).length : 0;
+  const readingTime = Math.ceil(wordCount / 200);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -74,7 +77,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     datePublished: post.publishedAt ?? undefined,
     dateModified: post.updatedAt ?? post.publishedAt ?? undefined,
     url: `${siteConfig.url}/blog/${post.slug}`,
-    wordCount: post.content ? post.content.split(/\s+/).length : undefined,
+    wordCount,
     publisher: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
   };
 
@@ -88,8 +91,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {post.author ? <Badge>{post.author}</Badge> : null}
       <h1 className="mt-4 text-4xl font-semibold tracking-tight">{post.title}</h1>
       {post.publishedAt ? (
-        <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
-          {format(new Date(post.publishedAt), "MMMM d, yyyy")}
+        <p className="mt-3 flex gap-3 text-sm text-slate-500 dark:text-slate-400">
+          <span>{format(new Date(post.publishedAt), "MMMM d, yyyy")}</span>
+          <span>·</span>
+          <span>{readingTime} min read</span>
         </p>
       ) : null}
       {post.excerpt ? (

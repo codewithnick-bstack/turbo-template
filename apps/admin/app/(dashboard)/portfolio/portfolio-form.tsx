@@ -16,10 +16,12 @@ export function PortfolioEntryForm({ entry }: Props) {
     client: entry?.client ?? "",
     description: entry?.description ?? "",
     coverImageUrl: entry?.coverImageUrl ?? "",
+    images: entry?.images ?? [],
     url: entry?.url ?? "",
     tags: entry?.tags.join(", ") ?? "",
     status: entry?.status ?? "draft",
   });
+  const [newImageUrl, setNewImageUrl] = useState("");
 
   const set = (k: keyof Omit<typeof values, "status">) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -36,6 +38,7 @@ export function PortfolioEntryForm({ entry }: Props) {
       const payload = {
         ...values,
         tags: values.tags.split(",").map((t) => t.trim()).filter(Boolean),
+        images: values.images.filter(Boolean),
       };
       const res = await fetch(url, {
         method,
@@ -92,6 +95,59 @@ export function PortfolioEntryForm({ entry }: Props) {
       <div>
         <label htmlFor="pf-coverImageUrl" className="mb-1 block text-sm font-medium">Cover image URL</label>
         <input id="pf-coverImageUrl" className="input" type="url" value={values.coverImageUrl} onChange={set("coverImageUrl")} placeholder="https://…" />
+      </div>
+      <div>
+        <label className="mb-1 block text-sm font-medium">Gallery images</label>
+        <div className="space-y-2">
+          {values.images.map((img, idx) => (
+            <div key={idx} className="flex gap-2">
+              <input
+                type="url"
+                className="input flex-1"
+                value={img}
+                onChange={(e) => setValues((v) => ({
+                  ...v,
+                  images: v.images.map((x, i) => i === idx ? e.target.value : x),
+                }))}
+                placeholder="https://…"
+              />
+              <button
+                type="button"
+                onClick={() => setValues((v) => ({
+                  ...v,
+                  images: v.images.filter((_, i) => i !== idx),
+                }))}
+                className="rounded-lg border border-red-300 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <div className="flex gap-2">
+            <input
+              type="url"
+              className="input flex-1"
+              value={newImageUrl}
+              onChange={(e) => setNewImageUrl(e.target.value)}
+              placeholder="Add image URL"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                if (newImageUrl.trim()) {
+                  setValues((v) => ({
+                    ...v,
+                    images: [...v.images, newImageUrl.trim()],
+                  }));
+                  setNewImageUrl("");
+                }
+              }}
+              className="rounded-lg border border-[var(--border)] px-3 py-2 text-sm font-medium hover:bg-[var(--muted)]"
+            >
+              Add
+            </button>
+          </div>
+        </div>
       </div>
       <div>
         <label htmlFor="pf-tags" className="mb-1 block text-sm font-medium">Tags (comma-separated)</label>

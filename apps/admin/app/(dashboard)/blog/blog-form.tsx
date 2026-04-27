@@ -16,6 +16,8 @@ export function BlogForm({ post }: Props) {
     slug: post?.slug ?? "",
     title: post?.title ?? "",
     excerpt: post?.excerpt ?? "",
+    metaTitle: post?.metaTitle ?? "",
+    metaDescription: post?.metaDescription ?? "",
     content: post?.content ?? "",
     author: post?.author ?? "",
   });
@@ -112,6 +114,26 @@ export function BlogForm({ post }: Props) {
       </Field>
       <Field label="Excerpt" htmlFor="blog-excerpt">
         <textarea id="blog-excerpt" className="input min-h-[80px]" value={values.excerpt} onChange={set("excerpt")} placeholder="Short summary" />
+      </Field>
+      <Field label="Meta Title (SEO)" htmlFor="blog-meta-title">
+        <input
+          id="blog-meta-title"
+          className="input"
+          value={values.metaTitle}
+          onChange={set("metaTitle")}
+          placeholder="Page title for search results (60 chars)"
+          maxLength={60}
+        />
+      </Field>
+      <Field label="Meta Description (SEO)" htmlFor="blog-meta-description">
+        <textarea
+          id="blog-meta-description"
+          className="input min-h-[60px]"
+          value={values.metaDescription}
+          onChange={set("metaDescription")}
+          placeholder="Description for search results (160 chars)"
+          maxLength={160}
+        />
       </Field>
 
       <div>
