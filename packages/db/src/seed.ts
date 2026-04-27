@@ -1,5 +1,6 @@
 import { createDb } from "./client";
-import { blogPosts, teamMembers, testimonials, portfolioEntries, siteSettings } from "./schema";
+import { blogPosts, teamMembers, testimonials, portfolioEntries, siteSettings, user, account } from "./schema";
+import { hash } from "bcryptjs";
 
 async function main() {
   const url = process.env.DATABASE_URL;
@@ -11,6 +12,25 @@ async function main() {
   const { db, close } = createDb({ url });
 
   try {
+    // Default admin user
+    const adminUserId = "admin-" + Date.now();
+    const hashedPassword = await hash("password123", 10);
+
+    await db.insert(user).values({
+      id: adminUserId,
+      name: "Admin",
+      email: "admin@example.com",
+      emailVerified: true,
+    }).onConflictDoNothing();
+
+    await db.insert(account).values({
+      id: "account-" + Date.now(),
+      accountId: "admin@example.com",
+      providerId: "credential",
+      userId: adminUserId,
+      password: hashedPassword,
+    }).onConflictDoNothing();
+
     // Settings (single row)
     await db.insert(siteSettings).values({
       businessName: "Acme Studio",
@@ -264,7 +284,7 @@ Accessibility is not a checkbox — it's an ongoing practice that improves the e
       },
     ]);
 
-    console.log("seed complete: 1 settings, 3 posts, 4 team members, 4 testimonials, 3 portfolio entries");
+    console.log("seed complete: 1 admin user, 1 settings, 3 posts, 4 team members, 4 testimonials, 3 portfolio entries");
   } finally {
     await close();
   }

@@ -10,7 +10,7 @@ async function main() {
 
   const { db, close } = createDb({ url });
   try {
-    await migrate(db, { migrationsFolder: "packages/db/migrations" });
+    await migrate(db, { migrationsFolder: "migrations" });
     console.log("migrations applied");
   } finally {
     await close();
