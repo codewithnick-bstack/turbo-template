@@ -27,7 +27,7 @@ function RotatingLine() {
 
   return (
     <p
-      className="relative mx-auto mt-8 h-14 max-w-2xl text-lg font-light text-white/95 sm:h-9 sm:text-xl"
+      className="relative mt-7 h-14 max-w-2xl text-lg font-light text-white/95 sm:h-9 sm:text-xl"
       aria-live="polite"
     >
       {hero.rotating.map((line, lineIndex) => {
@@ -70,7 +70,7 @@ export function HeroSection() {
   }, [reduced]);
 
   return (
-    <section className="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden bg-[#08172c]">
+    <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-[#08172c]">
       <video
         ref={videoRef}
         className="absolute inset-0 -z-20 size-full object-cover"
@@ -86,36 +86,39 @@ export function HeroSection() {
         <source src="/hero/hero.mp4" type="video/mp4" />
       </video>
 
-      {/* One scrim. Measured against the brightest pixels this clip puts behind
-          the text (lit towers, ~t=12s): white type needs 4.5:1, and the type
-          runs wider than the gradient's bright centre, so the FLOOR matters
-          more than the peak. 0.62 everywhere plus a small centre lift holds
-          ~4.9:1 on the headline. A 0.55 flat scrim measured 4.03:1 and fails —
-          re-measure before lightening. */}
+      {/* Scrim follows the copy: heaviest at the bottom-left where the type
+          sits, so the skyline stays legible on the right. Measured against the
+          brightest pixels this clip puts behind the text (lit towers, ~t=12s) —
+          white needs 4.5:1, and the type runs wider than any bright centre, so
+          the FLOOR governs legibility, not the peak. Re-measure before
+          lightening: a 0.55 flat scrim came in at 4.03:1 and fails. */}
       <div
-        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_75%_65%_at_50%_45%,rgba(8,23,44,0.68)_0%,rgba(8,23,44,0.62)_65%,rgba(8,23,44,0.7)_100%)]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(8,23,44,0.82)_0%,rgba(8,23,44,0.68)_50%,rgba(8,23,44,0.34)_100%)]"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(8,23,44,0.6)_0%,rgba(8,23,44,0.2)_50%,transparent_78%)]"
         aria-hidden="true"
       />
 
-      <div className="mx-auto w-full max-w-3xl px-4 pt-24 pb-24 text-center sm:px-6">
-        <h1 className="hero-rise-slow text-[clamp(2.5rem,8vw,5.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance text-white">
+      <div className="mx-auto w-full max-w-6xl px-4 pt-32 pb-20 sm:px-6 lg:px-8 lg:pb-28">
+        <h1 className="hero-rise-slow max-w-4xl text-[clamp(2.5rem,7.5vw,5.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-white">
           {hookWords.length > 1 ? `${hookWords.slice(0, -1).join(" ")} ` : ""}
-          <span className="relative inline-block whitespace-nowrap">
+          {/* The mark stays in inline flow and rides the last word: absolute
+              positioning put it wherever the line happened to break. */}
+          <span className="whitespace-nowrap">
             {hookWords.at(-1)}
             {hero.trademark ? (
-              <span
-                aria-hidden="true"
-                className="absolute top-[0.12em] -right-[0.85em] text-[0.2em] font-normal tracking-normal text-white/40"
-              >
+              <sup className="ml-[0.06em] align-super text-[0.22em] font-normal tracking-normal text-white/45">
                 TM
-              </span>
+              </sup>
             ) : null}
           </span>
         </h1>
 
         <RotatingLine />
 
-        <div className="hero-rise mt-12 flex flex-col justify-center gap-3 sm:flex-row">
+        <div className="hero-rise mt-11 flex flex-col gap-3 sm:flex-row">
           <Link
             href={hero.primaryCta.href}
             onClick={() => {
@@ -152,7 +155,7 @@ export function HeroSection() {
       <motion.a
         href="#what-we-do"
         aria-label="Scroll to what we do"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 transition hover:text-white"
+        className="absolute right-6 bottom-10 text-white/40 transition hover:text-white lg:right-10"
         animate={reduced ? {} : { y: [0, 8, 0] }}
         transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
       >
