@@ -7,7 +7,10 @@ import { CountUp } from "@/components/count-up";
 import { HeroSection } from "@/components/hero-section";
 import { ParallaxBand } from "@/components/parallax-band";
 import { Reveal } from "@/components/reveal";
+import { Rule } from "@/components/rule";
+import { ScaleIn } from "@/components/scale-in";
 import { ScrollDepthTracker } from "@/components/scroll-depth-tracker";
+import { StaggerWords } from "@/components/stagger-words";
 import { industries, paths, siteConfig, stats, values } from "@/lib/site-data";
 
 export const metadata: Metadata = {
@@ -35,57 +38,83 @@ export default function HomePage() {
     <div>
       <HeroSection />
 
-      {/* Proof, the first thing past the fold. Numbers count as they arrive. */}
-      <section className="border-b border-[var(--border)] bg-[#08172c] py-14 text-white lg:py-16">
-        <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-y-10 px-4 sm:px-6 lg:grid-cols-4 lg:px-8">
+      {/* Proof, first thing past the fold. Wide measure, hairline dividers. */}
+      <section className="border-b border-[var(--border)] bg-[#08172c] text-white">
+        <dl className="mx-auto grid max-w-7xl grid-cols-2 px-4 sm:px-6 lg:grid-cols-4 lg:px-10">
           {stats.map((stat, index) => (
-            <Reveal key={stat.label} index={index}>
-              <dd className="text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
+            <Reveal
+              key={stat.label}
+              index={index}
+              className={
+                index === 0
+                  ? "py-12 lg:py-16"
+                  : "border-l border-white/10 py-12 pl-6 lg:py-16 lg:pl-10"
+              }
+            >
+              <dd className="font-display tnum text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
                 <CountUp value={stat.value} />
               </dd>
-              <dt className="mt-2 text-xs tracking-[0.14em] text-white/50 uppercase">{stat.label}</dt>
+              <dt className="mt-3 text-[0.7rem] font-semibold tracking-[0.14em] text-white/45 uppercase">
+                {stat.label}
+              </dt>
             </Reveal>
           ))}
         </dl>
       </section>
 
-      {/* Why you are here — two doors, nothing else. */}
-      <section id="what-we-do" className="bg-white py-20 lg:py-28 dark:bg-[#071527]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
+      {/* Two doors. Narrow intro column, then a wide split — the measure
+          changes so the page does not read as one repeated container. */}
+      <section id="what-we-do" className="bg-[var(--background)] py-24 lg:py-32">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6">
+          <Reveal>
+            <Rule />
+            <p className="mt-6 text-[0.7rem] font-semibold tracking-[0.16em] text-[#d8261c] uppercase">
+              Two ways in
+            </p>
+          </Reveal>
+          <StaggerWords
+            text="Why are you here?"
+            className="font-display mt-5 text-4xl font-semibold tracking-[-0.02em] text-[#0e2a4f] sm:text-5xl dark:text-white"
+          />
+        </div>
+
+        <div className="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-10">
+          <div className="grid gap-14 lg:grid-cols-2 lg:gap-24">
             {paths.map((path, index) => (
               <Reveal key={path.audience} index={index} className="relative">
-                {/* Oversized ghost numeral as graphic anchor. */}
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute -top-10 -left-2 text-[7rem] leading-none font-bold text-[#0e2a4f]/[0.06] select-none dark:text-white/[0.05]"
+                  className="font-display pointer-events-none absolute -top-14 -left-3 text-[9rem] leading-none font-bold text-[#0e2a4f]/[0.05] select-none dark:text-white/[0.04]"
                 >
                   0{index + 1}
                 </span>
                 <div className="relative">
-                  <div className="h-1 w-14 bg-[#d8261c]" aria-hidden="true" />
-                  <p className="mt-6 text-xs font-semibold tracking-[0.18em] text-[#d8261c] uppercase">
+                  <p className="text-[0.7rem] font-semibold tracking-[0.16em] text-[#d8261c] uppercase">
                     {path.audience}
                   </p>
-                  <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-[#0e2a4f] sm:text-4xl dark:text-white">
+                  <h3 className="font-display mt-4 text-3xl font-semibold tracking-[-0.02em] text-[#0e2a4f] sm:text-4xl dark:text-white">
                     {path.title}
-                  </h2>
-                  <p className="mt-5 text-base leading-7 text-[var(--muted)]">{path.description}</p>
-                  <ul className="mt-7 space-y-3">
+                  </h3>
+                  <p className="mt-5 max-w-md text-base leading-7 text-[var(--muted)]">
+                    {path.description}
+                  </p>
+                  <ul className="mt-8 space-y-0">
                     {path.bullets.map((bullet) => (
-                      <li key={bullet} className="flex gap-3 text-sm leading-6 text-[var(--muted)]">
-                        <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 bg-[#d8261c]" />
+                      <li
+                        key={bullet}
+                        className="border-t border-[var(--border)] py-4 text-sm leading-6 text-[var(--muted)]"
+                      >
                         {bullet}
                       </li>
                     ))}
                   </ul>
                   <Link
                     href={path.cta.href}
-                    className="group mt-9 inline-flex items-center gap-2 border-b-2 border-[#d8261c] pb-1 text-base font-semibold text-[#0e2a4f] dark:text-white"
+                    className="group mt-9 inline-flex items-center gap-2 border-b-2 border-[#d8261c] pb-1 text-[0.8rem] font-bold tracking-[0.1em] text-[#0e2a4f] uppercase dark:text-white"
                   >
                     {path.cta.label}
                     <ArrowRight
-                      className="size-4 transition group-hover:translate-x-1"
+                      className="size-3.5 transition group-hover:translate-x-1"
                       aria-hidden="true"
                     />
                   </Link>
@@ -96,84 +125,129 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Who we are — parallax image band. */}
-      <ParallaxBand image="/hero/band.jpg" className="py-24 text-white lg:py-32">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <Reveal className="max-w-2xl">
-            <div className="h-1 w-14 bg-[#d8261c]" aria-hidden="true" />
-            <h2 className="mt-6 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-              41 years. Approximately 35,000 placements.
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-white/70">
-              S.R. Clarke has provided the professionals who built and renovated America&apos;s most
-              iconic buildings, bridges, and highways — and the infrastructure around them.
+      {/* The number as the graphic. Full-bleed, cropped, nothing else. */}
+      <section className="relative overflow-hidden border-y border-[var(--border)] bg-[var(--muted-bg)] py-24 lg:py-32">
+        <span
+          aria-hidden="true"
+          className="font-display tnum pointer-events-none absolute -top-8 -right-4 text-[clamp(9rem,26vw,22rem)] leading-[0.8] font-bold text-[#0e2a4f]/[0.07] select-none lg:-top-16 dark:text-white/[0.05]"
+        >
+          41
+        </span>
+        <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-10">
+          <Reveal>
+            <Rule />
+          </Reveal>
+          <StaggerWords
+            text="Forty-one years on American jobsites."
+            className="font-display mt-7 text-4xl font-semibold tracking-[-0.02em] text-[#0e2a4f] sm:text-5xl lg:text-6xl dark:text-white"
+          />
+          <Reveal index={1}>
+            <p className="mt-7 max-w-xl text-lg leading-8 text-[var(--muted)]">
+              Approximately 35,000 placements. The professionals who built and renovated
+              America&apos;s most iconic buildings, bridges, and highways came through this desk.
             </p>
             <Link
               href="/why-src"
-              className="group mt-9 inline-flex items-center gap-2 border-b-2 border-[#d8261c] pb-1 text-base font-semibold text-white"
+              className="group mt-9 inline-flex items-center gap-2 border-b-2 border-[#d8261c] pb-1 text-[0.8rem] font-bold tracking-[0.1em] text-[#0e2a4f] uppercase dark:text-white"
             >
               Why SRC
-              <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden="true" />
+              <ArrowRight
+                className="size-3.5 transition group-hover:translate-x-1"
+                aria-hidden="true"
+              />
             </Link>
           </Reveal>
         </div>
-      </ParallaxBand>
+      </section>
 
-      {/* How we can help — the four markets. */}
-      <section className="bg-[var(--muted-bg)] py-20 lg:py-28">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <Reveal className="max-w-2xl">
-            <div className="h-1 w-14 bg-[#d8261c]" aria-hidden="true" />
-            <p className="mt-6 text-xs font-semibold tracking-[0.18em] text-[#d8261c] uppercase">
-              Industries served
-            </p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-[#0e2a4f] sm:text-4xl dark:text-white">
-              The buildings, bridges, and highways you already know.
-            </h2>
-          </Reveal>
-          <div className="mt-14 grid gap-px border border-[var(--border)] bg-[var(--border)] md:grid-cols-2">
-            {industries.map((industry, index) => (
-              <Reveal key={industry.slug} index={index}>
-                <Link
-                  href={`/positions#${industry.slug}`}
-                  className="group flex h-full flex-col justify-between bg-[var(--background)] p-9 transition hover:bg-[#0e2a4f] hover:text-white"
-                >
-                  <div>
-                    <span
-                      aria-hidden="true"
-                      className="text-xs font-semibold tracking-[0.14em] text-[#d8261c]"
-                    >
-                      0{index + 1}
+      {/* Industries. Offset heading against a full-width hairline grid. */}
+      <section className="bg-[var(--background)] py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+            <Reveal>
+              <Rule />
+              <p className="mt-6 text-[0.7rem] font-semibold tracking-[0.16em] text-[#d8261c] uppercase">
+                Industries served
+              </p>
+              <h2 className="font-display mt-5 text-3xl font-semibold tracking-[-0.02em] text-[#0e2a4f] sm:text-4xl dark:text-white">
+                The buildings, bridges, and highways you already know.
+              </h2>
+            </Reveal>
+
+            <div className="grid gap-px bg-[var(--border)] sm:grid-cols-2">
+              {industries.map((industry, index) => (
+                <Reveal key={industry.slug} index={index}>
+                  <Link
+                    href={`/positions#${industry.slug}`}
+                    className="group flex h-full flex-col justify-between bg-[var(--background)] p-8 transition hover:bg-[#0e2a4f]"
+                  >
+                    <div>
+                      <span
+                        aria-hidden="true"
+                        className="font-display tnum text-xs font-bold tracking-[0.14em] text-[#d8261c]"
+                      >
+                        0{index + 1}
+                      </span>
+                      <h3 className="font-display mt-4 text-xl font-semibold text-[#0e2a4f] group-hover:text-white dark:text-white">
+                        {industry.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-6 text-[var(--muted)] group-hover:text-white/70">
+                        {industry.description}
+                      </p>
+                    </div>
+                    <span className="mt-8 inline-flex items-center gap-2 text-[0.7rem] font-bold tracking-[0.1em] text-[#d8261c] uppercase group-hover:text-white">
+                      View openings
+                      <ArrowRight
+                        className="size-3.5 transition group-hover:translate-x-1"
+                        aria-hidden="true"
+                      />
                     </span>
-                    <h3 className="mt-4 text-2xl font-semibold text-[#0e2a4f] group-hover:text-white dark:text-white">
-                      {industry.title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-6 text-[var(--muted)] group-hover:text-white/70">
-                      {industry.description}
-                    </p>
-                  </div>
-                  <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#d8261c] group-hover:text-white">
-                    View openings
-                    <ArrowRight
-                      className="size-4 transition group-hover:translate-x-1"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* What we hold ourselves to. */}
-      <section className="bg-white py-20 lg:py-28 dark:bg-[#071527]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <dl className="grid gap-x-14 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Image band. Narrow copy column against the photograph. */}
+      <ParallaxBand image="/hero/band.jpg" className="py-28 text-white lg:py-40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+          <ScaleIn className="max-w-xl" from={1.06}>
+            <Reveal>
+              <Rule light />
+              <p className="mt-6 text-[0.7rem] font-semibold tracking-[0.16em] text-white/50 uppercase">
+                How we work
+              </p>
+              <h2 className="font-display mt-5 text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">
+                Subject matter experts, not resume forwarders.
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-white/70">
+                We know the projects, the pay bands, and the managers you would be working for.
+                That is the difference between a submittal and a placement.
+              </p>
+            </Reveal>
+          </ScaleIn>
+        </div>
+      </ParallaxBand>
+
+      {/* Values. Four columns, hairline tops, wide measure. */}
+      <section className="bg-[var(--background)] py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+          <Reveal className="max-w-2xl">
+            <Rule />
+            <h2 className="font-display mt-6 text-3xl font-semibold tracking-[-0.02em] text-[#0e2a4f] sm:text-4xl dark:text-white">
+              What we hold ourselves to.
+            </h2>
+          </Reveal>
+          <dl className="mt-16 grid gap-x-12 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {values.map((value, index) => (
               <Reveal key={value.title} index={index}>
-                <div className="h-px w-full bg-[var(--border)]" aria-hidden="true" />
-                <dt className="mt-5 text-xl font-semibold text-[#0e2a4f] dark:text-white">
+                <span
+                  aria-hidden="true"
+                  className="block h-px w-full bg-[var(--border)]"
+                />
+                <dt className="font-display mt-6 text-lg font-semibold text-[#0e2a4f] dark:text-white">
                   {value.title}
                 </dt>
                 <dd className="mt-3 text-sm leading-6 text-[var(--muted)]">{value.description}</dd>
@@ -183,37 +257,37 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Closing CTA — same two doors as the hero. */}
-      <ParallaxBand image="/hero/band-2.jpg" className="py-24 text-white lg:py-32">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <Reveal>
-            <h2 className="text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
-              Join us in the mission today.
-            </h2>
-            <p className="mt-6 text-lg text-white/70">
+      {/* Closing. Centred here on purpose — it is the one moment that should
+          feel like an address to the reader rather than a column of copy. */}
+      <ParallaxBand image="/hero/band-2.jpg" className="py-28 text-white lg:py-40">
+        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
+          <StaggerWords
+            text="Join us in the mission today."
+            className="font-display text-4xl font-semibold tracking-[-0.02em] text-balance sm:text-6xl"
+          />
+          <Reveal index={1}>
+            <p className="mt-7 text-lg text-white/70">
               One conversation tells you whether we can help.
             </p>
             <div className="mt-12 flex flex-col justify-center gap-3 sm:flex-row">
               <Link
                 href="/career-seekers"
-                className="group inline-flex items-center justify-center gap-2 bg-[#d8261c] px-10 py-4.5 text-base font-semibold text-white transition hover:bg-[#b81f16]"
+                className="group inline-flex items-center justify-center gap-2 bg-[#d8261c] px-10 py-4.5 text-[0.8rem] font-bold tracking-[0.1em] text-white uppercase transition hover:bg-[#b81f16]"
               >
                 Get Hired
                 <ArrowRight
-                  className="size-4 transition group-hover:translate-x-1"
+                  className="size-3.5 transition group-hover:translate-x-1"
                   aria-hidden="true"
                 />
               </Link>
               <Link
                 href="/employers"
-                className="inline-flex items-center justify-center border border-white/30 px-10 py-4.5 text-base font-semibold text-white transition hover:border-white hover:bg-white/10"
+                className="inline-flex items-center justify-center border border-white/30 px-10 py-4.5 text-[0.8rem] font-bold tracking-[0.1em] text-white uppercase transition hover:border-white hover:bg-white/10"
               >
                 Hire Today
               </Link>
             </div>
-            <p className="mt-10 text-sm tracking-wide text-white/40">
-              Or call {siteConfig.phone}
-            </p>
+            <p className="mt-10 text-sm tracking-wide text-white/40">Or call {siteConfig.phone}</p>
           </Reveal>
         </div>
       </ParallaxBand>

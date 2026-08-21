@@ -102,7 +102,7 @@ export function HeroSection() {
       />
 
       <div className="mx-auto w-full max-w-6xl px-4 pt-32 pb-20 sm:px-6 lg:px-8 lg:pb-28">
-        <h1 className="hero-rise-slow max-w-4xl text-[clamp(2.5rem,7.5vw,5.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-white">
+        <h1 className="hero-rise-slow font-display max-w-4xl text-[clamp(2.5rem,7.5vw,5.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-white">
           {hookWords.length > 1 ? `${hookWords.slice(0, -1).join(" ")} ` : ""}
           {/* The mark stays in inline flow and rides the last word: absolute
               positioning put it wherever the line happened to break. */}

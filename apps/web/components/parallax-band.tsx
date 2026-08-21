@@ -29,7 +29,7 @@ export function ParallaxBand({
       <motion.div
         aria-hidden="true"
         {...(reduced ? {} : { style: { y } })}
-        className="absolute inset-x-0 -inset-y-[14%] -z-20 bg-cover bg-center opacity-25"
+        className="absolute inset-x-0 -inset-y-[14%] -z-20 bg-cover bg-center opacity-30"
       >
         <div
           className="size-full bg-cover bg-center"

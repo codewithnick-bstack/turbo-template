@@ -14,7 +14,7 @@ export function PageHero({ eyebrow, title, intro, cta }: PageHeroProps) {
     <section className="bg-[#0e2a4f] py-16 text-white lg:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <p className="text-xs font-semibold tracking-[0.18em] text-white/60 uppercase">{eyebrow}</p>
-        <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+        <h1 className="font-display mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
           {title}
         </h1>
         <p className="mt-5 max-w-2xl text-lg leading-8 text-white/75">{intro}</p>

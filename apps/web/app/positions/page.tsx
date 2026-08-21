@@ -32,7 +32,7 @@ export default function PositionsPage() {
                 className="flex flex-col justify-between border border-[var(--border)] bg-[var(--card)] p-8"
               >
                 <div>
-                  <h2 className="text-xl font-semibold text-[#0e2a4f] dark:text-white">{industry.title}</h2>
+                  <h2 className="font-display text-xl font-semibold text-[#0e2a4f] dark:text-white">{industry.title}</h2>
                   <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{industry.description}</p>
                 </div>
                 <Link

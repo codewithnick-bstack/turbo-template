@@ -25,10 +25,16 @@ export function SiteHeader() {
       setScrolled(true);
       return;
     }
+
     const onScroll = () => setScrolled(window.scrollY > 80);
     onScroll();
+
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    document.addEventListener("scroll", onScroll, { passive: true, capture: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("scroll", onScroll, { capture: true });
+    };
   }, [pathname]);
 
   return (
@@ -37,22 +43,25 @@ export function SiteHeader() {
         "fixed top-0 z-50 w-full transition-colors duration-300",
         overlay
           ? "border-b border-white/10 bg-transparent"
-          : "border-b border-slate-200/70 bg-white/90 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/85",
+          : "border-b border-[var(--border)] bg-[var(--background)]/92 backdrop-blur-xl",
       )}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-[var(--header-height)] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
           className="flex items-baseline gap-2 tracking-tight"
           aria-label={`${siteConfig.name} — home`}
         >
-          <span
-            className={cn(
-              "text-xl font-semibold",
-              overlay ? "text-white" : "text-[#0e2a4f] dark:text-white",
-            )}
-          >
-            S.R. <span className="text-[#d8261c]">Clarke</span>
+          <span className="flex flex-col gap-1.5">
+            <span aria-hidden="true" className="h-[3px] w-7 bg-[#d8261c]" />
+            <span
+              className={cn(
+                "font-display text-lg leading-none font-bold tracking-[-0.02em]",
+                overlay ? "text-white" : "text-[#0e2a4f] dark:text-white",
+              )}
+            >
+              S.R. CLARKE
+            </span>
           </span>
         </Link>
 
@@ -62,7 +71,7 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               className={cn(
-                "rounded-sm px-3 py-2 text-sm font-medium transition",
+                "px-3 py-2 text-[0.7rem] font-semibold tracking-[0.1em] uppercase transition",
                 overlay
                   ? "text-white/80 hover:bg-white/10 hover:text-white"
                   : "text-slate-600 hover:bg-slate-100 hover:text-[#0e2a4f] dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white",
@@ -83,14 +92,14 @@ export function SiteHeader() {
         <div className="hidden items-center gap-3 lg:flex">
           <Link
             href={hero.primaryCta.href}
-            className="rounded-sm bg-[#d8261c] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#b81f16]"
+            className="bg-[#d8261c] px-5 py-2.5 text-[0.7rem] font-bold tracking-[0.1em] text-white uppercase transition hover:bg-[#b81f16]"
           >
             {hero.primaryCta.label}
           </Link>
           <Link
             href={hero.secondaryCta.href}
             className={cn(
-              "rounded-sm border px-5 py-2.5 text-sm font-semibold transition",
+              "border px-5 py-2.5 text-[0.7rem] font-bold tracking-[0.1em] uppercase transition",
               overlay
                 ? "border-white/40 text-white hover:border-white hover:bg-white/10"
                 : "border-[#0e2a4f]/25 text-[#0e2a4f] hover:bg-[#0e2a4f] hover:text-white dark:border-slate-700 dark:text-white dark:hover:bg-slate-800",

@@ -37,6 +37,24 @@
   padding-top: var(--header-height);
 }
 
+/* Display type. Archivo for headlines and figures, Inter for reading copy —
+   the widths differ enough that big numbers read as engineered rather than
+   as body text scaled up.
+
+   These keys make Tailwind emit the font-display / font-body utilities itself.
+   Do not also hand-write a .font-display rule: the generated utility wins on
+   order and the hand-written one silently does nothing. */
+@theme inline {
+  --font-display: var(--font-display-sans), "Archivo", system-ui, sans-serif;
+  --font-body: var(--font-body-sans), "Inter", system-ui, sans-serif;
+}
+
+/* Figures in stat blocks should line up in columns. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
 /* Visible focus indicators (WCAG 2.4.11) */
 :focus-visible {
   outline: 2px solid var(--accent);

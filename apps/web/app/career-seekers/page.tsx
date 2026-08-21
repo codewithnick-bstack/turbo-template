@@ -38,7 +38,7 @@ export default function CareerSeekersPage() {
 
       <section className="bg-[var(--muted-bg)] py-16 lg:py-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-semibold tracking-tight text-[#0e2a4f] sm:text-4xl dark:text-white">
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-[#0e2a4f] sm:text-4xl dark:text-white">
             Questions candidates ask
           </h2>
           <dl className="mt-10 space-y-8">
