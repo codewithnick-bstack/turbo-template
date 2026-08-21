@@ -2,24 +2,23 @@ import brand from "../../../brand.config";
 
 export const siteConfig = {
   name: brand.businessName,
-  description: brand.tagline ?? "Professional services for modern businesses.",
+  description:
+    "Construction and infrastructure recruiting. 41 years, 35,000 placements, and the people who built America's most iconic projects.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   phone: brand.phone ?? "",
   email: brand.email ?? "",
   location: brand.address ?? "",
   nav: [
-    { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
-    { href: "/services", label: "Services" },
-    { href: "/pricing", label: "Pricing" },
-    { href: "/portfolio", label: "Portfolio" },
+    { href: "/why-src", label: "Why SRC" },
+    { href: "/employers", label: "For Employers" },
+    { href: "/career-seekers", label: "For Career Seekers" },
+    { href: "/positions", label: "Positions" },
     { href: "/blog", label: "Blog" },
-    { href: "/contact", label: "Contact" },
   ],
   footerExtra: [
-    { href: "/team", label: "Team" },
+    { href: "/contact", label: "Contact" },
+    { href: "/team", label: "Our Team" },
     { href: "/testimonials", label: "Testimonials" },
-    { href: "/status", label: "System Status" },
   ],
   socials: brand.socialLinks
     ? Object.entries(brand.socialLinks)
@@ -28,85 +27,140 @@ export const siteConfig = {
     : [],
 };
 
+/** Hook + rotating subheadlines for the video hero. */
+export const hero = {
+  hook: "Our People Build America.",
+  trademark: true,
+  rotating: [
+    "Our hands build the American future.",
+    "The towers. The bridges. The highways.",
+    "41 years of putting the right people on site.",
+    "35,000 careers placed. And counting.",
+  ],
+  question: "What will you build next?",
+  primaryCta: { label: "Get Hired", href: "/career-seekers" },
+  secondaryCta: { label: "Hire Today", href: "/employers" },
+};
+
 export const stats = [
-  { label: "Client launches", value: "48+" },
-  { label: "Avg. speed score", value: "95" },
-  { label: "Lead lift", value: "+31%" },
-  { label: "Weeks to launch", value: "2-4" },
+  { label: "Candidate database", value: "275,374" },
+  { label: "Successful placements", value: "24,751" },
+  { label: "Active positions", value: "180" },
+  { label: "Average tenure", value: "4.7 yrs" },
 ];
 
-export const features = [
+export const industries = [
   {
-    title: "Conversion-focused layout",
-    description: "Homepages built around trust, clarity, and strong CTAs so visitors convert into leads.",
+    slug: "commercial-construction",
+    title: "Commercial Construction",
+    description:
+      "Superintendents, project managers, and executives for ground-up commercial builds and interior work.",
   },
   {
-    title: "SEO-ready foundation",
-    description: "Metadata, structured data, sitemap generation, and fast server rendering from day one.",
+    slug: "heavy-construction",
+    title: "Heavy Construction",
+    description: "Bridges, highways, tunnels, and the civil infrastructure that keeps the country moving.",
   },
   {
-    title: "Fast client swaps",
-    description: "Replace copy, colors, and imagery through a single data file without touching layout code.",
+    slug: "real-estate-development",
+    title: "Real Estate & Commercial Development",
+    description: "Development, pre-construction, and owner-side talent for large mixed-use portfolios.",
   },
   {
-    title: "Modern motion",
-    description: "Tasteful animations and polished gradients powered by Framer Motion and Tailwind CSS v4.",
+    slug: "sub-contracting",
+    title: "Sub-Contracting",
+    description: "Trade leadership across mechanical, electrical, concrete, steel, and specialty scopes.",
   },
 ];
 
-export const services = [
+/** The two audiences. Every page routes back to one of these. */
+export const audiencePaths = {
+  candidate: 
   {
-    slug: "brand-sites",
-    title: "Brand websites",
-    summary: "Launch a polished marketing site that tells your story and converts traffic into inquiries.",
-    bullets: ["Custom landing pages", "CMS-ready content blocks", "SEO and analytics setup"],
-    priceFrom: 2800,
-    accent: "from-violet-500/20 to-fuchsia-500/20",
+    audience: "For Career Seekers",
+    title: "Take the next step in your career.",
+    description:
+      "We act as subject matter experts, not resume forwarders. We know the projects, the pay bands, and the managers you would be working for.",
+    bullets: [
+      "Confidential search — your employer never finds out",
+      "Roles that are not posted publicly",
+      "Straight answers on comp and project scope",
+    ],
+    cta: { label: "Get Hired", href: "/career-seekers" },
   },
-  {
-    slug: "lead-generation",
-    title: "Lead generation funnels",
-    summary: "Pair persuasive design with forms, scheduling, and campaign-ready landing pages.",
-    bullets: ["Paid traffic pages", "CRM-ready forms", "A/B testing hooks"],
-    priceFrom: 4200,
-    accent: "from-cyan-500/20 to-sky-500/20",
+  employer: {
+    audience: "For Employers",
+    title: "Fill the role that is holding up the schedule.",
+    description:
+      "We work as a valued business partner, screening against strict criteria so the shortlist you see is short for a reason.",
+    bullets: [
+      "275,374-strong construction database",
+      "Vetted, verified, and guaranteed placements",
+      "Executive search through field leadership",
+    ],
+    cta: { label: "Hire Today", href: "/employers" },
   },
-  {
-    slug: "ongoing-growth",
-    title: "Ongoing growth support",
-    summary: "Retainers for new pages, CRO updates, and monthly SEO or blog publishing.",
-    bullets: ["Monthly content drops", "Performance tuning", "Reporting dashboards"],
-    priceFrom: 900,
-    accent: "from-emerald-500/20 to-teal-500/20",
-  },
-];
+} as const;
+
+/** Ordered for rendering side by side on the homepage. */
+export const paths = [audiencePaths.candidate, audiencePaths.employer];
 
 export const values = [
   {
-    title: "Clarity over clutter",
-    description: "We simplify the message, sharpen the offer, and remove anything that slows the user down.",
+    title: "Mission",
+    description:
+      "To be an integral, strategic partner to our candidates and our clients — ensuring our clients' growth and our candidates' career advancement.",
   },
   {
-    title: "Built for handoff",
-    description: "The starter is organized for agencies and freelancers who need quick swaps for new clients.",
+    title: "Purpose",
+    description:
+      "To make a positive difference in our candidates' lives and our clients' success by streamlining search, recruitment, assessment, and hiring.",
   },
   {
-    title: "Accessible by default",
-    description: "Semantic structure, contrast-friendly palettes, keyboard support, and reduced-motion respect.",
+    title: "Integrity",
+    description:
+      "Confidentiality for candidates and clients, so plans are never jeopardized. Honest subject matter expert assessments, every time.",
+  },
+  {
+    title: "Quality",
+    description:
+      "Candidates and clients who meet strict criteria. Services that are verified and guaranteed.",
   },
 ];
 
+/** Kept for template compatibility with /services. */
+export const services = industries.map((industry) => ({
+  slug: industry.slug,
+  title: industry.title,
+  summary: industry.description,
+  bullets: [] as string[],
+  priceFrom: 0,
+  accent: "from-slate-500/20 to-slate-700/20",
+}));
+
+export const features = industries.map((industry) => ({
+  title: industry.title,
+  description: industry.description,
+}));
+
 export const faqs = [
   {
-    question: "How quickly can I swap this for a new client?",
-    answer: "Usually in a day: update the content arrays, color tokens, metadata, and blog posts, then deploy.",
+    question: "Do you charge candidates?",
+    answer: "No. Our fees are paid by the hiring company. Working with us costs a candidate nothing.",
   },
   {
-    question: "Can I connect a CMS later?",
-    answer: "Yes. The page sections are modular so it's easy to swap the demo dataset for a CMS or database.",
+    question: "Is my search confidential?",
+    answer:
+      "Yes. We never present your information to a client without your explicit approval on that specific opportunity.",
   },
   {
-    question: "Is the backend optional?",
-    answer: "Yes. The site works standalone, but the Express API adds a production-friendly contact endpoint.",
+    question: "What roles do you place?",
+    answer:
+      "Field and office leadership through the C-suite: superintendents, project managers, estimators, executives, and owners' representatives.",
+  },
+  {
+    question: "How long have you been doing this?",
+    answer:
+      "41 years, with approximately 35,000 placements across commercial, heavy civil, development, and sub-contracting.",
   },
 ];

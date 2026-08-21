@@ -1,88 +1,160 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { stats } from "@/lib/site-data";
+import { hero } from "@/lib/site-data";
 import { ANALYTICS_EVENTS, trackClarityEvent, trackEvent } from "@/lib/analytics";
+
+const ROTATE_MS = 3800;
+const hookWords = hero.hook.split(" ");
+const FADE_S = 0.5;
+
+function RotatingLine() {
+  const reduced = useReducedMotion();
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (reduced || hero.rotating.length < 2) return;
+    const id = window.setInterval(
+      () => setIndex((current) => (current + 1) % hero.rotating.length),
+      ROTATE_MS,
+    );
+    return () => window.clearInterval(id);
+  }, [reduced]);
+
+  return (
+    <p
+      className="relative mx-auto mt-8 h-14 max-w-2xl text-lg font-light text-white/70 sm:h-9 sm:text-xl"
+      aria-live="polite"
+    >
+      {hero.rotating.map((line, lineIndex) => {
+        const active = lineIndex === index;
+        return (
+          <motion.span
+            key={line}
+            className="absolute inset-x-0 top-0"
+            initial={false}
+            animate={{ opacity: active ? 1 : 0, y: active ? 0 : 8 }}
+            // The outgoing line clears out before the next one arrives, so the
+            // two never ghost over each other.
+            transition={{
+              duration: reduced ? 0 : FADE_S,
+              delay: reduced || !active ? 0 : FADE_S,
+              ease: "easeOut",
+            }}
+            aria-hidden={!active}
+          >
+            {line}
+          </motion.span>
+        );
+      })}
+    </p>
+  );
+}
 
 export function HeroSection() {
   const reduced = useReducedMotion();
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // No opacity in initial — hero text must be visible immediately for LCP.
-  // Only animate the y-offset so the h1 is painted on first render.
-  const fadeUp = reduced
-    ? {}
-    : { initial: { y: 18 }, animate: { y: 0 }, transition: { duration: 0.5, ease: "easeOut" as const } };
-
-  const fadeScale = reduced
-    ? {}
-    : { initial: { opacity: 0, scale: 0.96 }, animate: { opacity: 1, scale: 1 }, transition: { duration: 0.5, delay: 0.1 } };
+  // Autoplay can be blocked (data saver, low power mode). The poster stays
+  // visible in that case, so there is nothing to recover from.
+  useEffect(() => {
+    if (reduced) {
+      videoRef.current?.pause();
+      return;
+    }
+    videoRef.current?.play().catch(() => {});
+  }, [reduced]);
 
   return (
-    <section className="relative overflow-hidden px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.16),transparent_24%)]" />
-      <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-        <motion.div {...fadeUp}>
-          <Badge className="mb-4 gap-2">
-            <Sparkles className="size-3.5" aria-hidden="true" />
-            Client-ready starter template
-          </Badge>
-          <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl dark:text-white">
-            Ship beautiful client websites in days, not weeks.
-          </h1>
-          <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 sm:text-lg dark:text-slate-300">
-            A premium monorepo starter with Next.js, Express, cron automation, Tailwind v4, and a polished marketing UI ready for fast swaps.
-          </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/contact"
-              className="w-full sm:w-auto"
-              onClick={() => {
-                trackEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED, { button: "primary", href: "/contact" });
-                trackClarityEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED);
-              }}
-            >
-              <Button size="lg" className="w-full">
-                Launch your next site
-                <ArrowRight className="ml-2 size-4" aria-hidden="true" />
-              </Button>
-            </Link>
-            <Link
-              href="/portfolio"
-              className="w-full sm:w-auto"
-              onClick={() => trackEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED, { button: "secondary", href: "/portfolio" })}
-            >
-              <Button variant="secondary" size="lg" className="w-full">Browse examples</Button>
-            </Link>
-          </div>
-        </motion.div>
+    <section className="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden bg-[#08172c]">
+      <video
+        ref={videoRef}
+        className="absolute inset-0 -z-20 size-full object-cover opacity-[0.38]"
+        poster="/hero/hero-poster.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden="true"
+        tabIndex={-1}
+      >
+        <source src="/hero/hero.mp4" type="video/mp4" />
+      </video>
 
-        <motion.div
-          {...fadeScale}
-          className="rounded-[2rem] border border-white/60 bg-white/80 p-4 shadow-2xl shadow-indigo-500/10 backdrop-blur dark:border-slate-800 dark:bg-slate-950/70"
-        >
-          <div className="rounded-[1.5rem] bg-slate-950 p-5 text-white">
-            <div className="grid gap-3 sm:grid-cols-2">
-              {stats.map((stat) => (
-                <div key={stat.label} className="rounded-2xl bg-white/5 p-4">
-                  <p className="text-2xl font-semibold">{stat.value}</p>
-                  <p className="mt-1 text-sm text-slate-300">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 rounded-2xl bg-gradient-to-r from-indigo-500 to-cyan-400 p-[1px]">
-              <div className="rounded-2xl bg-slate-950 p-4 text-sm text-slate-300">
-                <p className="font-medium text-white">Why clients love it</p>
-                <p className="mt-2">Fast page speed, premium design, and easy content swaps for each new launch.</p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+      {/* Two scrims: a flat navy wash for contrast, then a vignette so the
+          centre of the frame stays the brightest thing on screen. */}
+      <div className="absolute inset-0 -z-10 bg-[#08172c]/40" aria-hidden="true" />
+      <div
+        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(8,23,44,0.15)_25%,rgba(8,23,44,0.72)_95%)]"
+        aria-hidden="true"
+      />
+
+      <div className="mx-auto w-full max-w-3xl px-4 pt-24 pb-24 text-center sm:px-6">
+        <h1 className="hero-rise-slow text-[clamp(2.5rem,8vw,5.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance text-white">
+          {hookWords.length > 1 ? `${hookWords.slice(0, -1).join(" ")} ` : ""}
+          <span className="relative inline-block whitespace-nowrap">
+            {hookWords.at(-1)}
+            {hero.trademark ? (
+              <span
+                aria-hidden="true"
+                className="absolute top-[0.12em] -right-[0.85em] text-[0.2em] font-normal tracking-normal text-white/40"
+              >
+                TM
+              </span>
+            ) : null}
+          </span>
+        </h1>
+
+        <RotatingLine />
+
+        <div className="hero-rise mt-12 flex flex-col justify-center gap-3 sm:flex-row">
+          <Link
+            href={hero.primaryCta.href}
+            onClick={() => {
+              trackEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED, {
+                button: "primary",
+                href: hero.primaryCta.href,
+              });
+              trackClarityEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED);
+            }}
+            className="group inline-flex items-center justify-center gap-2 bg-[#d8261c] px-10 py-4.5 text-base font-semibold tracking-wide text-white transition hover:bg-[#b81f16] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          >
+            {hero.primaryCta.label}
+            <ArrowRight
+              className="size-4 transition group-hover:translate-x-1"
+              aria-hidden="true"
+            />
+          </Link>
+          <Link
+            href={hero.secondaryCta.href}
+            onClick={() =>
+              trackEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED, {
+                button: "secondary",
+                href: hero.secondaryCta.href,
+              })
+            }
+            className="inline-flex items-center justify-center border border-white/30 px-10 py-4.5 text-base font-semibold tracking-wide text-white backdrop-blur-sm transition hover:border-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          >
+            {hero.secondaryCta.label}
+          </Link>
+        </div>
       </div>
+
+      {/* Scroll cue — the only other thing competing for attention. */}
+      <motion.a
+        href="#what-we-do"
+        aria-label="Scroll to what we do"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 transition hover:text-white"
+        animate={reduced ? {} : { y: [0, 8, 0] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <span className="block h-12 w-px bg-gradient-to-b from-transparent via-white/40 to-white/70" />
+      </motion.a>
     </section>
   );
 }

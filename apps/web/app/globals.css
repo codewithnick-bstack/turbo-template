@@ -4,30 +4,42 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --muted: #475569;
-  --muted-bg: #f1f5f9;
-  --card: rgba(255, 255, 255, 0.9);
-  --border: #e2e8f0;
-  --primary: #4f46e5;
+  --background: #ffffff;
+  --foreground: #0b1b33;
+  --muted: #4a5b73;
+  --muted-bg: #f2f5f9;
+  --card: rgba(255, 255, 255, 0.95);
+  --border: #dde4ed;
+  --primary: #0e2a4f;
   --primary-foreground: #ffffff;
+  --accent: #d8261c;
+  --accent-foreground: #ffffff;
+  --header-height: 4.5rem;
 }
 
 .dark {
-  --background: #020617;
-  --foreground: #f8fafc;
-  --muted: #cbd5e1;
-  --muted-bg: #0f172a;
-  --card: rgba(15, 23, 42, 0.85);
-  --border: #1e293b;
-  --primary: #6366f1;
+  --background: #071527;
+  --foreground: #f4f7fb;
+  --muted: #9fb1c8;
+  --muted-bg: #0d2340;
+  --card: rgba(10, 31, 60, 0.9);
+  --border: #163258;
+  --primary: #3f7fd0;
   --primary-foreground: #ffffff;
+  --accent: #ef4438;
+  --accent-foreground: #ffffff;
+}
+
+/* The header is fixed. The home hero paints under it on purpose (see
+   hero-section.tsx); every other page gets the height back via this class,
+   applied by SiteShell so content is never hidden behind the bar. */
+.page-offset {
+  padding-top: var(--header-height);
 }
 
 /* Visible focus indicators (WCAG 2.4.11) */
 :focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -48,16 +60,52 @@
   }
 }
 
+html {
+  scroll-padding-top: var(--header-height);
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
 }
 
 ::selection {
-  background: rgba(99, 102, 241, 0.25);
+  background: rgba(216, 38, 28, 0.22);
 }
 
 .prose a {
-  color: #4f46e5;
+  color: #0e2a4f;
   text-decoration: underline;
+}
+
+.dark .prose a {
+  color: #7fb0ec;
+}
+
+/* Hero entrance. CSS rather than JS so the headline and CTAs are painted by
+   the first frame — a delayed opacity fade would hide the primary CTA. */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-rise {
+  animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+
+.hero-rise-slow {
+  animation: hero-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise,
+  .hero-rise-slow {
+    animation: none;
+  }
 }

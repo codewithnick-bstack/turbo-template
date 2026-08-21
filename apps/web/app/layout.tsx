@@ -5,6 +5,7 @@ import { generateTokens } from "@repo/ui";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { SiteShell } from "@/components/site-shell";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ChatbotLoader } from "@/components/chatbot-loader";
 import { ConsentProvider } from "@/components/consent-provider";
@@ -81,7 +82,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             </a>
             <div className="relative flex min-h-screen flex-col">
               <SiteHeader />
-              <main id="main-content" className="flex-1">{children}</main>
+              <SiteShell>{children}</SiteShell>
               <SiteFooter />
             </div>
             <ChatbotLoader />
