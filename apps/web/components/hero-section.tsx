@@ -27,7 +27,7 @@ function RotatingLine() {
 
   return (
     <p
-      className="relative mx-auto mt-8 h-14 max-w-2xl text-lg font-light text-white/70 sm:h-9 sm:text-xl"
+      className="relative mx-auto mt-8 h-14 max-w-2xl text-lg font-light text-white/95 sm:h-9 sm:text-xl"
       aria-live="polite"
     >
       {hero.rotating.map((line, lineIndex) => {
@@ -73,7 +73,7 @@ export function HeroSection() {
     <section className="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden bg-[#08172c]">
       <video
         ref={videoRef}
-        className="absolute inset-0 -z-20 size-full object-cover opacity-[0.38]"
+        className="absolute inset-0 -z-20 size-full object-cover"
         poster="/hero/hero-poster.jpg"
         autoPlay
         muted
@@ -86,11 +86,14 @@ export function HeroSection() {
         <source src="/hero/hero.mp4" type="video/mp4" />
       </video>
 
-      {/* Two scrims: a flat navy wash for contrast, then a vignette so the
-          centre of the frame stays the brightest thing on screen. */}
-      <div className="absolute inset-0 -z-10 bg-[#08172c]/40" aria-hidden="true" />
+      {/* One scrim. Measured against the brightest pixels this clip puts behind
+          the text (lit towers, ~t=12s): white type needs 4.5:1, and the type
+          runs wider than the gradient's bright centre, so the FLOOR matters
+          more than the peak. 0.62 everywhere plus a small centre lift holds
+          ~4.9:1 on the headline. A 0.55 flat scrim measured 4.03:1 and fails —
+          re-measure before lightening. */}
       <div
-        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(8,23,44,0.15)_25%,rgba(8,23,44,0.72)_95%)]"
+        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_75%_65%_at_50%_45%,rgba(8,23,44,0.68)_0%,rgba(8,23,44,0.62)_65%,rgba(8,23,44,0.7)_100%)]"
         aria-hidden="true"
       />
 
