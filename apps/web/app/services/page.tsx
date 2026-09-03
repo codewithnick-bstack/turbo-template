@@ -1,57 +1,72 @@
 import type { Metadata } from "next";
 
-import { ServicesShowcase } from "@/components/services-showcase";
-import { Badge } from "@/components/ui/badge";
-import { services, siteConfig } from "@/lib/site-data";
+import { PageHero } from "@/components/page-hero";
+import { Reveal } from "@/components/reveal";
+import { Section, Container } from "@/components/section";
+import { SectionHeading } from "@/components/section-heading";
+import { TextLink } from "@/components/cta";
+import { industries, siteConfig } from "@/lib/site-data";
 
 export const metadata: Metadata = {
   title: "Services",
-  description: "Explore the service packages included in the starter demo site.",
+  description:
+    "Construction and infrastructure executive search, from field leadership through the C-suite.",
   alternates: { canonical: "/services" },
   openGraph: {
     title: "Services",
-    description: "Explore the service packages included in the starter demo site.",
+    description:
+      "Construction and infrastructure executive search, from field leadership through the C-suite.",
     url: "/services",
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Services" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Services",
-    description: "Explore the service packages included in the starter demo site.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Services" }],
+    description:
+      "Construction and infrastructure executive search, from field leadership through the C-suite.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
   },
 };
 
 export default function ServicesPage() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Services",
-    itemListElement: services.map((s, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      item: {
-        "@type": "Service",
-        name: s.title,
-        description: s.summary,
-        provider: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
-      },
-    })),
+    "@type": "Service",
+    name: "Construction and infrastructure executive search",
+    provider: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
+    areaServed: "US",
+    serviceType: industries.map((industry) => industry.title),
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+    <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Badge>Services</Badge>
-      <h1 className="mt-4 text-4xl font-semibold tracking-tight">Service packages that turn visits into conversations</h1>
-      <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">
-        Each card can be repurposed for design, consulting, legal, wellness, real estate, or portfolio websites. Use the demo copy as a starting point and adapt it per client.
-      </p>
-      <div className="mt-8">
-        <ServicesShowcase />
-      </div>
+      <PageHero
+        eyebrow="Services"
+        title="One service: finding the right person for the role."
+        intro="Field and office leadership through the C-suite, across the industries we know best."
+      />
+
+      <Section>
+        <Container>
+          <SectionHeading eyebrow="What we cover" title="Industries served" size="lg" />
+          <div className="mt-14 grid gap-6 md:grid-cols-2">
+            {industries.map((industry, index) => (
+              <Reveal key={industry.slug} index={index}>
+                <div className="h-full border border-[var(--border)] bg-[var(--card)] p-8">
+                  <h3 className="font-display text-xl font-semibold text-[var(--navy)] dark:text-white">
+                    {industry.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{industry.description}</p>
+                  <TextLink href="/contact" label="Ask about openings" className="mt-6" />
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </Section>
     </div>
   );
 }

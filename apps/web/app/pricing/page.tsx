@@ -1,120 +1,65 @@
 import type { Metadata } from "next";
 
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import { PricingCta } from "@/components/pricing-cta";
-import { services, faqs } from "@/lib/site-data";
-import { siteConfig } from "@/lib/site-data";
-import { formatCurrency } from "@/lib/utils";
+import { CtaLink } from "@/components/cta";
+import { PageHero } from "@/components/page-hero";
+import { Reveal } from "@/components/reveal";
+import { Section, Container } from "@/components/section";
+import { faqs, siteConfig } from "@/lib/site-data";
 
 export const metadata: Metadata = {
   title: "Pricing",
-  description: "Transparent pricing for website design, development, and growth services.",
+  description: "How S.R. Clarke is paid — candidates never pay a fee.",
   alternates: { canonical: "/pricing" },
   openGraph: {
     title: "Pricing",
-    description: "Transparent pricing for website design, development, and growth services.",
+    description: "How S.R. Clarke is paid — candidates never pay a fee.",
     url: "/pricing",
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Pricing" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Pricing",
-    description: "Transparent pricing for website design, development, and growth services.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Pricing" }],
+    description: "How S.R. Clarke is paid — candidates never pay a fee.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
   },
 };
 
-const servicesJsonLd = {
-  "@context": "https://schema.org",
-  "@graph": services.map((service) => ({
-    "@type": "Service",
-    name: service.title,
-    description: service.summary,
-    provider: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
-    offers: {
-      "@type": "Offer",
-      price: service.priceFrom,
-      priceCurrency: "USD",
-      priceSpecification: {
-        "@type": "UnitPriceSpecification",
-        price: service.priceFrom,
-        priceCurrency: "USD",
-        description: "starting from",
-      },
-      url: `${siteConfig.url}/contact`,
-    },
-  })),
-};
+// Recruiting fees are negotiated per search and paid by the hiring company —
+// there is no packaged/tiered pricing to display, so this page states the
+// one fact that is public (candidates never pay) and routes both audiences
+// to a real conversation instead of a fabricated price table.
+const feeFaq = faqs.find((faq) => faq.question === "Do you charge candidates?");
 
 export default function PricingPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesJsonLd) }}
+    <div>
+      <PageHero
+        eyebrow="Pricing"
+        title="Candidates never pay a fee."
+        intro={
+          feeFaq?.answer ??
+          "Our fees are paid by the hiring company. Working with us costs a candidate nothing."
+        }
       />
-      <div className="text-center">
-        <Badge>Pricing</Badge>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight">Simple, honest pricing</h1>
-        <p className="mt-4 text-base text-slate-600 dark:text-slate-300">
-          Fixed-scope packages with clear deliverables. No hourly surprises.
-        </p>
-      </div>
 
-      <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {services.map((service, i) => (
-          <Card key={service.slug} className={i === 1 ? "ring-2 ring-indigo-500" : ""}>
-            {i === 1 ? (
-              <div className="-mt-2 mb-3">
-                <Badge className="bg-indigo-600 text-white">Most popular</Badge>
-              </div>
-            ) : null}
-            <h2 className="text-xl font-semibold">{service.title}</h2>
-            <p className="mt-1 text-2xl font-bold">
-              {formatCurrency(service.priceFrom)}
-              <span className="ml-1 text-sm font-normal text-slate-500 dark:text-slate-400">starting from</span>
+      <Section>
+        <Container measure="narrow">
+          <Reveal>
+            <p className="text-lg leading-8 text-[var(--muted)]">
+              Employer search fees are scoped and negotiated per engagement — they depend on the
+              role, the level, and how the search is run. There is no packaged rate card to quote
+              in the abstract. The fastest way to get a number is to tell us what you are trying to
+              fill.
             </p>
-            <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">{service.summary}</p>
-            <ul className="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-              {service.bullets.map((bullet) => (
-                <li key={bullet} className="flex items-center gap-2">
-                  <span className="text-indigo-500">✓</span>
-                  {bullet}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-6">
-              <PricingCta
-                label="Get started"
-                variant={i === 1 ? "default" : "secondary"}
-                serviceTitle={service.title}
-              />
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <CtaLink href="/employers" label="Start a search" variant="outlineDark" size="lg" withArrow />
+              <CtaLink href="/contact" label="Talk to us" variant="outlineDark" size="lg" />
             </div>
-          </Card>
-        ))}
-      </div>
-
-      <section className="mt-16">
-        <h2 className="text-2xl font-semibold">Common questions</h2>
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          {faqs.map((faq) => (
-            <Card key={faq.question}>
-              <h3 className="font-semibold">{faq.question}</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{faq.answer}</p>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <div className="mt-12 text-center">
-        <p className="text-slate-600 dark:text-slate-300">Not sure which package fits? Let&apos;s talk.</p>
-        <div className="mt-4 inline-block">
-          <PricingCta label="Book a free consultation" variant="default" size="lg" />
-        </div>
-      </div>
+          </Reveal>
+        </Container>
+      </Section>
     </div>
   );
 }

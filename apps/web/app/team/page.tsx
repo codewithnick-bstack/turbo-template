@@ -1,37 +1,37 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { CtaLink } from "@/components/cta";
+import { PageHero } from "@/components/page-hero";
+import { Reveal } from "@/components/reveal";
+import { Section, Container } from "@/components/section";
 import { getTeam } from "@/lib/api";
 import { siteConfig } from "@/lib/site-data";
 
 export const metadata: Metadata = {
   title: "Team",
-  description: "Meet the people behind the work.",
+  description: "The recruiters behind S.R. Clarke's 41 years of construction placements.",
   alternates: { canonical: "/team" },
   openGraph: {
     title: "Team",
-    description: "Meet the people behind the work.",
+    description: "The recruiters behind S.R. Clarke's 41 years of construction placements.",
     url: "/team",
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Team" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Team",
-    description: "Meet the people behind the work.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Team" }],
+    description: "The recruiters behind S.R. Clarke's 41 years of construction placements.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
   },
 };
 
 async function TeamList() {
   const team = await getTeam().catch(() => []);
   if (team.length === 0) {
-    return <p className="mt-8 text-slate-500 dark:text-slate-400">Team page coming soon.</p>;
+    return <p className="text-[var(--muted)]">Team page coming soon.</p>;
   }
   const jsonLd = {
     "@context": "https://schema.org",
@@ -52,35 +52,42 @@ async function TeamList() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {team.map((member) => (
-        <Card key={member.id}>
-          <div
-            className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-400 text-lg font-semibold text-white"
-            aria-label={`${member.name} avatar`}
-            role="img"
-          >
-            <span aria-hidden="true">{member.name.charAt(0)}</span>
-          </div>
-          <h2 className="text-lg font-semibold">{member.name}</h2>
-          <p className="text-sm font-medium text-indigo-600 dark:text-indigo-300">{member.title}</p>
-          {member.bio ? (
-            <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">{member.bio}</p>
-          ) : null}
-          <div className="mt-4 flex gap-3">
-            {member.linkedinUrl ? (
-              <a href={member.linkedinUrl} target="_blank" rel="noreferrer" className="text-xs text-slate-500 hover:text-slate-900 dark:hover:text-white">
-                LinkedIn ↗
-              </a>
-            ) : null}
-            {member.twitterUrl ? (
-              <a href={member.twitterUrl} target="_blank" rel="noreferrer" className="text-xs text-slate-500 hover:text-slate-900 dark:hover:text-white">
-                Twitter ↗
-              </a>
-            ) : null}
-          </div>
-        </Card>
-      ))}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {team.map((member, index) => (
+          <Reveal key={member.id} index={index}>
+            <div className="h-full border-t-2 border-[var(--accent)] bg-[var(--card)] p-6">
+              <h2 className="font-display text-lg font-semibold text-[var(--navy)] dark:text-white">
+                {member.name}
+              </h2>
+              <p className="mt-1 text-sm font-semibold text-[var(--accent-text)]">{member.title}</p>
+              {member.bio ? (
+                <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{member.bio}</p>
+              ) : null}
+              <div className="mt-4 flex gap-4">
+                {member.linkedinUrl ? (
+                  <a
+                    href={member.linkedinUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs font-semibold tracking-wide text-[var(--muted)] uppercase hover:text-[var(--navy)] dark:hover:text-white"
+                  >
+                    LinkedIn ↗
+                  </a>
+                ) : null}
+                {member.twitterUrl ? (
+                  <a
+                    href={member.twitterUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs font-semibold tracking-wide text-[var(--muted)] uppercase hover:text-[var(--navy)] dark:hover:text-white"
+                  >
+                    Twitter ↗
+                  </a>
+                ) : null}
+              </div>
+            </div>
+          </Reveal>
+        ))}
       </div>
     </>
   );
@@ -88,9 +95,9 @@ async function TeamList() {
 
 function TeamSkeleton() {
   return (
-    <div className="mt-10 grid animate-pulse gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid animate-pulse gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="h-48 rounded-[2rem] bg-slate-200 dark:bg-slate-800" />
+        <div key={i} className="h-48 bg-[var(--muted-bg)]" />
       ))}
     </div>
   );
@@ -98,20 +105,22 @@ function TeamSkeleton() {
 
 export default function TeamPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-      <Badge>Team</Badge>
-      <h1 className="mt-4 text-4xl font-semibold tracking-tight">The people behind the work</h1>
-      <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">
-        A small, focused team with deep experience in design, engineering, and growth.
-      </p>
-      <Suspense fallback={<TeamSkeleton />}>
-        <TeamList />
-      </Suspense>
-      <div className="mt-12">
-        <Link href="/contact">
-          <Button>Work with us</Button>
-        </Link>
-      </div>
+    <div>
+      <PageHero
+        eyebrow="Team"
+        title="The desk behind 35,000 placements."
+        intro="Recruiters who know the projects, the pay bands, and the managers you'd be working for."
+      />
+      <Section>
+        <Container>
+          <Suspense fallback={<TeamSkeleton />}>
+            <TeamList />
+          </Suspense>
+          <div className="mt-14">
+            <CtaLink href="/contact" label="Work with us" variant="outlineDark" withArrow />
+          </div>
+        </Container>
+      </Section>
     </div>
   );
 }

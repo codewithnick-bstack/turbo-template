@@ -3,18 +3,18 @@ import { CheckCircle, AlertCircle, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "System Status",
-  description: "Status of all template services.",
+  description: "Uptime for the systems this site depends on.",
   alternates: { canonical: "/status" },
   openGraph: {
     title: "System Status",
-    description: "Status of all template services.",
+    description: "Uptime for the systems this site depends on.",
     url: "/status",
     type: "website",
   },
   twitter: {
     card: "summary",
     title: "System Status",
-    description: "Status of all template services.",
+    description: "Uptime for the systems this site depends on.",
   },
 };
 
@@ -81,15 +81,18 @@ export default function StatusPage() {
   const overall = overallStatus(SERVICES);
 
   return (
-    <main className="max-w-3xl mx-auto px-4 py-16">
+    <main className="page-offset mx-auto max-w-3xl px-4 py-16 lg:py-20">
       <div className="mb-12 text-center">
-        <h1 className="text-4xl font-bold tracking-tight mb-3">System Status</h1>
-        <p className="text-[var(--muted)]">Status of all template services.</p>
+        <p className="eyebrow">Operations</p>
+        <h1 className="font-display mt-4 text-4xl font-bold tracking-[-0.02em] text-[var(--navy)] dark:text-white">
+          System Status
+        </h1>
+        <p className="mt-2 text-[var(--muted)]">Uptime for the systems this site depends on.</p>
       </div>
 
       {/* Overall status banner */}
       <div
-        className={`rounded-2xl border p-6 mb-10 flex items-center gap-4 ${
+        className={`border p-6 mb-10 flex items-center gap-4 ${
           overall === "operational"
             ? "border-green-200 bg-green-50"
             : overall === "degraded"
@@ -119,7 +122,7 @@ export default function StatusPage() {
       {/* Service list */}
       <section aria-labelledby="services-heading" className="mb-10">
         <h2 id="services-heading" className="text-xl font-semibold mb-4">Services</h2>
-        <div className="divide-y divide-[var(--border)] rounded-xl border border-[var(--border)] overflow-hidden">
+        <div className="divide-y divide-[var(--border)] border border-[var(--border)]">
           {SERVICES.map((service) => (
             <div key={service.name} className="flex items-center justify-between px-5 py-4 bg-white dark:bg-[var(--card)]">
               <div>
@@ -142,7 +145,7 @@ export default function StatusPage() {
         ) : (
           <div className="space-y-4">
             {RECENT_INCIDENTS.filter((i) => i.status !== "resolved").map((incident) => (
-              <div key={incident.id} className="rounded-xl border border-yellow-200 bg-yellow-50 p-5">
+              <div key={incident.id} className="border border-yellow-200 bg-yellow-50 p-5">
                 <div className="flex items-start justify-between gap-2">
                   <p className="font-semibold">{incident.title}</p>
                   <span className="text-xs font-medium bg-yellow-200 text-yellow-800 px-2 py-0.5 rounded-full capitalize">
@@ -167,15 +170,10 @@ export default function StatusPage() {
       {/* Monitoring callout */}
       <section aria-labelledby="monitoring-heading">
         <h2 id="monitoring-heading" className="text-xl font-semibold mb-4">Monitoring</h2>
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5">
+        <div className="border border-[var(--border)] bg-[var(--card)] p-5">
           <p className="text-sm text-[var(--muted)]">
-            This is a template status page. Connect a real uptime monitoring service to show live metrics and incident history.
+            Status shown here is self-reported, not pulled from a live uptime monitor yet.
           </p>
-          <ul className="mt-3 space-y-1 text-sm text-[var(--muted)]">
-            <li>• <a href="https://betteruptime.com" className="underline hover:text-[var(--foreground)]" target="_blank" rel="noopener noreferrer">BetterUptime</a></li>
-            <li>• <a href="https://instatus.com" className="underline hover:text-[var(--foreground)]" target="_blank" rel="noopener noreferrer">Instatus</a></li>
-            <li>• <a href="https://statuspage.io" className="underline hover:text-[var(--foreground)]" target="_blank" rel="noopener noreferrer">Atlassian Statuspage</a></li>
-          </ul>
         </div>
       </section>
     </main>
