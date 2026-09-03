@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
-import { Badge } from "@/components/ui/badge";
 import { BlogReadTracker } from "@/components/blog-read-tracker";
+import { Container } from "@/components/section";
 import { getBlogPost, getBlogPosts } from "@/lib/api";
 import { siteConfig } from "@/lib/site-data";
 
@@ -82,31 +82,35 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   };
 
   return (
-    <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-      <BlogReadTracker slug={post.slug} />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      {post.author ? <Badge>{post.author}</Badge> : null}
-      <h1 className="mt-4 text-4xl font-semibold tracking-tight">{post.title}</h1>
-      {post.publishedAt ? (
-        <p className="mt-3 flex gap-3 text-sm text-slate-500 dark:text-slate-400">
-          <span>{format(new Date(post.publishedAt), "MMMM d, yyyy")}</span>
-          <span>·</span>
-          <span>{readingTime} min read</span>
-        </p>
-      ) : null}
-      {post.excerpt ? (
-        <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-300">{post.excerpt}</p>
-      ) : null}
-      <div className="prose prose-slate mt-10 max-w-none dark:prose-invert [&_iframe]:w-full [&_iframe]:rounded-lg [&_.iframe-wrapper]:w-full">
-        {post.content
-          ? isHtml(post.content)
-            ? <div dangerouslySetInnerHTML={{ __html: post.content }} />
-            : <MDXRemote source={post.content} />
-          : null}
-      </div>
+    <article className="page-offset py-16 lg:py-20">
+      <Container measure="narrow">
+        <BlogReadTracker slug={post.slug} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {post.author ? <p className="eyebrow">{post.author}</p> : null}
+        <h1 className="font-display mt-4 text-4xl font-semibold tracking-[-0.02em] text-[var(--navy)] dark:text-white">
+          {post.title}
+        </h1>
+        {post.publishedAt ? (
+          <p className="mt-3 flex gap-3 text-sm text-[var(--muted)]">
+            <span>{format(new Date(post.publishedAt), "MMMM d, yyyy")}</span>
+            <span>·</span>
+            <span>{readingTime} min read</span>
+          </p>
+        ) : null}
+        {post.excerpt ? (
+          <p className="mt-4 text-base leading-7 text-[var(--muted)]">{post.excerpt}</p>
+        ) : null}
+        <div className="prose prose-slate mt-10 max-w-none dark:prose-invert [&_iframe]:w-full [&_iframe]:rounded-lg [&_.iframe-wrapper]:w-full">
+          {post.content
+            ? isHtml(post.content)
+              ? <div dangerouslySetInnerHTML={{ __html: post.content }} />
+              : <MDXRemote source={post.content} />
+            : null}
+        </div>
+      </Container>
     </article>
   );
 }
