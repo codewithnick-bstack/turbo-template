@@ -1,17 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
+import { CtaLink } from "@/components/cta";
 import { hero } from "@/lib/site-data";
 import { ANALYTICS_EVENTS, trackClarityEvent, trackEvent } from "@/lib/analytics";
 
-const ROTATE_MS = 3800;
-const hookWords = hero.hook.split(" ");
+const ROTATE_MS = 4200;
 const FADE_S = 0.5;
+const hookWords = hero.hook.split(" ");
 
+/**
+ * Cycles the supporting line under the headline. Each line clears out before
+ * the next arrives, so the two never ghost over each other. Holds on the first
+ * line when reduced motion is requested.
+ */
 function RotatingLine() {
   const reduced = useReducedMotion();
   const [index, setIndex] = useState(0);
@@ -27,7 +31,7 @@ function RotatingLine() {
 
   return (
     <p
-      className="relative mt-7 h-14 max-w-2xl text-lg font-light text-white/95 sm:h-9 sm:text-xl"
+      className="relative mt-8 h-16 max-w-2xl text-lg leading-relaxed font-light text-white/85 sm:h-10 sm:text-xl"
       aria-live="polite"
     >
       {hero.rotating.map((line, lineIndex) => {
@@ -38,8 +42,6 @@ function RotatingLine() {
             className="absolute inset-x-0 top-0"
             initial={false}
             animate={{ opacity: active ? 1 : 0, y: active ? 0 : 8 }}
-            // The outgoing line clears out before the next one arrives, so the
-            // two never ghost over each other.
             transition={{
               duration: reduced ? 0 : FADE_S,
               delay: reduced || !active ? 0 : FADE_S,
@@ -70,11 +72,13 @@ export function HeroSection() {
   }, [reduced]);
 
   return (
-    <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-[#08172c]">
+    <section className="on-dark relative isolate flex min-h-[100svh] items-end overflow-hidden bg-[var(--navy-deep)]">
       <video
         ref={videoRef}
         className="absolute inset-0 -z-20 size-full object-cover"
         poster="/hero/hero-poster.jpg"
+        width={1600}
+        height={900}
         autoPlay
         muted
         loop
@@ -87,40 +91,53 @@ export function HeroSection() {
       </video>
 
       {/* Scrim follows the copy: heaviest at the bottom-left where the type
-          sits, so the skyline stays legible on the right. Measured against the
-          brightest pixels this clip puts behind the text (lit towers, ~t=12s) —
-          white needs 4.5:1, and the type runs wider than any bright centre, so
-          the FLOOR governs legibility, not the peak. Re-measure before
-          lightening: a 0.55 flat scrim came in at 4.03:1 and fails. */}
+          sits, lifting toward the top-right so the skyline stays visible.
+          Measured against the brightest pixels this footage puts behind the
+          text (lit windows and street lights, up to rgb(255,255,253)) — white
+          needs 4.5:1, and a line of type is wider than any bright spot, so the
+          FLOOR governs legibility rather than the average. At the 0.86 bottom
+          stop white measures ~11.8:1 over the worst such pixel; 0.60 is the
+          bare AA floor and a flat 0.55 fails at 4.05:1. Re-measure before
+          lightening any stop. */}
       <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(8,23,44,0.82)_0%,rgba(8,23,44,0.68)_50%,rgba(8,23,44,0.34)_100%)]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(8,23,44,0.86)_0%,rgba(8,23,44,0.72)_45%,rgba(8,23,44,0.34)_100%)]"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(8,23,44,0.6)_0%,rgba(8,23,44,0.2)_50%,transparent_78%)]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(8,23,44,0.62)_0%,rgba(8,23,44,0.22)_52%,transparent_80%)]"
         aria-hidden="true"
       />
 
       <div className="mx-auto w-full max-w-6xl px-4 pt-32 pb-20 sm:px-6 lg:px-8 lg:pb-28">
-        <h1 className="hero-rise-slow font-display max-w-4xl text-[clamp(2.5rem,7.5vw,5.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-white">
+        {/* One h1 per page. Sized to dominate the fold — this industry's better
+            sites lead with type at this weight, not with chrome. */}
+        <h1 className="hero-rise-slow font-display max-w-5xl text-[clamp(2.75rem,8.5vw,6.5rem)] leading-[0.98] font-bold tracking-[-0.035em] text-white">
           {hookWords.length > 1 ? `${hookWords.slice(0, -1).join(" ")} ` : ""}
           {/* The mark stays in inline flow and rides the last word: absolute
               positioning put it wherever the line happened to break. */}
           <span className="whitespace-nowrap">
             {hookWords.at(-1)}
             {hero.trademark ? (
-              <sup className="ml-[0.06em] align-super text-[0.22em] font-normal tracking-normal text-white/45">
+              <sup className="ml-[0.06em] align-super text-[0.2em] font-normal tracking-normal text-white/45">
                 TM
               </sup>
             ) : null}
           </span>
         </h1>
 
-        <RotatingLine />
+        <div className="hero-rise-delay-1">
+          <RotatingLine />
+        </div>
 
-        <div className="hero-rise mt-11 flex flex-col gap-3 sm:flex-row">
-          <Link
+        {/* Both doors, left-aligned under the subhead. The two-audience split
+            is the business model, so neither CTA is demoted to a text link. */}
+        <div className="hero-rise-delay-2 mt-12 flex flex-col gap-3 sm:flex-row">
+          <CtaLink
             href={hero.primaryCta.href}
+            label={hero.primaryCta.label}
+            variant="primary"
+            size="lg"
+            withArrow
             onClick={() => {
               trackEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED, {
                 button: "primary",
@@ -128,34 +145,28 @@ export function HeroSection() {
               });
               trackClarityEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED);
             }}
-            className="group inline-flex items-center justify-center gap-2 bg-[#d8261c] px-10 py-4.5 text-base font-semibold tracking-wide text-white transition hover:bg-[#b81f16] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-          >
-            {hero.primaryCta.label}
-            <ArrowRight
-              className="size-4 transition group-hover:translate-x-1"
-              aria-hidden="true"
-            />
-          </Link>
-          <Link
+          />
+          <CtaLink
             href={hero.secondaryCta.href}
+            label={hero.secondaryCta.label}
+            variant="outline"
+            size="lg"
             onClick={() =>
               trackEvent(ANALYTICS_EVENTS.HERO_CTA_CLICKED, {
                 button: "secondary",
                 href: hero.secondaryCta.href,
               })
             }
-            className="inline-flex items-center justify-center border border-white/30 px-10 py-4.5 text-base font-semibold tracking-wide text-white backdrop-blur-sm transition hover:border-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-          >
-            {hero.secondaryCta.label}
-          </Link>
+          />
         </div>
       </div>
 
-      {/* Scroll cue — the only other thing competing for attention. */}
+      {/* Scroll cue — the only other thing competing for attention. Desktop
+          only; on a phone the fold ends where the thumb already is. */}
       <motion.a
         href="#what-we-do"
         aria-label="Scroll to what we do"
-        className="absolute right-6 bottom-10 text-white/40 transition hover:text-white lg:right-10"
+        className="absolute right-6 bottom-10 hidden text-white/40 transition-colors hover:text-white lg:right-10 lg:block"
         animate={reduced ? {} : { y: [0, 8, 0] }}
         transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
       >

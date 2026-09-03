@@ -13,8 +13,20 @@
   --primary: #0e2a4f;
   --primary-foreground: #ffffff;
   --accent: #d8261c;
+  --accent-hover: #b81f16;
   --accent-foreground: #ffffff;
   --header-height: 4.5rem;
+
+  /* Navy is the heading colour on light surfaces and the ground colour on the
+     dark bands. Named separately from --primary because --primary shifts to a
+     legible mid-blue in dark mode while these two must stay dark. */
+  --navy: #0e2a4f;
+  --navy-deep: #08172c;
+
+  /* Red used as SMALL TEXT rather than as a fill. #d8261c measures 4.98:1 on
+     white and 4.56:1 on --muted-bg, so the brand red clears AA for text here
+     and both tokens hold the same value. Dark mode splits them apart. */
+  --accent-text: #d8261c;
 }
 
 .dark {
@@ -27,7 +39,39 @@
   --primary: #3f7fd0;
   --primary-foreground: #ffffff;
   --accent: #ef4438;
+  --accent-hover: #d8261c;
   --accent-foreground: #ffffff;
+  --navy: #0e2a4f;
+  --navy-deep: #08172c;
+
+  /* #ef4438 measures 4.17:1 on --muted-bg — large-text only, and the eyebrow
+     labels using this colour are 11px. #f4564a is the nearest red to the brand
+     that clears AA on BOTH dark surfaces (5.48:1 on --background, 4.71:1 on
+     --muted-bg). The fill token above stays #ef4438: as a button background it
+     carries white text, so its own contrast is not the constraint. */
+  --accent-text: #f4564a;
+}
+
+/* Spacing rhythm. Sections come in three weights so the page reads as verses
+   rather than one repeated interval — tight for stat strips, standard for most
+   content, loose for the full-bleed image bands. 8pt grid throughout. */
+@theme inline {
+  --font-display: var(--font-display-sans), "Archivo", system-ui, sans-serif;
+  --font-body: var(--font-body-sans), "Inter", system-ui, sans-serif;
+
+  --spacing-section-tight: 4rem;
+  --spacing-section: 6rem;
+  --spacing-section-loose: 8rem;
+}
+
+/* Motion tokens. One easing curve for everything that enters and a shorter one
+   for state changes, so hovers read as the same system as the scroll reveals.
+   Durations follow the 150-300ms micro / 300-500ms reveal split. */
+:root {
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --duration-micro: 180ms;
+  --duration-reveal: 700ms;
 }
 
 /* The header is fixed. The home hero paints under it on purpose (see
@@ -37,28 +81,32 @@
   padding-top: var(--header-height);
 }
 
-/* Display type. Archivo for headlines and figures, Inter for reading copy —
-   the widths differ enough that big numbers read as engineered rather than
-   as body text scaled up.
-
-   These keys make Tailwind emit the font-display / font-body utilities itself.
-   Do not also hand-write a .font-display rule: the generated utility wins on
-   order and the hand-written one silently does nothing. */
-@theme inline {
-  --font-display: var(--font-display-sans), "Archivo", system-ui, sans-serif;
-  --font-body: var(--font-body-sans), "Inter", system-ui, sans-serif;
-}
-
 /* Figures in stat blocks should line up in columns. */
 .tnum {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
 }
 
+/* Section eyebrow — the small red uppercase label that heads a section. Used
+   on every route, so it lives here rather than being re-typed per page. */
+.eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
 /* Visible focus indicators (WCAG 2.4.11) */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* On the navy bands the red ring disappears into the ground — switch to white
+   so the focus indicator is visible wherever it lands. */
+.on-dark :focus-visible {
+  outline-color: #ffffff;
 }
 
 /* Respect reduced motion (WCAG 2.3.3) */
@@ -101,7 +149,9 @@ body {
 }
 
 /* Hero entrance. CSS rather than JS so the headline and CTAs are painted by
-   the first frame — a delayed opacity fade would hide the primary CTA. */
+   the first frame — a delayed opacity fade would hide the primary CTA. The
+   three steps stagger headline, subhead, then CTAs; the last one still lands
+   inside the first second. */
 @keyframes hero-rise {
   from {
     opacity: 0;
@@ -113,17 +163,22 @@ body {
   }
 }
 
-.hero-rise {
-  animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+.hero-rise-slow {
+  animation: hero-rise 0.9s var(--ease-out-quint) both;
 }
 
-.hero-rise-slow {
-  animation: hero-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+.hero-rise-delay-1 {
+  animation: hero-rise 0.8s var(--ease-out-quint) 0.18s both;
+}
+
+.hero-rise-delay-2 {
+  animation: hero-rise 0.8s var(--ease-out-quint) 0.34s both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-rise,
-  .hero-rise-slow {
+  .hero-rise-slow,
+  .hero-rise-delay-1,
+  .hero-rise-delay-2 {
     animation: none;
   }
 }
