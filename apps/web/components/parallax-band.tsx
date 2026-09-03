@@ -25,7 +25,10 @@ export function ParallaxBand({
   const y = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
 
   return (
-    <section ref={ref} className={`relative isolate overflow-hidden bg-[#08172c] ${className}`}>
+    <section
+      ref={ref}
+      className={`on-dark relative isolate overflow-hidden bg-[var(--navy-deep)] ${className}`}
+    >
       <motion.div
         aria-hidden="true"
         {...(reduced ? {} : { style: { y } })}
@@ -37,7 +40,7 @@ export function ParallaxBand({
         />
       </motion.div>
       <div
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-[#08172c] via-[#08172c]/85 to-[#08172c]/45"
+        className="absolute inset-0 -z-10 bg-gradient-to-r from-[var(--navy-deep)] via-[var(--navy-deep)]/85 to-[var(--navy-deep)]/45"
         aria-hidden="true"
       />
       {children}

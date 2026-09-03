@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 
 import { CountUp } from "@/components/count-up";
+import { CtaPair, TextLink } from "@/components/cta";
 import { HeroSection } from "@/components/hero-section";
 import { ParallaxBand } from "@/components/parallax-band";
 import { Reveal } from "@/components/reveal";
@@ -39,7 +40,7 @@ export default function HomePage() {
       <HeroSection />
 
       {/* Proof, first thing past the fold. Wide measure, hairline dividers. */}
-      <section className="border-b border-[var(--border)] bg-[#08172c] text-white">
+      <section className="on-dark border-b border-[var(--border)] bg-[var(--navy-deep)] text-white">
         <dl className="mx-auto grid max-w-7xl grid-cols-2 px-4 sm:px-6 lg:grid-cols-4 lg:px-10">
           {stats.map((stat, index) => (
             <Reveal
@@ -68,13 +69,11 @@ export default function HomePage() {
         <div className="mx-auto max-w-2xl px-4 sm:px-6">
           <Reveal>
             <Rule />
-            <p className="mt-6 text-[0.7rem] font-semibold tracking-[0.16em] text-[#d8261c] uppercase">
-              Two ways in
-            </p>
+            <p className="eyebrow mt-6">Two ways in</p>
           </Reveal>
           <StaggerWords
             text="Why are you here?"
-            className="font-display mt-5 text-4xl font-semibold tracking-[-0.02em] text-[#0e2a4f] sm:text-5xl dark:text-white"
+            className="font-display mt-5 text-4xl font-semibold tracking-[-0.02em] text-[var(--navy)] sm:text-5xl dark:text-white"
           />
         </div>
 
@@ -84,15 +83,13 @@ export default function HomePage() {
               <Reveal key={path.audience} index={index} className="relative">
                 <span
                   aria-hidden="true"
-                  className="font-display pointer-events-none absolute -top-14 -left-3 text-[9rem] leading-none font-bold text-[#0e2a4f]/[0.05] select-none dark:text-white/[0.04]"
+                  className="font-display pointer-events-none absolute -top-14 -left-3 text-[9rem] leading-none font-bold text-[var(--navy)]/[0.05] select-none dark:text-white/[0.04]"
                 >
                   0{index + 1}
                 </span>
                 <div className="relative">
-                  <p className="text-[0.7rem] font-semibold tracking-[0.16em] text-[#d8261c] uppercase">
-                    {path.audience}
-                  </p>
-                  <h3 className="font-display mt-4 text-3xl font-semibold tracking-[-0.02em] text-[#0e2a4f] sm:text-4xl dark:text-white">
+                  <p className="eyebrow">{path.audience}</p>
+                  <h3 className="font-display mt-4 text-3xl font-semibold tracking-[-0.02em] text-[var(--navy)] sm:text-4xl dark:text-white">
                     {path.title}
                   </h3>
                   <p className="mt-5 max-w-md text-base leading-7 text-[var(--muted)]">
@@ -108,16 +105,7 @@ export default function HomePage() {
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    href={path.cta.href}
-                    className="group mt-9 inline-flex items-center gap-2 border-b-2 border-[#d8261c] pb-1 text-[0.8rem] font-bold tracking-[0.1em] text-[#0e2a4f] uppercase dark:text-white"
-                  >
-                    {path.cta.label}
-                    <ArrowRight
-                      className="size-3.5 transition group-hover:translate-x-1"
-                      aria-hidden="true"
-                    />
-                  </Link>
+                  <TextLink href={path.cta.href} label={path.cta.label} className="mt-9" />
                 </div>
               </Reveal>
             ))}
@@ -129,7 +117,7 @@ export default function HomePage() {
       <section className="relative overflow-hidden border-y border-[var(--border)] bg-[var(--muted-bg)] py-24 lg:py-32">
         <span
           aria-hidden="true"
-          className="font-display tnum pointer-events-none absolute -top-8 -right-4 text-[clamp(9rem,26vw,22rem)] leading-[0.8] font-bold text-[#0e2a4f]/[0.07] select-none lg:-top-16 dark:text-white/[0.05]"
+          className="font-display tnum pointer-events-none absolute -top-8 -right-4 text-[clamp(9rem,26vw,22rem)] leading-[0.8] font-bold text-[var(--navy)]/[0.07] select-none lg:-top-16 dark:text-white/[0.05]"
         >
           41
         </span>
@@ -139,23 +127,14 @@ export default function HomePage() {
           </Reveal>
           <StaggerWords
             text="Forty-one years on American jobsites."
-            className="font-display mt-7 text-4xl font-semibold tracking-[-0.02em] text-[#0e2a4f] sm:text-5xl lg:text-6xl dark:text-white"
+            className="font-display mt-7 text-4xl font-semibold tracking-[-0.02em] text-[var(--navy)] sm:text-5xl lg:text-6xl dark:text-white"
           />
           <Reveal index={1}>
             <p className="mt-7 max-w-xl text-lg leading-8 text-[var(--muted)]">
               Approximately 35,000 placements. The professionals who built and renovated
               America&apos;s most iconic buildings, bridges, and highways came through this desk.
             </p>
-            <Link
-              href="/why-src"
-              className="group mt-9 inline-flex items-center gap-2 border-b-2 border-[#d8261c] pb-1 text-[0.8rem] font-bold tracking-[0.1em] text-[#0e2a4f] uppercase dark:text-white"
-            >
-              Why SRC
-              <ArrowRight
-                className="size-3.5 transition group-hover:translate-x-1"
-                aria-hidden="true"
-              />
-            </Link>
+            <TextLink href="/why-src" label="Why SRC" className="mt-9" />
           </Reveal>
         </div>
       </section>
@@ -166,10 +145,8 @@ export default function HomePage() {
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
             <Reveal>
               <Rule />
-              <p className="mt-6 text-[0.7rem] font-semibold tracking-[0.16em] text-[#d8261c] uppercase">
-                Industries served
-              </p>
-              <h2 className="font-display mt-5 text-3xl font-semibold tracking-[-0.02em] text-[#0e2a4f] sm:text-4xl dark:text-white">
+              <p className="eyebrow mt-6">Industries served</p>
+              <h2 className="font-display mt-5 text-3xl font-semibold tracking-[-0.02em] text-[var(--navy)] sm:text-4xl dark:text-white">
                 The buildings, bridges, and highways you already know.
               </h2>
             </Reveal>
@@ -179,26 +156,26 @@ export default function HomePage() {
                 <Reveal key={industry.slug} index={index}>
                   <Link
                     href={`/positions#${industry.slug}`}
-                    className="group flex h-full flex-col justify-between bg-[var(--background)] p-8 transition hover:bg-[#0e2a4f]"
+                    className="group flex h-full flex-col justify-between bg-[var(--background)] p-8 transition-colors duration-[var(--duration-micro)] hover:bg-[var(--navy)]"
                   >
                     <div>
                       <span
                         aria-hidden="true"
-                        className="font-display tnum text-xs font-bold tracking-[0.14em] text-[#d8261c]"
+                        className="font-display tnum text-xs font-bold tracking-[0.14em] text-[var(--accent-text)] group-hover:text-white"
                       >
                         0{index + 1}
                       </span>
-                      <h3 className="font-display mt-4 text-xl font-semibold text-[#0e2a4f] group-hover:text-white dark:text-white">
+                      <h3 className="font-display mt-4 text-xl font-semibold text-[var(--navy)] group-hover:text-white dark:text-white">
                         {industry.title}
                       </h3>
                       <p className="mt-3 text-sm leading-6 text-[var(--muted)] group-hover:text-white/70">
                         {industry.description}
                       </p>
                     </div>
-                    <span className="mt-8 inline-flex items-center gap-2 text-[0.7rem] font-bold tracking-[0.1em] text-[#d8261c] uppercase group-hover:text-white">
+                    <span className="mt-8 inline-flex items-center gap-2 text-[0.7rem] font-bold tracking-[0.1em] text-[var(--accent-text)] uppercase group-hover:text-white">
                       View openings
                       <ArrowRight
-                        className="size-3.5 transition group-hover:translate-x-1"
+                        className="size-3.5 transition-transform duration-[var(--duration-micro)] group-hover:translate-x-1"
                         aria-hidden="true"
                       />
                     </span>
@@ -216,9 +193,7 @@ export default function HomePage() {
           <ScaleIn className="max-w-xl" from={1.06}>
             <Reveal>
               <Rule light />
-              <p className="mt-6 text-[0.7rem] font-semibold tracking-[0.16em] text-white/50 uppercase">
-                How we work
-              </p>
+              <p className="eyebrow mt-6 text-white/50">How we work</p>
               <h2 className="font-display mt-5 text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">
                 Subject matter experts, not resume forwarders.
               </h2>
@@ -236,7 +211,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
           <Reveal className="max-w-2xl">
             <Rule />
-            <h2 className="font-display mt-6 text-3xl font-semibold tracking-[-0.02em] text-[#0e2a4f] sm:text-4xl dark:text-white">
+            <h2 className="font-display mt-6 text-3xl font-semibold tracking-[-0.02em] text-[var(--navy)] sm:text-4xl dark:text-white">
               What we hold ourselves to.
             </h2>
           </Reveal>
@@ -247,7 +222,7 @@ export default function HomePage() {
                   aria-hidden="true"
                   className="block h-px w-full bg-[var(--border)]"
                 />
-                <dt className="font-display mt-6 text-lg font-semibold text-[#0e2a4f] dark:text-white">
+                <dt className="font-display mt-6 text-lg font-semibold text-[var(--navy)] dark:text-white">
                   {value.title}
                 </dt>
                 <dd className="mt-3 text-sm leading-6 text-[var(--muted)]">{value.description}</dd>
@@ -269,24 +244,7 @@ export default function HomePage() {
             <p className="mt-7 text-lg text-white/70">
               One conversation tells you whether we can help.
             </p>
-            <div className="mt-12 flex flex-col justify-center gap-3 sm:flex-row">
-              <Link
-                href="/career-seekers"
-                className="group inline-flex items-center justify-center gap-2 bg-[#d8261c] px-10 py-4.5 text-[0.8rem] font-bold tracking-[0.1em] text-white uppercase transition hover:bg-[#b81f16]"
-              >
-                Get Hired
-                <ArrowRight
-                  className="size-3.5 transition group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </Link>
-              <Link
-                href="/employers"
-                className="inline-flex items-center justify-center border border-white/30 px-10 py-4.5 text-[0.8rem] font-bold tracking-[0.1em] text-white uppercase transition hover:border-white hover:bg-white/10"
-              >
-                Hire Today
-              </Link>
-            </div>
+            <CtaPair size="lg" align="center" className="mt-12" />
             <p className="mt-10 text-sm tracking-wide text-white/40">Or call {siteConfig.phone}</p>
           </Reveal>
         </div>
