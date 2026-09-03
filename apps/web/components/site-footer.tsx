@@ -7,19 +7,22 @@ import { siteConfig } from "@/lib/site-data";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-slate-200 bg-slate-50/80 dark:border-slate-800 dark:bg-slate-950/70">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:px-8">
+    <footer className="on-dark bg-[var(--navy-deep)] text-white/70">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:px-8">
         <div className="sm:col-span-2 lg:col-span-1">
-          <p className="text-lg font-semibold">{siteConfig.name}</p>
-          <p className="mt-3 max-w-md text-sm text-slate-600 dark:text-slate-300">{siteConfig.description}</p>
-          <div className="mt-4 space-y-1 text-sm text-slate-600 dark:text-slate-300">
+          <p className="font-display text-lg leading-none font-bold tracking-[-0.02em]">
+            <span className="text-white">S.R.</span>
+            <span className="ml-1.5 text-[#f4564a]">Clarke</span>
+          </p>
+          <p className="mt-4 max-w-md text-sm leading-6">{siteConfig.description}</p>
+          <div className="mt-5 space-y-1.5 text-sm">
             {siteConfig.email ? (
-              <ContactDetailLink href={`mailto:${siteConfig.email}`} type="email" className="hover:text-slate-900 dark:hover:text-white">
+              <ContactDetailLink href={`mailto:${siteConfig.email}`} type="email" className="hover:text-white">
                 {siteConfig.email}
               </ContactDetailLink>
             ) : null}
             {siteConfig.phone ? (
-              <ContactDetailLink href={`tel:${siteConfig.phone}`} type="phone" className="hover:text-slate-900 dark:hover:text-white">
+              <ContactDetailLink href={`tel:${siteConfig.phone}`} type="phone" className="hover:text-white">
                 {siteConfig.phone}
               </ContactDetailLink>
             ) : null}
@@ -28,11 +31,11 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <p className="font-semibold">Pages</p>
-          <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
+          <p className="eyebrow text-white/50">Pages</p>
+          <ul className="mt-4 space-y-2.5 text-sm">
             {siteConfig.nav.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="hover:text-slate-900 dark:hover:text-white">
+                <Link href={item.href} className="hover:text-white">
                   {item.label}
                 </Link>
               </li>
@@ -41,11 +44,11 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <p className="font-semibold">More</p>
-          <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
+          <p className="eyebrow text-white/50">More</p>
+          <ul className="mt-4 space-y-2.5 text-sm">
             {siteConfig.footerExtra.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="hover:text-slate-900 dark:hover:text-white">
+                <Link href={item.href} className="hover:text-white">
                   {item.label}
                 </Link>
               </li>
@@ -53,21 +56,25 @@ export function SiteFooter() {
           </ul>
         </div>
 
-        <div>
-          <p className="font-semibold">Social</p>
-          <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-            {siteConfig.socials.map((item) => (
-              <li key={item.label}>
-                <OutboundLink href={item.href} source="footer_social" className="hover:text-slate-900 dark:hover:text-white">
-                  {item.label}
-                </OutboundLink>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {siteConfig.socials.length > 0 ? (
+          <div>
+            <p className="eyebrow text-white/50">Social</p>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              {siteConfig.socials.map((item) => (
+                <li key={item.label}>
+                  <OutboundLink href={item.href} source="footer_social" className="hover:text-white">
+                    {item.label}
+                  </OutboundLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </div>
-      <div className="border-t border-slate-200 px-4 py-4 text-center text-sm text-slate-500 dark:border-slate-800">
-        <span>© {new Date().getFullYear()} {siteConfig.name}. Built with Next.js, Express, and Turborepo.</span>
+      <div className="border-t border-white/10 px-4 py-5 text-center text-sm text-white/45">
+        <span>
+          © {new Date().getFullYear()} {siteConfig.name}. Built with Next.js, Express, and Turborepo.
+        </span>
         <span className="mx-2">·</span>
         <CookieSettingsButton />
       </div>

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Menu, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { CtaLink } from "@/components/cta";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { hero, siteConfig } from "@/lib/site-data";
@@ -47,21 +48,20 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-[var(--header-height)] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        {/* Wordmark: "S.R." follows the surface (white over the hero, navy on
+            the solid bar). "Clarke" carries the accent red, but the overlay
+            state is always over the dark hero scrim regardless of site theme,
+            so it needs its own red — --accent-text's LIGHT value (#d8261c)
+            only measures 3.6:1 on navy-deep and fails there; #f4564a clears
+            5.37:1 and is what the token already uses in dark mode. */}
         <Link
           href="/"
-          className="flex items-baseline gap-2 tracking-tight"
+          className="font-display flex items-baseline text-lg leading-none font-bold tracking-[-0.02em]"
           aria-label={`${siteConfig.name} — home`}
         >
-          <span className="flex flex-col gap-1.5">
-            <span aria-hidden="true" className="h-[3px] w-7 bg-[#d8261c]" />
-            <span
-              className={cn(
-                "font-display text-lg leading-none font-bold tracking-[-0.02em]",
-                overlay ? "text-white" : "text-[#0e2a4f] dark:text-white",
-              )}
-            >
-              S.R. CLARKE
-            </span>
+          <span className={overlay ? "text-white" : "text-[var(--navy)] dark:text-white"}>S.R.</span>
+          <span className={cn("ml-1.5", overlay ? "text-[#f4564a]" : "text-[var(--accent-text)]")}>
+            Clarke
           </span>
         </Link>
 
@@ -71,10 +71,10 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               className={cn(
-                "px-3 py-2 text-[0.7rem] font-semibold tracking-[0.1em] uppercase transition",
+                "px-3 py-2 text-[0.7rem] font-semibold tracking-[0.1em] uppercase transition-colors duration-[var(--duration-micro)]",
                 overlay
                   ? "text-white/80 hover:bg-white/10 hover:text-white"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-[#0e2a4f] dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white",
+                  : "text-slate-600 hover:bg-slate-100 hover:text-[var(--navy)] dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white",
               )}
               onClick={() =>
                 trackEvent(ANALYTICS_EVENTS.NAV_LINK_CLICKED, {
@@ -90,23 +90,18 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Link
+          <CtaLink
             href={hero.primaryCta.href}
-            className="bg-[#d8261c] px-5 py-2.5 text-[0.7rem] font-bold tracking-[0.1em] text-white uppercase transition hover:bg-[#b81f16]"
-          >
-            {hero.primaryCta.label}
-          </Link>
-          <Link
+            label={hero.primaryCta.label}
+            variant="primary"
+            className="px-5 py-2.5 text-[0.7rem] tracking-[0.1em] uppercase"
+          />
+          <CtaLink
             href={hero.secondaryCta.href}
-            className={cn(
-              "border px-5 py-2.5 text-[0.7rem] font-bold tracking-[0.1em] uppercase transition",
-              overlay
-                ? "border-white/40 text-white hover:border-white hover:bg-white/10"
-                : "border-[#0e2a4f]/25 text-[#0e2a4f] hover:bg-[#0e2a4f] hover:text-white dark:border-slate-700 dark:text-white dark:hover:bg-slate-800",
-            )}
-          >
-            {hero.secondaryCta.label}
-          </Link>
+            label={hero.secondaryCta.label}
+            variant={overlay ? "outline" : "outlineDark"}
+            className="px-5 py-2.5 text-[0.7rem] tracking-[0.1em] uppercase"
+          />
         </div>
 
         <button
@@ -150,20 +145,20 @@ export function SiteHeader() {
               </Link>
             ))}
             <div className="grid gap-2 pt-3">
-              <Link
+              <CtaLink
                 href={hero.primaryCta.href}
+                label={hero.primaryCta.label}
+                variant="primary"
                 onClick={() => setOpen(false)}
-                className="rounded-sm bg-[#d8261c] px-5 py-3 text-center text-sm font-semibold text-white"
-              >
-                {hero.primaryCta.label}
-              </Link>
-              <Link
+                className="justify-center py-3 text-sm"
+              />
+              <CtaLink
                 href={hero.secondaryCta.href}
+                label={hero.secondaryCta.label}
+                variant="outlineDark"
                 onClick={() => setOpen(false)}
-                className="rounded-sm border border-[#0e2a4f]/25 px-5 py-3 text-center text-sm font-semibold text-[#0e2a4f] dark:border-slate-700 dark:text-white"
-              >
-                {hero.secondaryCta.label}
-              </Link>
+                className="justify-center py-3 text-sm"
+              />
             </div>
             <div className="flex items-center justify-between gap-3 pt-3">
               <ThemeToggle />
