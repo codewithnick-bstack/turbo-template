@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
+import { CountUp } from "@/components/count-up";
 import { PageHero } from "@/components/page-hero";
+import { Reveal } from "@/components/reveal";
+import { Section, Container } from "@/components/section";
+import { SectionHeading } from "@/components/section-heading";
 import { stats, values } from "@/lib/site-data";
 
 export const metadata: Metadata = {
@@ -19,32 +23,36 @@ export default function WhySrcPage() {
         cta={{ label: "Talk to a recruiter", href: "/contact" }}
       />
 
-      <section className="border-b border-[var(--border)] bg-white py-12 dark:bg-[#071527]">
-        <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-y-8 px-4 sm:px-6 lg:grid-cols-4 lg:px-8">
-          {stats.map((stat) => (
-            <div key={stat.label}>
-              <dd className="font-display tnum text-3xl font-semibold text-[#0e2a4f] dark:text-white">{stat.value}</dd>
-              <dt className="mt-1 text-xs tracking-wide text-[var(--muted)] uppercase">{stat.label}</dt>
-            </div>
-          ))}
-        </dl>
-      </section>
-
-      <section className="bg-[var(--muted-bg)] py-16 lg:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-[#0e2a4f] sm:text-4xl dark:text-white">
-            What we hold ourselves to
-          </h2>
-          <dl className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-            {values.map((value) => (
-              <div key={value.title} className="border-t border-[var(--border)] pt-5">
-                <dt className="text-lg font-semibold text-[#0e2a4f] dark:text-white">{value.title}</dt>
-                <dd className="mt-2 text-sm leading-6 text-[var(--muted)]">{value.description}</dd>
-              </div>
+      <Section space="tight" tone="muted" bordered>
+        <Container measure="full">
+          <dl className="grid grid-cols-2 gap-y-8 lg:grid-cols-4">
+            {stats.map((stat, index) => (
+              <Reveal key={stat.label} index={index}>
+                <dd className="font-display tnum text-3xl font-semibold text-[var(--navy)] dark:text-white">
+                  <CountUp value={stat.value} />
+                </dd>
+                <dt className="mt-1 text-xs tracking-wide text-[var(--muted)] uppercase">{stat.label}</dt>
+              </Reveal>
             ))}
           </dl>
-        </div>
-      </section>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <SectionHeading eyebrow="What we stand for" title="What we hold ourselves to." size="lg" />
+          <dl className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2">
+            {values.map((value, index) => (
+              <Reveal key={value.title} index={index} className="border-t border-[var(--border)] pt-5">
+                <dt className="font-display text-lg font-semibold text-[var(--navy)] dark:text-white">
+                  {value.title}
+                </dt>
+                <dd className="mt-2 text-sm leading-6 text-[var(--muted)]">{value.description}</dd>
+              </Reveal>
+            ))}
+          </dl>
+        </Container>
+      </Section>
     </div>
   );
 }

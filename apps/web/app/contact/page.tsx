@@ -2,57 +2,76 @@ import type { Metadata } from "next";
 
 import { ContactDetailLink } from "@/components/contact-detail-link";
 import { ContactForm } from "@/components/contact-form";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import { PageHero } from "@/components/page-hero";
+import { Reveal } from "@/components/reveal";
+import { Section, Container } from "@/components/section";
 import { siteConfig } from "@/lib/site-data";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Send a project inquiry through the integrated Express backend.",
+  description:
+    "Talk to S.R. Clarke about an open search or a confidential career move. One conversation tells you whether we can help.",
   alternates: { canonical: "/contact" },
   openGraph: {
     title: "Contact",
-    description: "Send a project inquiry through the integrated Express backend.",
+    description:
+      "Talk to S.R. Clarke about an open search or a confidential career move.",
     url: "/contact",
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Contact" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Contact",
-    description: "Send a project inquiry through the integrated Express backend.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Contact" }],
+    description:
+      "Talk to S.R. Clarke about an open search or a confidential career move.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
   },
 };
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto grid max-w-6xl gap-6 px-4 py-12 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8 lg:py-16">
-      <Card className="h-fit">
-        <Badge>Contact</Badge>
-        <h1 className="mt-4 text-3xl font-semibold tracking-tight">Tell us about your next website</h1>
-        <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
-          The form posts to the Express backend at <code>/api/contact</code>, validates the payload, and can forward emails through Resend or Nodemailer.
-        </p>
-        <div className="mt-5 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-          {siteConfig.email ? (
-              <ContactDetailLink href={`mailto:${siteConfig.email}`} type="email" className="text-indigo-600 hover:underline dark:text-indigo-400">
-                {siteConfig.email}
-              </ContactDetailLink>
-            ) : null}
-            {siteConfig.phone ? (
-              <ContactDetailLink href={`tel:${siteConfig.phone}`} type="phone" className="text-indigo-600 hover:underline dark:text-indigo-400">
-                {siteConfig.phone}
-              </ContactDetailLink>
-            ) : null}
-            {siteConfig.location ? <p>{siteConfig.location}</p> : null}
-        </div>
-      </Card>
+    <div>
+      <PageHero
+        eyebrow="Contact"
+        title="One conversation tells you whether we can help."
+        intro="Whether you're hiring or looking, reach out directly or use the form. We respond personally — there is no queue."
+      />
 
-      <Card>
-        <ContactForm />
-      </Card>
+      <Section>
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+            <Reveal>
+              <div className="space-y-1.5 text-base leading-7 text-[var(--muted)]">
+                {siteConfig.email ? (
+                  <ContactDetailLink
+                    href={`mailto:${siteConfig.email}`}
+                    type="email"
+                    className="block font-medium text-[var(--navy)] hover:text-[var(--accent-text)] dark:text-white"
+                  >
+                    {siteConfig.email}
+                  </ContactDetailLink>
+                ) : null}
+                {siteConfig.phone ? (
+                  <ContactDetailLink
+                    href={`tel:${siteConfig.phone}`}
+                    type="phone"
+                    className="block font-medium text-[var(--navy)] hover:text-[var(--accent-text)] dark:text-white"
+                  >
+                    {siteConfig.phone}
+                  </ContactDetailLink>
+                ) : null}
+                {siteConfig.location ? <p>{siteConfig.location}</p> : null}
+              </div>
+            </Reveal>
+
+            <Reveal index={1}>
+              <ContactForm />
+            </Reveal>
+          </div>
+        </Container>
+      </Section>
     </div>
   );
 }

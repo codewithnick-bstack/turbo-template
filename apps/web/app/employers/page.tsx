@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
+import { CountUp } from "@/components/count-up";
 import { PageHero } from "@/components/page-hero";
+import { Reveal } from "@/components/reveal";
+import { Section, Container } from "@/components/section";
+import { SectionHeading } from "@/components/section-heading";
 import { audiencePaths, industries, stats } from "@/lib/site-data";
 
 const path = audiencePaths.employer;
@@ -21,32 +25,38 @@ export default function EmployersPage() {
         cta={{ label: "Start a search", href: "/contact" }}
       />
 
-      <section className="border-b border-[var(--border)] bg-white py-12 dark:bg-[#071527]">
-        <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-y-8 px-4 sm:px-6 lg:grid-cols-4 lg:px-8">
-          {stats.map((stat) => (
-            <div key={stat.label}>
-              <dd className="font-display tnum text-3xl font-semibold text-[#0e2a4f] dark:text-white">{stat.value}</dd>
-              <dt className="mt-1 text-xs tracking-wide text-[var(--muted)] uppercase">{stat.label}</dt>
-            </div>
-          ))}
-        </dl>
-      </section>
+      <Section space="tight" tone="muted" bordered>
+        <Container measure="full">
+          <dl className="grid grid-cols-2 gap-y-8 lg:grid-cols-4">
+            {stats.map((stat, index) => (
+              <Reveal key={stat.label} index={index}>
+                <dd className="font-display tnum text-3xl font-semibold text-[var(--navy)] dark:text-white">
+                  <CountUp value={stat.value} />
+                </dd>
+                <dt className="mt-1 text-xs tracking-wide text-[var(--muted)] uppercase">{stat.label}</dt>
+              </Reveal>
+            ))}
+          </dl>
+        </Container>
+      </Section>
 
-      <section className="bg-[var(--muted-bg)] py-16 lg:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-[#0e2a4f] sm:text-4xl dark:text-white">
-            Where we place
-          </h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {industries.map((industry) => (
-              <div key={industry.slug} className="border border-[var(--border)] bg-[var(--card)] p-8">
-                <h3 className="font-display text-xl font-semibold text-[#0e2a4f] dark:text-white">{industry.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{industry.description}</p>
-              </div>
+      <Section>
+        <Container>
+          <SectionHeading eyebrow="Coverage" title="Where we place" size="lg" />
+          <div className="mt-14 grid gap-6 md:grid-cols-2">
+            {industries.map((industry, index) => (
+              <Reveal key={industry.slug} index={index}>
+                <div className="h-full border border-[var(--border)] bg-[var(--card)] p-8">
+                  <h3 className="font-display text-xl font-semibold text-[var(--navy)] dark:text-white">
+                    {industry.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{industry.description}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </div>
   );
 }

@@ -1,9 +1,9 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-
 import type { Metadata } from "next";
 
 import { PageHero } from "@/components/page-hero";
+import { Reveal } from "@/components/reveal";
+import { Section, Container } from "@/components/section";
+import { TextLink } from "@/components/cta";
 import { industries } from "@/lib/site-data";
 
 export const metadata: Metadata = {
@@ -22,31 +22,28 @@ export default function PositionsPage() {
         cta={{ label: "Send your resume", href: "/contact" }}
       />
 
-      <section className="bg-white py-16 lg:py-20 dark:bg-[#071527]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <Section>
+        <Container>
           <div className="grid gap-6 md:grid-cols-2">
-            {industries.map((industry) => (
-              <div
-                key={industry.slug}
-                id={industry.slug}
-                className="flex flex-col justify-between border border-[var(--border)] bg-[var(--card)] p-8"
-              >
-                <div>
-                  <h2 className="font-display text-xl font-semibold text-[#0e2a4f] dark:text-white">{industry.title}</h2>
-                  <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{industry.description}</p>
-                </div>
-                <Link
-                  href="/contact"
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#d8261c]"
+            {industries.map((industry, index) => (
+              <Reveal key={industry.slug} index={index}>
+                <div
+                  id={industry.slug}
+                  className="flex h-full scroll-mt-[var(--header-height)] flex-col justify-between border border-[var(--border)] bg-[var(--card)] p-8"
                 >
-                  Ask about openings
-                  <ArrowRight className="size-4" aria-hidden="true" />
-                </Link>
-              </div>
+                  <div>
+                    <h2 className="font-display text-xl font-semibold text-[var(--navy)] dark:text-white">
+                      {industry.title}
+                    </h2>
+                    <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{industry.description}</p>
+                  </div>
+                  <TextLink href="/contact" label="Ask about openings" className="mt-6" />
+                </div>
+              </Reveal>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </div>
   );
 }
