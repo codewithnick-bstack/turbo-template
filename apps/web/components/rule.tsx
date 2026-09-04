@@ -8,7 +8,11 @@ import { motion, useReducedMotion } from "framer-motion";
  */
 export function Rule({ className = "", light = false }: { className?: string; light?: boolean }) {
   const reduced = useReducedMotion();
-  const base = `h-1 origin-left ${light ? "bg-[#d8261c]" : "bg-[#d8261c]"} ${className}`;
+  // `light` means "sitting on a dark ground". Both branches were #d8261c,
+  // so the prop did nothing: the two call sites are on the image bands,
+  // where the fill red is the wrong red. #f76b60 is the value --accent-text
+  // carries in dark mode, and these bands are dark whatever the theme.
+  const base = `h-1 origin-left ${light ? "bg-[#f76b60]" : "bg-[#d8261c]"} ${className}`;
 
   if (reduced) return <div aria-hidden="true" className={`${base} w-14`} />;
 
