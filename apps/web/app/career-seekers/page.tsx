@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
 import { PageHero } from "@/components/page-hero";
+import { ParallaxBand } from "@/components/parallax-band";
+import { Rule } from "@/components/rule";
 import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Section, Container } from "@/components/section";
@@ -39,6 +41,19 @@ export default function CareerSeekersPage() {
           </ul>
         </Container>
       </Section>
+
+      {/* Interior pages shipped one image each — the page hero — and then ran
+          on type alone. This band breaks the run before the FAQ, using the
+          page's own promise rather than a new claim. */}
+      <ParallaxBand image={photos.surveyor.src} className="py-24 text-white lg:py-32">
+        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
+          <Rule light className="mx-auto" />
+          <p className="font-display mt-8 text-2xl leading-snug font-semibold text-balance sm:text-3xl">
+            Confidential by default. Your employer never finds out you are
+            looking.
+          </p>
+        </div>
+      </ParallaxBand>
 
       <Section tone="muted">
         <Container measure="narrow">
