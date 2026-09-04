@@ -5,7 +5,6 @@ import { PageHero } from "@/components/page-hero";
 import { ProcessMark } from "@/components/process-mark";
 import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
-import { Rule } from "@/components/rule";
 import { Section, Container } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { sampleTeam } from "@/lib/sample-content";
@@ -133,7 +132,7 @@ export default function TeamPage() {
 
       <Section tone="muted" bordered>
         <Container measure="full">
-          <SectionHeading eyebrow="The desk" title="Who you'll work with" size="lg" />
+          <SectionHeading eyebrow="Who we are" title="Who you'll work with." size="lg" />
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {sampleTeam.map((member, index) => (
               <Reveal key={member.id} index={index}>
@@ -186,12 +185,11 @@ export default function TeamPage() {
 
       <Section>
         <Container>
-          <Reveal className="max-w-2xl">
-            <Rule />
-            <h2 className="font-display mt-6 text-3xl font-semibold tracking-[-0.02em] text-[var(--navy)] sm:text-4xl dark:text-white">
-              How the desk works
-            </h2>
-          </Reveal>
+          <SectionHeading
+            eyebrow="How it works"
+            title="One search, one recruiter."
+            className="max-w-2xl"
+          />
           <div className="mt-14 grid gap-10 sm:grid-cols-3">
             {deskSteps.map((step, index) => (
               <Reveal key={step.title} index={index}>

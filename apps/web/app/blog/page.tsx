@@ -195,7 +195,7 @@ export default function BlogPage() {
       <PageHero
         image={photos.plans}
         eyebrow="Blog"
-        title="Insights, updates, and useful reads."
+        title="Notes from the construction desk."
         intro="Notes on the construction and infrastructure labor market, from the desk that's been placing people on it for 41 years."
       />
       <Section>

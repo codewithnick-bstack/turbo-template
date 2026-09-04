@@ -78,7 +78,7 @@ export default function ServicesPage() {
         <Container>
           <SectionHeading
             eyebrow="What we cover"
-            title="Industries served"
+            title="The industries we serve."
             size="lg"
           />
           <div className="mt-14 grid gap-6 md:grid-cols-2">

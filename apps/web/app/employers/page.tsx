@@ -46,7 +46,7 @@ export default function EmployersPage() {
 
       <Section>
         <Container>
-          <SectionHeading eyebrow="Coverage" title="Where we place" size="lg" />
+          <SectionHeading eyebrow="Coverage" title="Where we place people." size="lg" />
           <div className="mt-14 grid gap-6 md:grid-cols-2">
             {industries.map((industry, index) => (
               <Reveal key={industry.slug} index={index}>

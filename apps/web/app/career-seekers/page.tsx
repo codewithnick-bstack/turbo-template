@@ -59,7 +59,7 @@ export default function CareerSeekersPage() {
         <Container measure="narrow">
           <SectionHeading
             eyebrow="FAQ"
-            title="Questions candidates ask"
+            title="What candidates want to know first."
             size="lg"
           />
           <dl className="mt-14 space-y-8">

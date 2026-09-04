@@ -91,10 +91,10 @@ export default function HomePage() {
         <div className="mx-auto max-w-2xl px-4 sm:px-6">
           <Reveal>
             <Rule />
-            <p className="eyebrow mt-6">Two ways in</p>
+            <p className="eyebrow mt-6">Who we work with</p>
           </Reveal>
           <StaggerWords
-            text="Why are you here?"
+            text="Two sides of the same desk."
             className="font-display mt-5 text-4xl font-semibold tracking-[-0.02em] text-[var(--navy)] sm:text-5xl dark:text-white"
           />
         </div>
@@ -329,7 +329,7 @@ export default function HomePage() {
       >
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
           <StaggerWords
-            text="Join us in the mission today."
+            text="Start with a conversation."
             className="font-display text-4xl font-semibold tracking-[-0.02em] text-balance sm:text-6xl"
           />
           <Reveal index={1}>
