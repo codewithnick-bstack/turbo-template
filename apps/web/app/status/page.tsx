@@ -4,6 +4,9 @@ import { CheckCircle, AlertCircle, Clock } from "lucide-react";
 export const metadata: Metadata = {
   title: "System Status",
   description: "Uptime for the systems this site depends on.",
+  // Operational page for the owner, not for search. It names internal
+  // services, so keep it out of the index and off every crawl path.
+  robots: { index: false, follow: false },
   alternates: { canonical: "/status" },
   openGraph: {
     title: "System Status",

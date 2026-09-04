@@ -13,7 +13,6 @@ const staticRoutes = [
   { path: "/blog", priority: 0.7 },
   { path: "/testimonials", priority: 0.6 },
   { path: "/contact", priority: 0.9 },
-  { path: "/status", priority: 0.3 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

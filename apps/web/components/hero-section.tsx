@@ -92,19 +92,18 @@ export function HeroSection() {
 
       {/* Scrim follows the copy: heaviest at the bottom-left where the type
           sits, lifting toward the top-right so the skyline stays visible.
-          Measured against the brightest pixels this footage puts behind the
-          text (lit windows and street lights, up to rgb(255,255,253)) — white
-          needs 4.5:1, and a line of type is wider than any bright spot, so the
-          FLOOR governs legibility rather than the average. At the 0.86 bottom
-          stop white measures ~11.8:1 over the worst such pixel; 0.60 is the
-          bare AA floor and a flat 0.55 fails at 4.05:1. Re-measure before
-          lightening any stop. */}
+          Nikhil asked for a lighter ground (2026-09-04), so the stops came
+          down from 0.86/0.72/0.34 and 0.62/0.22. The footage is now the
+          skyline half only (night → sunset, mirrored, tone lifted in the file
+          itself). Measured over the brightest lit-window pixels under the copy
+          across the loop: subline worst case 4.5–6.1:1, headline 3.1–3.6:1
+          (large text), averages 5–12:1. Re-measure before lightening further. */}
       <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(8,23,44,0.86)_0%,rgba(8,23,44,0.72)_45%,rgba(8,23,44,0.34)_100%)]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(8,23,44,0.76)_0%,rgba(8,23,44,0.56)_45%,rgba(8,23,44,0.18)_100%)]"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(8,23,44,0.62)_0%,rgba(8,23,44,0.22)_52%,transparent_80%)]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(8,23,44,0.48)_0%,rgba(8,23,44,0.14)_52%,transparent_80%)]"
         aria-hidden="true"
       />
 
