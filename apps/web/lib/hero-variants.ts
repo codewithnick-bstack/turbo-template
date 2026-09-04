@@ -3,9 +3,11 @@
  * Delete this file, /hero-lab, and public/hero/variants once a grade is chosen
  * and baked into public/hero/hero.mp4.
  *
- * Every variant is the same 15s loop (first 7.5s of the source, mirrored);
- * only the colour grade differs. `scrim` is the overlay pair the hero uses, so
- * a lighter grade can be paired with a heavier scrim and vice versa.
+ * Round 2: Nikhil picked the high-contrast S-curve but called it too strong,
+ * and asked for the full clip rather than the trimmed skyline half. So every
+ * variant here is the whole 16.6s source (skyline into construction, no
+ * mirroring) and the curve steps down from the round-1 "punch" — 90% of that
+ * strength down to 30%, plus the ungraded clip as the floor.
  */
 export type HeroVariant = {
   slug: string;
@@ -28,46 +30,46 @@ const SCRIM_LIGHT: [string, string] = [
 
 export const heroVariants: HeroVariant[] = [
   {
-    slug: "untouched",
+    slug: "c90",
+    name: "90% — softest",
+    note: "Barely any S-curve. Closest to the untouched clip while still shaped.",
+    filter: "curve 0.30→0.26 / 0.70→0.75 · saturation 1.12",
+    scrim: SCRIM_STANDARD,
+  },
+  {
+    slug: "c75",
+    name: "75%",
+    note: "Gentle shaping. Shadows stay open, highlights barely lift.",
+    filter: "curve 0.30→0.27 / 0.70→0.74 · saturation 1.18",
+    scrim: SCRIM_STANDARD,
+  },
+  {
+    slug: "c60",
+    name: "60%",
+    note: "The middle of the range. Noticeable contrast, nothing crushed.",
+    filter: "curve 0.29→0.24 / 0.71→0.77 · saturation 1.22",
+    scrim: SCRIM_STANDARD,
+  },
+  {
+    slug: "c45",
+    name: "45%",
+    note: "Getting punchy. Blacks deepen, windows start to glow.",
+    filter: "curve 0.28→0.23 / 0.72→0.79 · saturation 1.26",
+    scrim: SCRIM_LIGHT,
+  },
+  {
+    slug: "c30",
+    name: "30% — closest to round 1",
+    note: "Nearly the grade you liked, pulled back a notch.",
+    filter: "curve 0.28→0.21 / 0.72→0.81 · saturation 1.30",
+    scrim: SCRIM_LIGHT,
+  },
+  {
+    slug: "full",
     name: "Untouched",
-    note: "The source clip, no grade. The baseline everything else is judged against.",
+    note: "The full source clip, no grade at all. The floor for comparison.",
     filter: "none",
     scrim: SCRIM_STANDARD,
-  },
-  {
-    slug: "teal",
-    name: "Deep teal",
-    note: "Current pick. Cooler and richer: gamma 0.95, contrast 1.10, saturation 1.30.",
-    filter: "gamma 0.95 · contrast 1.10 · saturation 1.30 · cool balance",
-    scrim: SCRIM_STANDARD,
-  },
-  {
-    slug: "cinematic",
-    name: "Cinematic",
-    note: "Darker and flatter in the highlights. Restrained, closer to film.",
-    filter: "gamma 0.92 · contrast 1.14 · saturation 1.18 · brightness −0.02",
-    scrim: SCRIM_STANDARD,
-  },
-  {
-    slug: "noir",
-    name: "Near-monochrome",
-    note: "Colour pulled almost out, cool cast left in. The type carries the page.",
-    filter: "saturation 0.35 · gamma 0.92 · contrast 1.20 · cool balance",
-    scrim: SCRIM_LIGHT,
-  },
-  {
-    slug: "warm",
-    name: "Warm",
-    note: "Golden-hour lean. Reads friendlier, less corporate-cold.",
-    filter: "gamma 0.97 · contrast 1.08 · saturation 1.15 · warm balance",
-    scrim: SCRIM_STANDARD,
-  },
-  {
-    slug: "punch",
-    name: "High contrast",
-    note: "S-curve. Blacks crushed, windows hot. The most aggressive option.",
-    filter: "S-curve · saturation 1.35",
-    scrim: SCRIM_LIGHT,
   },
 ];
 
