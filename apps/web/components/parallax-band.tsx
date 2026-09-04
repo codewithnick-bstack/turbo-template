@@ -32,15 +32,18 @@ export function ParallaxBand({
       <motion.div
         aria-hidden="true"
         {...(reduced ? {} : { style: { y } })}
-        className="absolute inset-x-0 -inset-y-[14%] -z-20 bg-cover bg-center opacity-30"
+        className="absolute inset-x-0 -inset-y-[14%] -z-20 bg-cover bg-center opacity-70"
       >
         <div
           className="size-full bg-cover bg-center"
           style={{ backgroundImage: `url(${image})` }}
         />
       </motion.div>
+      {/* Copy sits on the left, so the scrim is heaviest there and lets the
+          photo read on the right. Two layers of dimming (image opacity + a
+          near-solid gradient) made the picture a smudge; one is enough. */}
       <div
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-[var(--navy-deep)] via-[var(--navy-deep)]/85 to-[var(--navy-deep)]/45"
+        className="absolute inset-0 -z-10 bg-gradient-to-r from-[var(--navy-deep)] via-[var(--navy-deep)]/70 to-[var(--navy-deep)]/15"
         aria-hidden="true"
       />
       {children}

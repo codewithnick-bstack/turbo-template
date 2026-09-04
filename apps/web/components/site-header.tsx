@@ -44,7 +44,10 @@ export function SiteHeader() {
         "fixed top-0 z-50 w-full transition-colors duration-300",
         overlay
           ? "border-b border-white/10 bg-transparent"
-          : "border-b border-[var(--border)] bg-[var(--background)]/92 backdrop-blur-xl",
+          // Literal colours on purpose: an opacity modifier on a CSS-variable
+          // colour computed to ~3% alpha here, leaving nav text floating on
+          // the page in light mode.
+          : "border-b border-[var(--border)] bg-white/90 backdrop-blur-xl dark:bg-[#071527]/90",
       )}
     >
       <div className="mx-auto flex h-[var(--header-height)] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
