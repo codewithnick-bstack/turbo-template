@@ -39,12 +39,12 @@ export function TestimonialCarousel({ testimonials }: Props) {
           <button
             onClick={() => setPaused((p) => !p)}
             aria-label={paused ? "Resume auto-advance" : "Pause auto-advance"}
-            className="rounded-full bg-indigo-50 p-2 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-950/70 dark:text-indigo-200 dark:hover:bg-indigo-900/70"
+            className="rounded-full bg-[var(--muted-bg)] p-2 text-[var(--navy)] hover:bg-[var(--border)] dark:text-white dark:hover:bg-[var(--border)]"
           >
             {paused ? <Play className="size-4" aria-hidden="true" /> : <Pause className="size-4" aria-hidden="true" />}
           </button>
         )}
-        <div className="rounded-full bg-indigo-50 p-3 text-indigo-600 dark:bg-indigo-950/70 dark:text-indigo-200">
+        <div className="rounded-full bg-[var(--muted-bg)] p-3 text-[var(--accent-text)]">
           <Quote className="size-5" aria-hidden="true" />
         </div>
       </div>
@@ -65,7 +65,7 @@ export function TestimonialCarousel({ testimonials }: Props) {
               className="p-2 flex items-center justify-center"
               onClick={() => setIndex(itemIndex)}
             >
-              <span className={`block h-2.5 rounded-full transition-all ${itemIndex === index ? "w-8 bg-indigo-600" : "w-2.5 bg-slate-300 dark:bg-slate-700"}`} />
+              <span className={`block h-2.5 rounded-full transition-all ${itemIndex === index ? "w-8 bg-[var(--accent)]" : "w-2.5 bg-[var(--border)]"}`} />
             </button>
           ))}
         </div>

@@ -103,7 +103,7 @@ export default function SearchPage() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search blog posts and portfolio…"
-          className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
+          className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
           aria-label="Search"
           aria-busy={loading}
         />
@@ -143,9 +143,9 @@ export default function SearchPage() {
               <li key={post.id}>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="group block rounded-xl border border-slate-200 bg-white p-4 hover:border-indigo-300 hover:shadow-sm transition-all dark:border-slate-800 dark:bg-slate-900 dark:hover:border-indigo-700"
+                  className="group block rounded-xl border border-slate-200 bg-white p-4 hover:border-[var(--accent)] hover:shadow-sm transition-all dark:border-slate-800 dark:bg-slate-900 dark:hover:border-[var(--accent)]"
                 >
-                  <p className="font-medium text-slate-900 group-hover:text-indigo-600 dark:text-slate-100 dark:group-hover:text-indigo-400">
+                  <p className="font-medium text-slate-900 group-hover:text-[var(--accent-text)] dark:text-slate-100">
                     {post.title}
                   </p>
                   {post.excerpt && (
@@ -176,9 +176,9 @@ export default function SearchPage() {
               <li key={entry.id}>
                 <Link
                   href={`/portfolio/${entry.id}`}
-                  className="group block rounded-xl border border-slate-200 bg-white p-4 hover:border-indigo-300 hover:shadow-sm transition-all dark:border-slate-800 dark:bg-slate-900 dark:hover:border-indigo-700"
+                  className="group block rounded-xl border border-slate-200 bg-white p-4 hover:border-[var(--accent)] hover:shadow-sm transition-all dark:border-slate-800 dark:bg-slate-900 dark:hover:border-[var(--accent)]"
                 >
-                  <p className="font-medium text-slate-900 group-hover:text-indigo-600 dark:text-slate-100 dark:group-hover:text-indigo-400">
+                  <p className="font-medium text-slate-900 group-hover:text-[var(--accent-text)] dark:text-slate-100">
                     {entry.title}
                   </p>
                   {entry.client && (
