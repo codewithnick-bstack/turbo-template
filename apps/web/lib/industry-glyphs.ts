@@ -18,12 +18,13 @@ export const industryGlyphs: Record<string, string[]> = {
     "M13 18h22M13 26h22M13 34h22",
     "M24 10v32",
   ],
-  // Girder bridge: deck, two piers, and the truss diagonals beneath.
+  // Arch bridge. Piers drop straight to a ground line and the arch springs
+  // between them: splayed legs under a deck read as a picnic table.
   "heavy-construction": [
-    "M4 22h40",
-    "M11 22v20M37 22v20",
-    "M4 22l7-9h26l7 9",
-    "M11 32l13-10 13 10",
+    "M4 18h40",
+    "M14 18v14M34 18v14",
+    "M14 32C14 24 18 20 24 20s10 4 10 12",
+    "M6 40h36",
   ],
   // Mixed-use block: a taller and a lower mass with a shared plaza line.
   "real-estate-development": [
@@ -32,11 +33,16 @@ export const industryGlyphs: Record<string, string[]> = {
     "M26 42V25h13v17",
     "M13 22h5M13 30h5M30 31h5",
   ],
-  // Trade work: a steel connection — two members and the bolted plate.
+  // A roof truss: the assembly a specialist trade fabricates and sets, and the
+  // only one of these four subjects that is unmistakably a sub-assembly rather
+  // than a whole building. Three earlier attempts failed here — a trapezoid on
+  // a stem read as a cocktail glass, a column-and-stiffener read as a stray
+  // tick chart because nothing visibly touched, and an I-beam end-on
+  // duplicated the company's own logo mark.
   "sub-contracting": [
-    "M8 14h32",
-    "M24 14v20",
-    "M14 34h20l-4 8H18z",
-    "M18 22h12",
+    "M5 34h38",
+    "M5 34 24 14l19 20",
+    "M14 34l10-10 10 10",
+    "M24 24v10",
   ],
 };
