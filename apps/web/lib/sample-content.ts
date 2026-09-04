@@ -217,7 +217,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
   {
     slug: "5-reasons-to-consider-a-career-in-construction",
     title: "5 Reasons to Consider a Career in Construction",
-    dek: "The industry has an image problem and a compensation reality that don't match. Here is what the numbers actually look like for people entering the trade today.",
+    dek: "The industry has an image problem and a compensation reality that don't match. What the work actually offers the people entering it today.",
     date: "2024-11-04",
     readingTime: 5,
     cover: photos.trades,
