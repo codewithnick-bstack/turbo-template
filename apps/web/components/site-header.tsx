@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { CtaLink } from "@/components/cta";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
-import { LogoMark } from "@/components/logo-mark";
+import { Wordmark } from "@/components/wordmark";
 import { headerCta, hero, siteConfig } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
@@ -52,28 +52,10 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-[var(--header-height)] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        {/* Wordmark: "S.R." follows the surface (white over the hero, navy on
-            the solid bar). "Clarke" carries the accent red, but the overlay
-            state is always over the dark hero scrim regardless of site theme,
-            so it cannot use --accent-text: that token's LIGHT value (#d8261c)
-            measures only 3.6:1 on navy-deep. It pins the DARK value instead,
-            which clears 6.18:1 there. Keep in sync with --accent-text. */}
-        <Link
-          href="/"
-          className="font-display flex items-baseline text-lg leading-none font-bold tracking-[-0.02em]"
-          aria-label={`${siteConfig.name} — home`}
-        >
-          <LogoMark
-            variant="monolith-open"
-            className={cn(
-              "mr-2 size-[1.15rem] shrink-0",
-              overlay ? "text-[#f76b60]" : "text-[var(--accent)] dark:text-[#f76b60]",
-            )}
-          />
-          <span className={overlay ? "text-white" : "text-[var(--navy)] dark:text-white"}>S.R.</span>
-          <span className={cn("ml-1.5", overlay ? "text-[#f76b60]" : "text-[var(--accent-text)]")}>
-            Clarke
-          </span>
+        {/* Typographic logo — see components/wordmark.tsx for why there is no
+            mark and how the colours are chosen per surface. */}
+        <Link href="/" aria-label={`${siteConfig.name} — home`} className="shrink-0">
+          <Wordmark onDark={overlay} />
         </Link>
 
         <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">

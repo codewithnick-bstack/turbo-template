@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { ContactDetailLink } from "@/components/contact-detail-link";
-import { LogoMark } from "@/components/logo-mark";
+import { Wordmark } from "@/components/wordmark";
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
 import { OutboundLink } from "@/components/outbound-link";
 import { siteConfig } from "@/lib/site-data";
@@ -11,11 +11,9 @@ export function SiteFooter() {
     <footer className="on-dark bg-[var(--navy-deep)] text-white/70">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:px-8">
         <div className="sm:col-span-2 lg:col-span-1">
-          <p className="font-display flex items-center text-lg leading-none font-bold tracking-[-0.02em]">
-            <LogoMark variant="monolith-open" className="mr-2 size-[1.15rem] shrink-0 text-[#f76b60]" />
-            <span className="text-white">S.R.</span>
-            <span className="ml-1.5 text-[#f76b60]">Clarke</span>
-          </p>
+          {/* No entrance animation here: nothing else in the footer moves on
+              arrival, so a rule drawing itself would be the only twitch. */}
+          <Wordmark onDark animate={false} />
           <p className="mt-4 max-w-md text-sm leading-6">{siteConfig.description}</p>
           <div className="mt-5 text-sm">
             {siteConfig.email ? (
