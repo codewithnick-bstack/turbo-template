@@ -77,11 +77,21 @@ export const groupClarke: StrokeGlyph[] = [
   // curve stays inside the stem's own width.
   {
     char: "a",
-    d: "M141.5 28.5c1.5-3 4.5-4.5 8.5-4.5 5.5 0 9 3.5 9 9V46",
+    // Proportions measured off Archivo's own rendered glyph rather than
+    // guessed: the letter is nearly SQUARE (aspect 0.93), and the shoulder
+    // occupies only the top tenth of it — through the upper middle of the
+    // letter the left side is empty and just the right stem carries ink.
+    // Every earlier version had a long sweeping shoulder that made the letter
+    // lean and read as a single-storey script "a".
+    d: "M144.5 26.5c2-1.75 4.5-2.5 7.5-2.5 5.5 0 9 3 9 8V46",
   },
   {
     char: "a-bowl",
-    d: "M159 35.5h-6c-4.5 0-7.5 2.5-7.5 5.75s2.75 5.25 6.5 5.25c3.5 0 7-2.5 7-6.5",
+    // Leaves the stem at the letter's vertical midpoint, runs out to x=147.5,
+    // and closes back on the stem at the baseline. The proportions came from
+    // scanning Archivo's own rendered glyph — see the note on the shoulder.
+    // Settled here; leave it alone.
+    d: "M161 35.5c-9 0-13.5 2-13.5 5s2.5 5 7 5c4.5 0 6.5-2.5 6.5-5.5",
   },
   // r: stem, then a shoulder that lifts to the x-line and stops on the
   // horizontal — cutting it short made the letter look broken.

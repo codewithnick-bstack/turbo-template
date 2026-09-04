@@ -26,9 +26,9 @@ export function WordmarkDrawn({
   className = "",
   strokeWidth = 4.5,
   /** Seconds each stroke takes. */
-  duration = 1.8,
+  duration = 2.6,
   /** Seconds between strokes WITHIN a group. */
-  stagger = 0.2,
+  stagger = 0.28,
 }: {
   className?: string;
   strokeWidth?: number;
@@ -66,6 +66,27 @@ export function WordmarkDrawn({
                 d={glyph.d}
                 stroke={group.stroke}
                 strokeWidth={strokeWidth}
+              />
+            );
+          }
+
+          // A period is a 0.5-unit path: pathLength cannot draw it, it just
+          // pops, and mid-draw those pops read as stray dots floating between
+          // the letters. They fade in once their group has finished instead.
+          const isDot = glyph.char === ".";
+          if (isDot) {
+            return (
+              <motion.path
+                key={key}
+                d={glyph.d}
+                stroke={group.stroke}
+                strokeWidth={strokeWidth}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{
+                  duration: 0.3,
+                  delay: group.strokes.length * stagger + duration * 0.75,
+                }}
               />
             );
           }
