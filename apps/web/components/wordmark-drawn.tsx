@@ -26,9 +26,9 @@ export function WordmarkDrawn({
   className = "",
   strokeWidth = 4.5,
   /** Seconds each stroke takes. */
-  duration = 0.55,
+  duration = 1.1,
   /** Seconds between strokes WITHIN a group. */
-  stagger = 0.08,
+  stagger = 0.14,
 }: {
   className?: string;
   strokeWidth?: number;
@@ -47,7 +47,7 @@ export function WordmarkDrawn({
 
   return (
     <svg
-      viewBox="0 0 221 64"
+      viewBox="0 0 231 64"
       className={className}
       fill="none"
       strokeLinecap="round"
