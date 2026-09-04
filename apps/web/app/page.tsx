@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 
 import { CountUp } from "@/components/count-up";
 import { CtaPair, TextLink } from "@/components/cta";
+import { Drift } from "@/components/drift";
 import { HeroSection } from "@/components/hero-section";
 import { ParallaxBand } from "@/components/parallax-band";
 import { Reveal } from "@/components/reveal";
@@ -101,7 +102,15 @@ export default function HomePage() {
             {paths.map((path, index) => {
               const photo = pathPhotos[index] ?? photos.siteMeeting;
               return (
-                <Reveal key={path.audience} index={index} className="relative">
+                // Opposite drift on the two columns: they separate by a few
+                // pixels as the section passes, which reads as depth without
+                // either column ever looking misaligned.
+                <Drift
+                  key={path.audience}
+                  distance={index === 0 ? -18 : 18}
+                  className="relative"
+                >
+                <Reveal index={index} className="relative">
                   {/* Each door opens on a photograph of the person behind it. */}
                   <figure className="relative mb-10 aspect-[4/3] overflow-hidden">
                     <Image
@@ -143,6 +152,7 @@ export default function HomePage() {
                     />
                   </div>
                 </Reveal>
+                </Drift>
               );
             })}
           </div>
@@ -179,8 +189,12 @@ export default function HomePage() {
       {/* Industries. Offset heading against a full-width hairline grid. */}
       <section className="bg-[var(--background)] py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
-            <Reveal>
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20 lg:items-start">
+            {/* The heading holds while the four tiles scroll past it, so the
+                section keeps its label as you read down. Desktop only: on a
+                phone the columns stack and a sticky heading would eat the
+                viewport the tiles need. */}
+            <Reveal className="lg:sticky lg:top-[calc(var(--header-height)+3rem)]">
               <Rule />
               <p className="eyebrow mt-6">Industries served</p>
               <h2 className="font-display mt-5 text-3xl font-semibold tracking-[-0.02em] text-[var(--navy)] sm:text-4xl dark:text-white">

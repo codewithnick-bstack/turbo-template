@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 import { CtaLink } from "@/components/cta";
+import { HeroParallax } from "@/components/hero-parallax";
 import { hero } from "@/lib/site-data";
 import { ANALYTICS_EVENTS, trackClarityEvent, trackEvent } from "@/lib/analytics";
 
@@ -73,33 +74,35 @@ export function HeroSection() {
 
   return (
     <section className="on-dark relative isolate flex min-h-[100svh] items-end overflow-hidden bg-[var(--navy-deep)]">
-      <video
-        ref={videoRef}
-        className="absolute inset-0 -z-20 size-full object-cover"
-        poster="/hero/hero-poster.jpg"
-        width={1600}
-        height={900}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-hidden="true"
-        tabIndex={-1}
-      >
-        <source src="/hero/hero.mp4" type="video/mp4" />
-      </video>
+      {/* The video layer drifts and fades as the page scrolls, so the copy
+          leaves ahead of the picture instead of the whole fold sliding away
+          as one piece. */}
+      <HeroParallax>
+        <video
+          ref={videoRef}
+          className="size-full object-cover"
+          poster="/hero/hero-poster.jpg"
+          width={1600}
+          height={900}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          tabIndex={-1}
+        >
+          <source src="/hero/hero.mp4" type="video/mp4" />
+        </video>
+      </HeroParallax>
 
       {/* Scrim follows the copy: heaviest at the bottom-left where the type
           sits, lifting toward the top-right so the skyline stays visible.
-          Nikhil asked for a lighter ground (2026-09-04), so the stops came
-          down from 0.86/0.72/0.34 and 0.62/0.22. The footage is now the
-          skyline half only (night → sunset, mirrored). The lift-the-tone grade
-          was reverted on 2026-09-04 — it washed the footage out. The file is
-          now graded richer and darker (gamma 0.95, contrast 1.10, saturation
-          1.30, cool balance), so the scrim goes back up to carry white type
-          over lit windows. Measured across the loop: see the contrast note in
-          the redesign hand-off. Re-measure before lightening any stop. */}
+          The footage is the skyline half only (night → sunset, mirrored),
+          graded with a high-contrast S-curve at 45% strength and saturation
+          1.26, played 1.5x slower. Measured over the brightest lit-window
+          pixels under the copy across the loop: headline 4.44–6.26:1,
+          subline 7.87–10.72:1. Re-measure before lightening any stop. */}
       <div
         className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(8,23,44,0.84)_0%,rgba(8,23,44,0.66)_45%,rgba(8,23,44,0.28)_100%)]"
         aria-hidden="true"
