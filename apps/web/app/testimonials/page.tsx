@@ -89,7 +89,7 @@ export default function TestimonialsPage() {
                   index={index}
                   className={cn(index % 3 === 1 && "md:mt-10")}
                 >
-                  <div
+                  <figure
                     className={cn(
                       "relative h-full border p-8",
                       dark
@@ -106,15 +106,15 @@ export default function TestimonialsPage() {
                     >
                       &ldquo;
                     </span>
-                    <p
+                    <blockquote
                       className={cn(
                         "-mt-4 text-base leading-7",
                         dark ? "text-white" : "text-[var(--navy)] dark:text-white",
                       )}
                     >
                       {item.quote}
-                    </p>
-                    <div className="mt-6">
+                    </blockquote>
+                    <figcaption className="mt-6">
                       <p
                         className={cn(
                           "text-sm font-semibold",
@@ -131,8 +131,8 @@ export default function TestimonialsPage() {
                       >
                         {item.sector}
                       </p>
-                    </div>
-                  </div>
+                    </figcaption>
+                  </figure>
                 </Reveal>
               );
             })}
@@ -146,15 +146,19 @@ export default function TestimonialsPage() {
             <ScaleIn from={1.05}>
               <Reveal>
                 <Rule light className="mx-auto" />
-                <p className="font-display mt-8 text-2xl leading-snug font-semibold text-balance sm:text-4xl">
-                  &ldquo;{bandQuote.quote}&rdquo;
-                </p>
-                <p className="mt-6 text-sm font-semibold tracking-wide text-white/80 uppercase">
-                  {bandQuote.role}
-                </p>
-                <p className="mt-1 text-xs tracking-[0.14em] text-white/50 uppercase">
-                  {bandQuote.sector}
-                </p>
+                <figure>
+                  <blockquote className="font-display mt-8 text-2xl leading-snug font-semibold text-balance sm:text-4xl">
+                    &ldquo;{bandQuote.quote}&rdquo;
+                  </blockquote>
+                  <figcaption>
+                    <p className="mt-6 text-sm font-semibold tracking-wide text-white/80 uppercase">
+                      {bandQuote.role}
+                    </p>
+                    <p className="mt-1 text-xs tracking-[0.14em] text-white/50 uppercase">
+                      {bandQuote.sector}
+                    </p>
+                  </figcaption>
+                </figure>
               </Reveal>
             </ScaleIn>
           </div>

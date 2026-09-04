@@ -154,7 +154,7 @@ export const sampleCaseStudies: SampleCaseStudy[] = [
     sector: "Commercial Construction",
     location: "Denver, CO",
     challenge:
-      "The client had run the role open for four months through a job board and a contingency firm with no qualified applicants. The estimator needed hard-bid and negotiated-work experience on projects over $40M, which narrowed the pool sharply in a market already short on that skill set.",
+      "The client had run the role open for four months through a job board and a contingency firm with no qualified applicants. The estimator needed hard-bid and negotiated-work experience on large negotiated and hard-bid projects, which narrowed the pool sharply in a market already short on that skill set.",
     approach: [
       "Sourced against the confidential candidate database rather than active job seekers, since the strongest fits were not looking",
       "Pre-screened for takeoff software and bid-day availability before presenting a shortlist",
@@ -167,7 +167,7 @@ export const sampleCaseStudies: SampleCaseStudy[] = [
     sector: "Heavy Construction",
     location: "Sacramento, CA",
     challenge:
-      "An internal promotion fell through mid-project, leaving a $120M highway interchange without an executive sponsor. The client needed someone who could step in without a ramp-up period and who DOT prequalification records would already recognize.",
+      "An internal promotion fell through mid-project, leaving a major highway interchange without an executive sponsor. The client needed someone who could step in without a ramp-up period and who DOT prequalification records would already recognize.",
     approach: [
       "Searched specifically within contractors holding active DOT relationships in the region",
       "Verified bonding-capacity experience at the required project size before first interview",
@@ -285,7 +285,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     body: [
       "The first myth is that construction careers cap out low. Executive-level compensation in commercial and heavy civil construction competes with corporate management roles in most regions we work, particularly once bonus structures are included.",
       "The second is that advancement requires a four-year degree. Plenty of the project executives we place came up through the field, not through a construction management program, and clients care more about track record than transcript.",
-      "The third myth is that the work is unstable. Backlog visibility on most commercial and infrastructure projects runs 12 to 24 months out, which is longer job security than a lot of white-collar roles offer right now.",
+      "The third myth is that the work is unstable. Backlog visibility on most commercial and infrastructure projects runs well over a year out, which is longer job security than a lot of white-collar roles offer right now.",
       "The fourth and fifth — that it is a young person's industry, and that women and career-changers do not have a path in — are both outdated. The candidate pool we place from looks nothing like it did even ten years ago.",
     ],
   },
@@ -358,7 +358,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     cover: photos.commercialHighrise,
     category: "Industry Trends",
     body: [
-      "Division President and Chief Estimator roles carry the highest total compensation we see regularly, particularly at contractors doing $200M or more in annual volume, where bonus structures are tied directly to backlog and margin performance.",
+      "Division President and Chief Estimator roles carry the highest total compensation we see regularly, particularly at the largest regional and national contractors, where bonus structures are tied directly to backlog and margin performance.",
       "VP of Construction roles at large developers follow closely, especially where the position carries both pre-construction and field oversight rather than one or the other.",
       "Heavy civil and infrastructure executive roles have closed the gap with commercial in the past several years, driven by public infrastructure funding and the relative scarcity of executives with DOT-relationship experience.",
       "The common thread across all of these is not the sector — it is P&L accountability. Executive compensation in construction tracks who owns the numbers on a project, not just who has the most years in the industry.",
