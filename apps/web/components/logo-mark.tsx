@@ -29,7 +29,12 @@ export function LogoMark({
       focusable="false"
     >
       {mark.fills?.map((d) => (
-        <path key={d} d={d} fill="currentColor" />
+        <path
+          key={d}
+          d={d}
+          fill="currentColor"
+          {...(mark.fillRule ? { fillRule: mark.fillRule } : {})}
+        />
       ))}
       {mark.strokes?.map((d) => (
         <path

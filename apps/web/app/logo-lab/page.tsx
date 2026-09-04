@@ -42,9 +42,11 @@ export default function LogoLabPage() {
         Logo mark candidates
       </h1>
       <p className="mt-4 max-w-2xl text-[var(--muted)]">
-        Four directions, all drawn from the same structural source as the
-        skyline and bridge artwork. Judge them at the favicon sizes first — that
-        is where marks fail.
+        Second round. The first attempt drew more structure and produced a
+        mark that read as a fifth industry icon rather than an identity — so
+        these come from the initial and from the act of placing someone
+        instead. Judge them at the favicon sizes first: that is where marks
+        fail, but surviving 16px is the floor, not the point.
       </p>
 
       <div className="mt-16 space-y-20">

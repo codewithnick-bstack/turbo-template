@@ -15,6 +15,9 @@ export type LogoMark = {
   rationale: string;
   /** Filled shapes, drawn with fill rather than stroke. */
   fills?: string[];
+  /** Set "evenodd" when a fill path encloses a counter that must read as a
+   *  hole rather than more ink. */
+  fillRule?: "evenodd" | "nonzero";
   /** Stroked paths. */
   strokes?: string[];
   /** Stroke width for `strokes`, in grid units. */
@@ -28,19 +31,27 @@ export type LogoMark = {
  */
 export const logoMarks: LogoMark[] = [
   {
-    key: "span",
-    name: "Span",
+    key: "monolith",
+    name: "Monolith S — as drawn",
     rationale:
-      "Two piers and the beam they carry, drawn as a section — an I-beam read end-on. Chosen over a keystone and a plumb bob because it is the only one of the three that still reads at 16px, which is the size that decides a mark: the keystone read as a table at every size, and the plumb line's thread disappears in a browser tab. It is also the closest sibling to the skyline and bridge drawings already on the site.",
-    fills: [
-      // The deck.
-      "M4 16h32v5H4z",
-    ],
-    strokes: [
-      // Piers, and the ground they bear on.
-      "M11 21v13M29 21v13",
-      "M4 34h32",
-    ],
-    strokeWidth: 3,
+      "An S cut as a solid block: the initial built like a plan rather than written. The first round drew more structure and produced a mark that read as a fifth industry icon; this reads as an identity because it is the name.",
+    fills: ["M6 6h28v8H16v5h18v20H6v-8h18v-5H6z"],
   },
-];
+  {
+    key: "monolith-open",
+    name: "Monolith S — wider aperture",
+    rationale:
+      "The same letter with thicker arms and deeper counters. The gaps are what disappear first when a mark is scaled down, so opening them is usually what makes the difference at 16px.",
+    fills: ["M5 5h30v9H15v4h20v22H5v-9h20v-4H5z"],
+  },
+  {
+    key: "monolith-square",
+    name: "Monolith S — squared",
+    rationale:
+      "Set on a filled navy square, the way it would appear as an avatar or a favicon. Worth comparing because a mark that floats can look thin in a browser tab even when its silhouette is strong.",
+    // One path, evenodd: the letter is a HOLE in the square, so it shows the
+    // ground through it. Two same-coloured paths would stack into a blob.
+    fillRule: "evenodd",
+    fills: ["M2 2h36v36H2zM8 8h24v7H17v4h15v13H8v-7h15v-4H8z"],
+  },
+]

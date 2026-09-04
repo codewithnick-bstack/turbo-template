@@ -64,9 +64,9 @@ export function SiteHeader() {
           aria-label={`${siteConfig.name} — home`}
         >
           <LogoMark
-            variant="span"
+            variant="monolith-open"
             className={cn(
-              "mr-2 size-6 shrink-0",
+              "mr-2 size-[1.15rem] shrink-0",
               overlay ? "text-[#f76b60]" : "text-[var(--accent)] dark:text-[#f76b60]",
             )}
           />

@@ -3,15 +3,18 @@ import { ImageResponse } from "next/og";
 import brand from "../../../brand.config";
 
 /**
- * Browser-tab icon: the Span mark, reversed out on the brand navy.
+ * Browser-tab icon: the S mark knocked out of the brand navy.
  *
- * Replaces the initial-letter tile this used to draw. A letter on a rounded
- * square is what every template ships; the mark is the site's own.
+ * Replaces the initial-letter tile this used to draw in a system font. Same
+ * letter, but drawn as the mark, so the tab matches the header.
  *
- * The geometry is duplicated from lib/logo-marks.ts rather than imported: this
- * runs in the OG image runtime, which renders a restricted subset of CSS and
- * cannot mount the React component. Keep the two in sync — there is a matching
- * note on the mark itself.
+ * The squared treatment is used here rather than the free-standing letter the
+ * header carries: a tab icon has to fill its box, and a floating glyph reads
+ * as thin at 16px.
+ *
+ * The geometry is duplicated from lib/logo-marks.ts because this runs in the
+ * OG image runtime, which cannot mount the React component — there is a note
+ * on the mark saying to keep the two in step.
  */
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
@@ -26,20 +29,17 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: brand.primaryColor,
+          // The square IS the navy ground: painting the wrapper navy too would
+          // hide it and leave a floating white letter.
+          background: brand.primaryForeground ?? "#ffffff",
         }}
       >
-        {/* Same 40x40 grid as the component, scaled into the icon box. The
-            deck is a filled bar and the piers are strokes, so the beam stays
-            readable when the whole thing is 16px in a tab. */}
-        <svg width="26" height="26" viewBox="0 0 40 40">
-          <path d="M4 16h32v5H4z" fill={brand.primaryForeground ?? "#ffffff"} />
+        <svg width="32" height="32" viewBox="0 0 40 40">
+          {/* Navy square with the letter knocked out of it. */}
           <path
-            d="M11 21v13M29 21v13M4 34h32"
-            fill="none"
-            stroke={brand.primaryForeground ?? "#ffffff"}
-            strokeWidth={3}
-            strokeLinecap="round"
+            d="M0 0h40v40H0zM8 8h24v7H17v4h15v13H8v-7h15v-4H8z"
+            fill={brand.primaryColor}
+            fillRule="evenodd"
           />
         </svg>
       </div>

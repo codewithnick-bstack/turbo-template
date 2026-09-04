@@ -12,7 +12,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:px-8">
         <div className="sm:col-span-2 lg:col-span-1">
           <p className="font-display flex items-center text-lg leading-none font-bold tracking-[-0.02em]">
-            <LogoMark variant="span" className="mr-2 size-6 shrink-0 text-[#f76b60]" />
+            <LogoMark variant="monolith-open" className="mr-2 size-[1.15rem] shrink-0 text-[#f76b60]" />
             <span className="text-white">S.R.</span>
             <span className="ml-1.5 text-[#f76b60]">Clarke</span>
           </p>
