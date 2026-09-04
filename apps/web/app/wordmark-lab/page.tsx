@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { Wordmark } from "@/components/wordmark";
 import { WordmarkDrawn } from "@/components/wordmark-drawn";
+import { WordmarkSignature } from "@/components/wordmark-signature";
 
 /**
  * Internal comparison page for the drawn wordmark. Not part of the site:
@@ -41,6 +42,23 @@ export default function WordmarkLabPage() {
           <div className="flex items-center gap-10 bg-[var(--navy-deep)] p-10">
             <WordmarkDrawn className="h-6 w-auto text-white" strokeWidth={6} />
             <span className="text-xs text-white/50">header size (24px tall)</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-16">
+        <h2 className="eyebrow">Signature: draws, then becomes real type</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--muted)]">
+          The strokes play once, then cross-fade to the actual Wordmark — so
+          what you are left looking at is real Archivo, not the hand-drawn
+          approximation. Reload to replay.
+        </p>
+        <div className="mt-6 grid gap-px bg-[var(--border)]">
+          <div className="flex min-h-28 items-center bg-white p-10">
+            <WordmarkSignature />
+          </div>
+          <div className="flex min-h-28 items-center bg-[var(--navy-deep)] p-10">
+            <WordmarkSignature onDark />
           </div>
         </div>
       </section>

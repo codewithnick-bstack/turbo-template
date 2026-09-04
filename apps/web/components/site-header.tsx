@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { CtaLink } from "@/components/cta";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
-import { Wordmark } from "@/components/wordmark";
+import { WordmarkSignature } from "@/components/wordmark-signature";
 import { headerCta, hero, siteConfig } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
@@ -52,10 +52,14 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-[var(--header-height)] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        {/* Typographic logo — see components/wordmark.tsx for why there is no
-            mark and how the colours are chosen per surface. */}
+        {/* The wordmark draws itself once, then quietly cross-fades to the
+            real type — see components/wordmark-signature.tsx. This is the only
+            place on the site that plays it: the header lives in the root
+            layout, so it does not re-mount on client navigation and the
+            animation runs once per full page load rather than on every route
+            change. The footer stays plain type. */}
         <Link href="/" aria-label={`${siteConfig.name} — home`} className="shrink-0">
-          <Wordmark onDark={overlay} />
+          <WordmarkSignature onDark={overlay} />
         </Link>
 
         <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">
