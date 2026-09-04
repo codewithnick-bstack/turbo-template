@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { CtaPair } from "@/components/cta";
+import { ClosingCta } from "@/components/closing-cta";
 import { PageHero } from "@/components/page-hero";
 import { ParallaxBand } from "@/components/parallax-band";
 import { photos } from "@/lib/photos";
@@ -165,17 +165,7 @@ export default function TestimonialsPage() {
         </ParallaxBand>
       ) : null}
 
-      <Section tone="muted" bordered>
-        <Container measure="narrow" className="text-center">
-          <Reveal>
-            <Rule className="mx-auto" />
-            <h2 className="font-display mt-6 text-3xl font-semibold tracking-[-0.02em] text-[var(--navy)] sm:text-4xl dark:text-white">
-              One conversation tells you whether we can help.
-            </h2>
-            <CtaPair size="lg" align="center" onDark={false} className="mt-10" />
-          </Reveal>
-        </Container>
-      </Section>
+      <ClosingCta />
     </div>
   );
 }

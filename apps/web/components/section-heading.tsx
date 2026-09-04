@@ -20,6 +20,8 @@ type SectionHeadingProps = {
   onDark?: boolean;
   /** Headings below the page's h1 are h2 by default; nested ones pass h3. */
   as?: "h2" | "h3";
+  /** Centre the block, including the rule. Used by the closing CTA sections. */
+  centered?: boolean;
   className?: string;
 };
 
@@ -35,12 +37,13 @@ export function SectionHeading({
   size = "md",
   onDark = false,
   as = "h2",
+  centered = false,
   className,
 }: SectionHeadingProps) {
   return (
-    <div className={className}>
+    <div className={cn(centered && "text-center", className)}>
       <Reveal>
-        <Rule />
+        <Rule {...(centered ? { className: "mx-auto" } : {})} />
         {eyebrow ? (
           <p className={cn("eyebrow mt-6", onDark && "text-white/55")}>{eyebrow}</p>
         ) : null}
@@ -61,6 +64,7 @@ export function SectionHeading({
           <p
             className={cn(
               "mt-6 max-w-2xl text-lg leading-8",
+              centered && "mx-auto",
               onDark ? "text-white/75" : "text-[var(--muted)]",
             )}
           >
