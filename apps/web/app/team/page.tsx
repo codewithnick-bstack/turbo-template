@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import { PageHero } from "@/components/page-hero";
+import { ProcessMark } from "@/components/process-mark";
 import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Rule } from "@/components/rule";
@@ -64,16 +65,19 @@ const jsonLd = {
 
 const deskSteps = [
   {
+    mark: "singleDesk",
     title: "One search, one recruiter",
     description:
       "A single point of contact runs a search end to end — sourcing, vetting, and reference checks all pass through the same desk.",
   },
   {
+    mark: "vetted",
     title: "Vetted before you see them",
     description:
       "Every candidate presented has already cleared reference interviews and a background check, not just a resume screen.",
   },
   {
+    mark: "confidential",
     title: "Confidential by default",
     description:
       "Candidate identities and employer searches stay private until both sides agree to a specific introduction.",
@@ -191,12 +195,18 @@ export default function TeamPage() {
           <div className="mt-14 grid gap-10 sm:grid-cols-3">
             {deskSteps.map((step, index) => (
               <Reveal key={step.title} index={index}>
-                <span
-                  aria-hidden="true"
-                  className="font-display tnum block text-sm font-bold text-[var(--accent-text)]"
-                >
-                  0{index + 1}
-                </span>
+                <div className="flex items-center justify-between">
+                  <span
+                    aria-hidden="true"
+                    className="font-display tnum block text-sm font-bold text-[var(--accent-text)]"
+                  >
+                    0{index + 1}
+                  </span>
+                  <ProcessMark
+                    name={step.mark}
+                    className="size-11 stroke-[var(--navy)]/35 dark:stroke-white/30"
+                  />
+                </div>
                 <h3 className="font-display mt-3 text-lg font-semibold text-[var(--navy)] dark:text-white">
                   {step.title}
                 </h3>

@@ -9,6 +9,8 @@ import { CtaPair, TextLink } from "@/components/cta";
 import { Drift } from "@/components/drift";
 import { HeroSection } from "@/components/hero-section";
 import { ParallaxBand } from "@/components/parallax-band";
+import { IndustryGlyph } from "@/components/industry-glyph";
+import { SkylineDivider } from "@/components/skyline-divider";
 import { Reveal } from "@/components/reveal";
 import { Rule } from "@/components/rule";
 import { ScaleIn } from "@/components/scale-in";
@@ -160,7 +162,7 @@ export default function HomePage() {
       </section>
 
       {/* The number as the graphic. Full-bleed, cropped, nothing else. */}
-      <section className="relative overflow-hidden border-y border-[var(--border)] bg-[var(--muted-bg)] py-24 lg:py-32">
+      <section className="relative overflow-hidden border-y border-[var(--border)] bg-[var(--muted-bg)] pt-24 pb-28 sm:pb-32 lg:pt-28">
         <span
           aria-hidden="true"
           className="font-display tnum pointer-events-none absolute -top-8 -right-4 text-[clamp(9rem,26vw,22rem)] leading-[0.8] font-bold text-[var(--navy)]/[0.07] select-none lg:-top-16 dark:text-white/[0.05]"
@@ -184,6 +186,13 @@ export default function HomePage() {
             <TextLink href="/why-src" label="Why SRC" className="mt-9" />
           </Reveal>
         </div>
+
+        {/* The site's one piece of drawn artwork, sitting under the copy that
+            names its subjects: the buildings, bridges and highways.
+            Absolutely positioned on the section's bottom edge so it reads as
+            the ground the type stands on. Floated in the flow it sat in the
+            middle of the section's padding and looked like a leftover. */}
+        <SkylineDivider className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full stroke-[var(--navy)]/30 sm:h-32 dark:stroke-white/25" />
       </section>
 
       {/* Industries. Offset heading against a full-width hairline grid. */}
@@ -226,12 +235,18 @@ export default function HomePage() {
                         className="absolute inset-0 -z-10 bg-gradient-to-t from-[var(--navy-deep)] via-[var(--navy-deep)]/75 to-[var(--navy-deep)]/35 transition-opacity duration-300 group-hover:opacity-85"
                       />
                       <div>
-                        <span
-                          aria-hidden="true"
-                          className="font-display tnum text-xs font-bold tracking-[0.14em] text-[#f76b60]"
-                        >
-                          0{index + 1}
-                        </span>
+                        <div className="flex items-center justify-between">
+                          <span
+                            aria-hidden="true"
+                            className="font-display tnum text-xs font-bold tracking-[0.14em] text-[#f76b60]"
+                          >
+                            0{index + 1}
+                          </span>
+                          <IndustryGlyph
+                            slug={industry.slug}
+                            className="size-12 stroke-white/45 transition-[stroke] duration-300 group-hover:stroke-white/80"
+                          />
+                        </div>
                         <h3 className="font-display mt-4 text-xl font-semibold">
                           {industry.title}
                         </h3>

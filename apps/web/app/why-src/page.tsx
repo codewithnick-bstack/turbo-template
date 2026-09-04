@@ -5,6 +5,7 @@ import { PageHero } from "@/components/page-hero";
 import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Section, Container } from "@/components/section";
+import { BridgeSectionMark } from "@/components/bridge-section-mark";
 import { SectionHeading } from "@/components/section-heading";
 import { stats, values } from "@/lib/site-data";
 
@@ -39,6 +40,11 @@ export default function WhySrcPage() {
               </Reveal>
             ))}
           </dl>
+          {/* The numbers describe infrastructure, so they stand on a
+              drawing of it. Full width and hard against the section
+              floor: centred and boxed, it read as a small object
+              stranded in an empty band. */}
+          <BridgeSectionMark className="mt-10 h-16 w-full stroke-[var(--navy)]/25 sm:h-20 dark:stroke-white/20" />
         </Container>
       </Section>
 
