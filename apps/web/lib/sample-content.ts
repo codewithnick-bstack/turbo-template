@@ -154,7 +154,7 @@ export const sampleCaseStudies: SampleCaseStudy[] = [
     sector: "Commercial Construction",
     location: "Denver, CO",
     challenge:
-      "The client had run the role open for four months through a job board and a contingency firm with no qualified applicants. The estimator needed hard-bid and negotiated-work experience on large negotiated and hard-bid projects, which narrowed the pool sharply in a market already short on that skill set.",
+      "The client had run the role open for four months through a job board and a contingency firm with no qualified applicants. The estimator needed hard-bid and negotiated-work experience on large projects, which narrowed the pool sharply in a market already short on that skill set.",
     approach: [
       "Sourced against the confidential candidate database rather than active job seekers, since the strongest fits were not looking",
       "Pre-screened for takeoff software and bid-day availability before presenting a shortlist",
