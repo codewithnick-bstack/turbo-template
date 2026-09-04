@@ -26,9 +26,9 @@ export function WordmarkDrawn({
   className = "",
   strokeWidth = 4.5,
   /** Seconds each stroke takes. */
-  duration = 1.1,
+  duration = 1.8,
   /** Seconds between strokes WITHIN a group. */
-  stagger = 0.14,
+  stagger = 0.2,
 }: {
   className?: string;
   strokeWidth?: number;

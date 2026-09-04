@@ -67,14 +67,21 @@ export const groupClarke: StrokeGlyph[] = [
   },
   // l: ascender to baseline.
   { char: "l", d: "M132 10v36" },
-  // a: ONE stroke — the bowl opens at the top right, curves round, and closes
-  // on the stem, which then runs to the baseline. Drawn as a separate bowl and
-  // stem it read as two pieces.
+  // a: a double-storey "a" built the way it is written — the shoulder comes
+  // over from the left, drops as the right stem to the baseline, and the bowl
+  // then closes back onto that same stem.
+  //
+  // Earlier passes drew the bowl as a loop hanging off the stem, which never
+  // read as one letter however the widths were adjusted: the bowl has to
+  // START and END on the stem. Its top sits at the midline (y=35.5) and the
+  // curve stays inside the stem's own width.
   {
     char: "a",
-    // The bowl must close INSIDE the stem's width, or the letter leans open
-    // and starts reading as a script "a".
-    d: "M141.5 29c1.5-3 4.5-5 8.5-5 5.5 0 9 3.5 9 8.5V46M159 36.5c-8 0-12 2-12 5.25s2.25 4.75 6 4.75c3.75 0 6-2.75 6-6",
+    d: "M141.5 28.5c1.5-3 4.5-4.5 8.5-4.5 5.5 0 9 3.5 9 9V46",
+  },
+  {
+    char: "a-bowl",
+    d: "M159 35.5h-6c-4.5 0-7.5 2.5-7.5 5.75s2.75 5.25 6.5 5.25c3.5 0 7-2.5 7-6.5",
   },
   // r: stem, then a shoulder that lifts to the x-line and stops on the
   // horizontal — cutting it short made the letter look broken.
