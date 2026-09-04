@@ -45,12 +45,15 @@ export function WordmarkDrawn({
     { strokes: groupClarke, stroke: "var(--accent-text)" },
   ];
 
+  // No strokeLinecap on the <svg>: a round cap paints a dot at a path's start
+  // point as soon as its pathLength leaves zero, which put a visible dot on
+  // every letter before any of them had drawn. Each path sets its own cap
+  // instead — butt while drawing, round once the stroke has length.
   return (
     <svg
       viewBox="0 0 231 64"
       className={className}
       fill="none"
-      strokeLinecap="round"
       strokeLinejoin="round"
       role="img"
       aria-label="S.R. Clarke"
@@ -66,6 +69,7 @@ export function WordmarkDrawn({
                 d={glyph.d}
                 stroke={group.stroke}
                 strokeWidth={strokeWidth}
+                strokeLinecap="round"
               />
             );
           }
@@ -81,6 +85,7 @@ export function WordmarkDrawn({
                 d={glyph.d}
                 stroke={group.stroke}
                 strokeWidth={strokeWidth}
+                strokeLinecap="round"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{
@@ -97,14 +102,17 @@ export function WordmarkDrawn({
               d={glyph.d}
               stroke={group.stroke}
               strokeWidth={strokeWidth}
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
+              initial={{ pathLength: 0, strokeLinecap: "butt" }}
+              animate={{ pathLength: 1, strokeLinecap: "round" }}
               transition={{
-                duration,
-                // Delay is per-group-position, NOT global: every group starts
-                // at zero, so the three draw at once.
-                delay: index * stagger,
-                ease: [0.22, 1, 0.36, 1],
+                pathLength: {
+                  duration,
+                  // Delay is per-group-position, NOT global: every group
+                  // starts at zero, so the three draw at once.
+                  delay: index * stagger,
+                  ease: [0.22, 1, 0.36, 1],
+                },
+                strokeLinecap: { delay: index * stagger + duration * 0.25, duration: 0 },
               }}
             />
           );
