@@ -45,12 +45,19 @@ export function WordmarkDrawn({
     { strokes: groupClarke, stroke: "var(--accent-text)" },
   ];
 
+  // Butt caps, not round: a round cap paints a DOT at a path's start point the
+  // moment its pathLength leaves zero, so at the start of the draw every
+  // letter put a dot on screen before any of them had visible length — ten
+  // dots at once, in the shape of the wordmark. Animating the cap from butt to
+  // round is not an option either: it is a keyword, framer cannot interpolate
+  // it, and trying scattered the letters into fragments. At this weight the
+  // squared terminals are barely distinguishable anyway.
   return (
     <svg
       viewBox="0 0 231 64"
       className={className}
       fill="none"
-      strokeLinecap="round"
+      strokeLinecap="butt"
       strokeLinejoin="round"
       role="img"
       aria-label="S.R. Clarke"
@@ -66,6 +73,7 @@ export function WordmarkDrawn({
                 d={glyph.d}
                 stroke={group.stroke}
                 strokeWidth={strokeWidth}
+                strokeLinecap="round"
               />
             );
           }
@@ -81,6 +89,7 @@ export function WordmarkDrawn({
                 d={glyph.d}
                 stroke={group.stroke}
                 strokeWidth={strokeWidth}
+                strokeLinecap="round"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{
