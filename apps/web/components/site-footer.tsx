@@ -73,7 +73,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-white/10 px-4 py-5 text-center text-sm text-white/45">
         <span>
-          © {new Date().getFullYear()} {siteConfig.name}. Built with Next.js, Express, and Turborepo.
+          © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
         </span>
         <span className="mx-2">·</span>
         <CookieSettingsButton />

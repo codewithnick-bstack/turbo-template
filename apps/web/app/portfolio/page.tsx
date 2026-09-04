@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 
+import { PageHero } from "@/components/page-hero";
 import { PortfolioShowcase } from "@/components/portfolio-showcase";
-import { Badge } from "@/components/ui/badge";
 import { getPortfolio } from "@/lib/api";
+import { photos } from "@/lib/photos";
 import { siteConfig } from "@/lib/site-data";
 
 export const metadata: Metadata = {
@@ -82,16 +83,14 @@ function PortfolioSkeleton() {
 
 export default function PortfolioPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-      <Badge>Portfolio</Badge>
-      <h1 className="mt-4 text-4xl font-semibold tracking-tight">
-        Selected work, results-first
-      </h1>
-      <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">
-        A look at some of the projects we have built, grown, and shipped for
-        clients across industries.
-      </p>
-      <div className="mt-8">
+    <div>
+      <PageHero
+        eyebrow="Case studies"
+        title="Searches we have closed."
+        intro="The role, the timeline, and what the hire changed on site. Told plainly."
+        image={photos.development}
+      />
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         <Suspense fallback={<PortfolioSkeleton />}>
           <PortfolioEntries />
         </Suspense>
