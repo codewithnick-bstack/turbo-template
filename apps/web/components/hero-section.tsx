@@ -94,16 +94,18 @@ export function HeroSection() {
           sits, lifting toward the top-right so the skyline stays visible.
           Nikhil asked for a lighter ground (2026-09-04), so the stops came
           down from 0.86/0.72/0.34 and 0.62/0.22. The footage is now the
-          skyline half only (night → sunset, mirrored, tone lifted in the file
-          itself). Measured over the brightest lit-window pixels under the copy
-          across the loop: subline worst case 4.5–6.1:1, headline 3.1–3.6:1
-          (large text), averages 5–12:1. Re-measure before lightening further. */}
+          skyline half only (night → sunset, mirrored). The lift-the-tone grade
+          was reverted on 2026-09-04 — it washed the footage out. The file is
+          now graded richer and darker (gamma 0.95, contrast 1.10, saturation
+          1.30, cool balance), so the scrim goes back up to carry white type
+          over lit windows. Measured across the loop: see the contrast note in
+          the redesign hand-off. Re-measure before lightening any stop. */}
       <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(8,23,44,0.76)_0%,rgba(8,23,44,0.56)_45%,rgba(8,23,44,0.18)_100%)]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(8,23,44,0.84)_0%,rgba(8,23,44,0.66)_45%,rgba(8,23,44,0.28)_100%)]"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(8,23,44,0.48)_0%,rgba(8,23,44,0.14)_52%,transparent_80%)]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(8,23,44,0.58)_0%,rgba(8,23,44,0.20)_52%,transparent_80%)]"
         aria-hidden="true"
       />
 
