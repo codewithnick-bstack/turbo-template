@@ -36,7 +36,7 @@ export const sampleTeam: SampleTeamMember[] = [
     focus: "Executive search across commercial and heavy civil",
     bio: "Runs the firm's retained search practice and holds the client relationships that go back decades. The final read on any executive-level shortlist passes through this desk.",
     sectors: ["Executive Search", "Commercial Construction"],
-    photo: photos.plans,
+    photo: photos.heavyCivil,
   },
   {
     id: "senior-recruiter-heavy-civil",
@@ -44,7 +44,7 @@ export const sampleTeam: SampleTeamMember[] = [
     focus: "Superintendents and project executives for infrastructure work",
     bio: "Fifteen-plus years placing field leadership on bridge, highway, and utility work. Knows which superintendents can run a night pour and which ones just say they can.",
     sectors: ["Heavy Construction", "Infrastructure"],
-    photo: photos.heavyCivil,
+    photo: photos.trades,
   },
   {
     id: "research-lead",
@@ -52,7 +52,7 @@ export const sampleTeam: SampleTeamMember[] = [
     focus: "Candidate sourcing and confidential database management",
     bio: "Owns the 275,000-plus candidate database and the sourcing process behind every search. Builds the long list before a recruiter ever picks up the phone.",
     sectors: ["Sourcing", "Data"],
-    photo: photos.siteMeeting,
+    photo: photos.concrete,
   },
   {
     id: "senior-recruiter-commercial",
@@ -60,7 +60,7 @@ export const sampleTeam: SampleTeamMember[] = [
     focus: "Project managers and estimators for ground-up commercial work",
     bio: "Focused on the mid-to-senior office side of commercial builds — project managers, estimators, and the occasional VP of Construction search.",
     sectors: ["Commercial Construction", "Pre-Construction"],
-    photo: photos.commercialHighrise,
+    photo: photos.bridgeGirder,
   },
   {
     id: "client-partnerships-lead",
@@ -68,7 +68,7 @@ export const sampleTeam: SampleTeamMember[] = [
     focus: "Employer onboarding and search-scope definition",
     bio: "First call for a new client. Turns a vague hiring problem into a position description a recruiter can actually search against.",
     sectors: ["Employer Services"],
-    photo: photos.siteMeeting,
+    photo: photos.tunnelWorks,
   },
   {
     id: "candidate-experience-lead",
@@ -76,7 +76,7 @@ export const sampleTeam: SampleTeamMember[] = [
     focus: "Interview prep, negotiation support, and transition coaching",
     bio: "Works the candidate side of every placement from first interview to start date, including the counteroffer conversation most firms skip.",
     sectors: ["Career Seekers"],
-    photo: photos.trades,
+    photo: photos.surveyor,
   },
 ];
 
@@ -220,7 +220,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     dek: "The industry has an image problem and a compensation reality that don't match. What the work actually offers the people entering it today.",
     date: "2024-11-04",
     readingTime: 5,
-    cover: photos.trades,
+    cover: photos.welding,
     category: "Career Advice",
     body: [
       "Construction gets talked about as a fallback career. The people running projects on site know better. Field leadership roles pay competitively with white-collar management positions in most metro markets, and the path to that pay is shorter — a superintendent in their early thirties is common; a director in their early thirties in most other industries is not.",
@@ -235,7 +235,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     dek: "Retained search works differently than posting a job and waiting. Here is the process a client should expect before the first candidate ever gets presented.",
     date: "2024-12-10",
     readingTime: 6,
-    cover: photos.siteMeeting,
+    cover: photos.earthworks,
     category: "For Employers",
     body: [
       "The first meeting with a search firm should feel more like an intake interview than a sales call. A recruiter who does not ask about your bonding capacity, your bench strength, or why the last person in the role left has not done this long enough to help you.",
@@ -250,7 +250,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     dek: "Safety records follow leadership, not luck. Four things the strongest superintendents we place do differently on site.",
     date: "2025-01-22",
     readingTime: 5,
-    cover: photos.concrete,
+    cover: photos.concretePour,
     category: "Field Leadership",
     body: [
       "Every superintendent we place gets asked about their safety record in the interview, but the answer that matters is not the number — it is what they changed after an incident, not just how they reported it.",
@@ -265,7 +265,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     dek: "Labor supply, project financing, and where the hiring pressure is heaviest this year, based on what we are seeing across active searches.",
     date: "2025-02-14",
     readingTime: 7,
-    cover: photos.commercialHighrise,
+    cover: photos.facadeInstall,
     category: "Industry Trends",
     body: [
       "The labor gap in field leadership is not closing this year. Retirements are outpacing the number of superintendents and project managers moving up from the field, and that pressure shows up first in heavy civil, where the training cycle is longest.",
@@ -280,7 +280,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     dek: "What candidates get wrong about pay, advancement, and who actually works in the industry before they talk to us.",
     date: "2025-03-19",
     readingTime: 4,
-    cover: photos.development,
+    cover: photos.industrialShell,
     category: "Career Advice",
     body: [
       "The first myth is that construction careers cap out low. Executive-level compensation in commercial and heavy civil construction competes with corporate management roles in most regions we work, particularly once bonus structures are included.",
@@ -295,7 +295,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     dek: "Formal mentorship is one of the few retention levers that actually works for mid-career field staff. Here is what a program that holds up looks like.",
     date: "2025-04-30",
     readingTime: 6,
-    cover: photos.trades,
+    cover: photos.paving,
     category: "For Employers",
     body: [
       "Most mentorship programs in construction fail for the same reason: they pair people up and never define what success looks like. A mentee needs a specific skill target — reading a complex MEP set, running a subcontractor buyout meeting — not a vague instruction to shadow someone.",
@@ -310,7 +310,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     dek: "The best executive-level roles in construction are rarely posted publicly. Where they actually surface, and how a confidential search works.",
     date: "2025-06-11",
     readingTime: 5,
-    cover: photos.plans,
+    cover: photos.energyInfra,
     category: "Career Advice",
     body: [
       "Executive-level construction roles — VP of Construction, Chief Estimator, Division President — are filled through relationships far more often than job boards. By the time a posting goes public, an internal or referred candidate is often already the frontrunner.",
@@ -325,7 +325,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     dek: "Every hiring decision in a tight labor market is a scarcity decision. What that means for how clients should set expectations before a search starts.",
     date: "2025-07-23",
     readingTime: 5,
-    cover: photos.heavyCivil,
+    cover: photos.residentialDevelopment,
     category: "For Employers",
     body: [
       "The law of scarcity is simple: when a resource is limited, its value rises and the terms shift toward whoever controls it. In construction hiring right now, that resource is qualified field leadership, and the terms have shifted toward the candidate.",
@@ -340,7 +340,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     dek: "Recruiters are not evaluating resumes the way applicant tracking systems do. What actually gets a candidate remembered.",
     date: "2025-08-15",
     readingTime: 4,
-    cover: photos.siteMeeting,
+    cover: photos.employerOffice,
     category: "Career Advice",
     body: [
       "A resume that lists job titles and dates tells a recruiter almost nothing. What gets remembered is a specific project — the size, the scope, the problem that came up mid-build, and what the candidate did about it.",
@@ -355,7 +355,7 @@ export const sampleBlogPosts: SampleBlogPost[] = [
     dek: "A look at where compensation actually concentrates at the executive level, and what experience typically gets a candidate there.",
     date: "2025-09-02",
     readingTime: 6,
-    cover: photos.commercialHighrise,
+    cover: photos.development,
     category: "Industry Trends",
     body: [
       "Division President and Chief Estimator roles carry the highest total compensation we see regularly, particularly at the largest regional and national contractors, where bonus structures are tied directly to backlog and margin performance.",

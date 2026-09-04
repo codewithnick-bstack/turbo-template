@@ -17,7 +17,7 @@ export default function PositionsPage() {
   return (
     <div>
       <PageHero
-        image={photos.commercialHighrise}
+        image={photos.steelErection}
         eyebrow="Positions & Opportunities"
         title="Open roles across the industries we serve."
         intro="Many of our searches are confidential and never posted. Tell us what you are looking for and we will match you against the full board."

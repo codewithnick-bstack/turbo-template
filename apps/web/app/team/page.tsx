@@ -106,7 +106,7 @@ export default function TeamPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <PageHero
-        image={photos.siteMeeting}
+        image={photos.safetyBriefing}
         eyebrow="Team"
         title="The desk behind 35,000 placements."
         intro="Recruiters who know the projects, the pay bands, and the managers you'd be working for."

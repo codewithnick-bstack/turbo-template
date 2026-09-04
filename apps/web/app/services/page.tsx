@@ -66,7 +66,7 @@ export default function ServicesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <PageHero
-        image={photos.trades}
+        image={photos.mechanicalRoom}
         eyebrow="Services"
         title="One service: finding the right person for the role."
         intro="Field and office leadership through the C-suite, across the industries we know best."

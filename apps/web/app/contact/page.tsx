@@ -49,7 +49,7 @@ export default function ContactPage() {
   return (
     <div>
       <PageHero
-        image={photos.bridgeDusk}
+        image={photos.fieldOffice}
         eyebrow="Contact"
         title="One conversation tells you whether we can help."
         intro="Whether you're hiring or looking, reach out directly or use the form. We respond personally — there is no queue."

@@ -51,7 +51,7 @@ export default function PricingPage() {
   return (
     <div>
       <PageHero
-        image={photos.heavyCivil}
+        image={photos.finishedBuilding}
         eyebrow="Pricing"
         title="Candidates never pay a fee."
         intro={

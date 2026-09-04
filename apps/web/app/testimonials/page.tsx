@@ -72,7 +72,7 @@ export default function TestimonialsPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <PageHero
-        image={photos.concrete}
+        image={photos.hardhatDetail}
         eyebrow="Testimonials"
         title="What clients and candidates say."
         intro="41 years of placements, in their own words."
@@ -141,7 +141,7 @@ export default function TestimonialsPage() {
       </Section>
 
       {bandQuote ? (
-        <ParallaxBand image={photos.bridgeDusk.src} className="py-28 text-white lg:py-40">
+        <ParallaxBand image={photos.nightSite.src} className="py-28 text-white lg:py-40">
           <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
             <ScaleIn from={1.05}>
               <Reveal>
