@@ -42,6 +42,22 @@ export const hero = {
   secondaryCta: { label: "Hire Today", href: "/employers" },
 };
 
+/**
+ * The header sits ~400px above the hero's buttons, which point at the same two
+ * pages, so repeating "Get Hired / Hire Today" put four identical CTAs in one
+ * viewport. The nav already carries "For Employers" and "For Career Seekers",
+ * so the header buttons take the next step on each path instead: browse the
+ * roles, or start a search. Distinct labels, distinct destinations.
+ */
+export const headerCta = {
+  // "Browse Roles", not "View Positions": /positions is a category page, not a
+  // job board — most searches are confidential and never posted, so the page
+  // lists the four industries and routes each to a conversation. A label
+  // promising listings would not be kept.
+  primary: { label: "Browse Roles", href: "/positions" },
+  secondary: { label: "Start a Search", href: "/contact" },
+};
+
 export const stats = [
   { label: "Candidate database", value: "275,374" },
   { label: "Successful placements", value: "24,751" },

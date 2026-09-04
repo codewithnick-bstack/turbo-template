@@ -17,7 +17,7 @@ const blogJsonLd = {
   "@context": "https://schema.org",
   "@type": "Blog",
   name: "Blog",
-  description: "Articles, insights, and updates from our team.",
+  description: "Hiring and career insights for construction and infrastructure — pay bands, project pipelines, and what moves candidates between firms.",
   url: `${siteConfig.url}/blog`,
   publisher: {
     "@type": "Organization",
@@ -28,14 +28,14 @@ const blogJsonLd = {
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Articles, insights, and updates from our team.",
+  description: "Hiring and career insights for construction and infrastructure — pay bands, project pipelines, and what moves candidates between firms.",
   alternates: {
     canonical: "/blog",
     types: { "application/rss+xml": `${siteConfig.url}/blog/feed.xml` },
   },
   openGraph: {
     title: "Blog",
-    description: "Articles, insights, and updates from our team.",
+    description: "Hiring and career insights for construction and infrastructure — pay bands, project pipelines, and what moves candidates between firms.",
     url: "/blog",
     siteName: siteConfig.name,
     images: [
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Blog",
-    description: "Articles, insights, and updates from our team.",
+    description: "Hiring and career insights for construction and infrastructure — pay bands, project pipelines, and what moves candidates between firms.",
     images: [
       { url: "/opengraph-image", width: 1200, height: 630, alt: "Blog" },
     ],

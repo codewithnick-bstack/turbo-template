@@ -13,12 +13,12 @@ import { siteConfig } from "@/lib/site-data";
 export const metadata: Metadata = {
   title: "Team",
   description:
-    "The recruiters behind S.R. Clarke's 41 years of construction placements.",
+    "The recruiters behind 41 years of construction and infrastructure placements — experts who know the projects, pay bands, and hiring managers.",
   alternates: { canonical: "/team" },
   openGraph: {
     title: "Team",
     description:
-      "The recruiters behind S.R. Clarke's 41 years of construction placements.",
+      "The recruiters behind 41 years of construction and infrastructure placements — experts who know the projects, pay bands, and hiring managers.",
     url: "/team",
     siteName: siteConfig.name,
     images: [
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Team",
     description:
-      "The recruiters behind S.R. Clarke's 41 years of construction placements.",
+      "The recruiters behind 41 years of construction and infrastructure placements — experts who know the projects, pay bands, and hiring managers.",
     images: [
       {
         url: "/opengraph-image",

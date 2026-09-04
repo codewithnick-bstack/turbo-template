@@ -228,7 +228,7 @@ export default function HomePage() {
                       <div>
                         <span
                           aria-hidden="true"
-                          className="font-display tnum text-xs font-bold tracking-[0.14em] text-[#f4564a]"
+                          className="font-display tnum text-xs font-bold tracking-[0.14em] text-[#f76b60]"
                         >
                           0{index + 1}
                         </span>

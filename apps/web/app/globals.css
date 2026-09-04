@@ -38,18 +38,24 @@
   --border: #163258;
   --primary: #3f7fd0;
   --primary-foreground: #ffffff;
-  --accent: #ef4438;
-  --accent-hover: #d8261c;
+  --accent: #d8261c;
+  --accent-hover: #b81a12;
   --accent-foreground: #ffffff;
   --navy: #0e2a4f;
   --navy-deep: #08172c;
 
-  /* #ef4438 measures 4.17:1 on --muted-bg — large-text only, and the eyebrow
-     labels using this colour are 11px. #f4564a is the nearest red to the brand
-     that clears AA on BOTH dark surfaces (5.48:1 on --background, 4.71:1 on
-     --muted-bg). The fill token above stays #ef4438: as a button background it
-     carries white text, so its own contrast is not the constraint. */
-  --accent-text: #f4564a;
+  /* Two reds because the same hue cannot serve as both a fill and small text.
+     --accent is a FILL carrying white labels, so the constraint is the label:
+     #ef4438 measured only 3.78:1 against white, which fails AA for the 11px
+     uppercase button text, so the fill matches light mode's #d8261c (4.98:1
+     against white). --accent-text is the red used AS text on dark surfaces,
+     where the constraint is the surface behind it. It has to clear AA on the
+     page-hero's navy too, not just the panel surfaces: #f4564a measured only
+     4.29:1 on --navy, so the 11px eyebrow labels there failed. #f76b60 is the
+     nearest red to the brand that clears 4.5:1 on ALL FOUR dark grounds
+     (4.94:1 on --navy, 5.43:1 on --muted-bg, 6.18:1 on --navy-deep,
+     6.31:1 on --background). */
+  --accent-text: #f76b60;
 }
 
 /* Spacing rhythm. Sections come in three weights so the page reads as verses

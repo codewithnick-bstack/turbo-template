@@ -12,11 +12,11 @@ import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Portfolio",
-  description: "Featured searches and case studies from our work.",
+  description: "Executive searches S.R. Clarke has closed across commercial construction, heavy civil, and real estate development — roles, scope, and outcomes.",
   alternates: { canonical: "/portfolio" },
   openGraph: {
     title: "Portfolio",
-    description: "Featured searches and case studies from our work.",
+    description: "Executive searches S.R. Clarke has closed across commercial construction, heavy civil, and real estate development — roles, scope, and outcomes.",
     url: "/portfolio",
     siteName: siteConfig.name,
     images: [
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Portfolio",
-    description: "Featured searches and case studies from our work.",
+    description: "Executive searches S.R. Clarke has closed across commercial construction, heavy civil, and real estate development — roles, scope, and outcomes.",
     images: [
       { url: "/opengraph-image", width: 1200, height: 630, alt: "Portfolio" },
     ],

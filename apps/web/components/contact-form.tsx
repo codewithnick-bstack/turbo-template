@@ -99,6 +99,7 @@ export function ContactForm() {
           <label htmlFor="name" className="mb-2 block text-sm font-medium">Name</label>
           <Input
             id="name"
+            autoComplete="name"
             aria-invalid={!!errors.name}
             aria-describedby={errors.name ? "name-error" : undefined}
             {...register("name")}
@@ -112,6 +113,7 @@ export function ContactForm() {
           <Input
             id="email"
             type="email"
+            autoComplete="email"
             aria-invalid={!!errors.email}
             aria-describedby={errors.email ? "email-error" : undefined}
             {...register("email")}
@@ -123,7 +125,7 @@ export function ContactForm() {
       </div>
       <div>
         <label htmlFor="subject" className="mb-2 block text-sm font-medium">Subject</label>
-        <Input id="subject" {...register("subject")} />
+        <Input id="subject" autoComplete="off" {...register("subject")} />
       </div>
       <div>
         <label htmlFor="message" className="mb-2 block text-sm font-medium">Project details</label>

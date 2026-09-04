@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { CtaLink } from "@/components/cta";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
-import { hero, siteConfig } from "@/lib/site-data";
+import { headerCta, hero, siteConfig } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
@@ -54,16 +54,16 @@ export function SiteHeader() {
         {/* Wordmark: "S.R." follows the surface (white over the hero, navy on
             the solid bar). "Clarke" carries the accent red, but the overlay
             state is always over the dark hero scrim regardless of site theme,
-            so it needs its own red — --accent-text's LIGHT value (#d8261c)
-            only measures 3.6:1 on navy-deep and fails there; #f4564a clears
-            5.37:1 and is what the token already uses in dark mode. */}
+            so it cannot use --accent-text: that token's LIGHT value (#d8261c)
+            measures only 3.6:1 on navy-deep. It pins the DARK value instead,
+            which clears 6.18:1 there. Keep in sync with --accent-text. */}
         <Link
           href="/"
           className="font-display flex items-baseline text-lg leading-none font-bold tracking-[-0.02em]"
           aria-label={`${siteConfig.name} — home`}
         >
           <span className={overlay ? "text-white" : "text-[var(--navy)] dark:text-white"}>S.R.</span>
-          <span className={cn("ml-1.5", overlay ? "text-[#f4564a]" : "text-[var(--accent-text)]")}>
+          <span className={cn("ml-1.5", overlay ? "text-[#f76b60]" : "text-[var(--accent-text)]")}>
             Clarke
           </span>
         </Link>
@@ -94,14 +94,14 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <CtaLink
-            href={hero.primaryCta.href}
-            label={hero.primaryCta.label}
+            href={headerCta.primary.href}
+            label={headerCta.primary.label}
             variant="primary"
             className="px-5 py-2.5 text-[0.7rem] tracking-[0.1em] uppercase"
           />
           <CtaLink
-            href={hero.secondaryCta.href}
-            label={hero.secondaryCta.label}
+            href={headerCta.secondary.href}
+            label={headerCta.secondary.label}
             variant={overlay ? "outline" : "outlineDark"}
             className="px-5 py-2.5 text-[0.7rem] tracking-[0.1em] uppercase"
           />

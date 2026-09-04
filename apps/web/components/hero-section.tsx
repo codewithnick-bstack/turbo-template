@@ -122,8 +122,11 @@ export function HeroSection() {
           <span className="whitespace-nowrap">
             {hookWords.at(-1)}
             {hero.trademark ? (
-              <sup className="ml-[0.06em] align-super text-[0.2em] font-normal tracking-normal text-white/45">
-                TM
+              <sup
+                aria-label="trademark"
+                className="ml-[0.06em] align-super text-[0.2em] font-normal tracking-normal text-white/45"
+              >
+                &trade;
               </sup>
             ) : null}
           </span>

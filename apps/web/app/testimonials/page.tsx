@@ -15,12 +15,12 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Testimonials",
   description:
-    "What clients and candidates say about working with S.R. Clarke.",
+    "What construction employers and placed candidates say about working with S.R. Clarke — in their own words, from searches we closed.",
   alternates: { canonical: "/testimonials" },
   openGraph: {
     title: "Testimonials",
     description:
-      "What clients and candidates say about working with S.R. Clarke.",
+      "What construction employers and placed candidates say about working with S.R. Clarke — in their own words, from searches we closed.",
     url: "/testimonials",
     siteName: siteConfig.name,
     images: [
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Testimonials",
     description:
-      "What clients and candidates say about working with S.R. Clarke.",
+      "What construction employers and placed candidates say about working with S.R. Clarke — in their own words, from searches we closed.",
     images: [
       {
         url: "/opengraph-image",

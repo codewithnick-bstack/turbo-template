@@ -9,11 +9,11 @@ import { faqs, siteConfig } from "@/lib/site-data";
 
 export const metadata: Metadata = {
   title: "Pricing",
-  description: "How S.R. Clarke is paid — candidates never pay a fee.",
+  description: "How S.R. Clarke is paid: employers pay on a successful placement, candidates never pay a fee. Fee structure and guarantee terms.",
   alternates: { canonical: "/pricing" },
   openGraph: {
     title: "Pricing",
-    description: "How S.R. Clarke is paid — candidates never pay a fee.",
+    description: "How S.R. Clarke is paid: employers pay on a successful placement, candidates never pay a fee. Fee structure and guarantee terms.",
     url: "/pricing",
     siteName: siteConfig.name,
     images: [
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Pricing",
-    description: "How S.R. Clarke is paid — candidates never pay a fee.",
+    description: "How S.R. Clarke is paid: employers pay on a successful placement, candidates never pay a fee. Fee structure and guarantee terms.",
     images: [
       {
         url: "/opengraph-image",
