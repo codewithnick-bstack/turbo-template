@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { PageHero } from "@/components/page-hero";
+import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Section, Container } from "@/components/section";
 import { TextLink } from "@/components/cta";
@@ -16,6 +17,7 @@ export default function PositionsPage() {
   return (
     <div>
       <PageHero
+        image={photos.commercialHighrise}
         eyebrow="Positions & Opportunities"
         title="Open roles across the industries we serve."
         intro="Many of our searches are confidential and never posted. Tell us what you are looking for and we will match you against the full board."
@@ -35,9 +37,15 @@ export default function PositionsPage() {
                     <h2 className="font-display text-xl font-semibold text-[var(--navy)] dark:text-white">
                       {industry.title}
                     </h2>
-                    <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{industry.description}</p>
+                    <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+                      {industry.description}
+                    </p>
                   </div>
-                  <TextLink href="/contact" label="Ask about openings" className="mt-6" />
+                  <TextLink
+                    href="/contact"
+                    label="Ask about openings"
+                    className="mt-6"
+                  />
                 </div>
               </Reveal>
             ))}

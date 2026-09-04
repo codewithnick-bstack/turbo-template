@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import { CtaLink } from "@/components/cta";
 import { PageHero } from "@/components/page-hero";
+import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Section, Container } from "@/components/section";
 import { getTeam } from "@/lib/api";
@@ -10,21 +11,38 @@ import { siteConfig } from "@/lib/site-data";
 
 export const metadata: Metadata = {
   title: "Team",
-  description: "The recruiters behind S.R. Clarke's 41 years of construction placements.",
+  description:
+    "The recruiters behind S.R. Clarke's 41 years of construction placements.",
   alternates: { canonical: "/team" },
   openGraph: {
     title: "Team",
-    description: "The recruiters behind S.R. Clarke's 41 years of construction placements.",
+    description:
+      "The recruiters behind S.R. Clarke's 41 years of construction placements.",
     url: "/team",
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Team",
-    description: "The recruiters behind S.R. Clarke's 41 years of construction placements.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+    description:
+      "The recruiters behind S.R. Clarke's 41 years of construction placements.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
   },
 };
 
@@ -51,7 +69,10 @@ async function TeamList() {
   };
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {team.map((member, index) => (
           <Reveal key={member.id} index={index}>
@@ -59,9 +80,13 @@ async function TeamList() {
               <h2 className="font-display text-lg font-semibold text-[var(--navy)] dark:text-white">
                 {member.name}
               </h2>
-              <p className="mt-1 text-sm font-semibold text-[var(--accent-text)]">{member.title}</p>
+              <p className="mt-1 text-sm font-semibold text-[var(--accent-text)]">
+                {member.title}
+              </p>
               {member.bio ? (
-                <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{member.bio}</p>
+                <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+                  {member.bio}
+                </p>
               ) : null}
               <div className="mt-4 flex gap-4">
                 {member.linkedinUrl ? (
@@ -107,6 +132,7 @@ export default function TeamPage() {
   return (
     <div>
       <PageHero
+        image={photos.siteMeeting}
         eyebrow="Team"
         title="The desk behind 35,000 placements."
         intro="Recruiters who know the projects, the pay bands, and the managers you'd be working for."
@@ -117,7 +143,12 @@ export default function TeamPage() {
             <TeamList />
           </Suspense>
           <div className="mt-14">
-            <CtaLink href="/contact" label="Work with us" variant="outlineDark" withArrow />
+            <CtaLink
+              href="/contact"
+              label="Work with us"
+              variant="outlineDark"
+              withArrow
+            />
           </div>
         </Container>
       </Section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { PageHero } from "@/components/page-hero";
+import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Section, Container } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
@@ -18,6 +19,7 @@ export default function CareerSeekersPage() {
   return (
     <div>
       <PageHero
+        image={photos.superintendent}
         eyebrow={path.audience}
         title={path.title}
         intro={path.description}
@@ -40,14 +42,24 @@ export default function CareerSeekersPage() {
 
       <Section tone="muted">
         <Container measure="narrow">
-          <SectionHeading eyebrow="FAQ" title="Questions candidates ask" size="lg" />
+          <SectionHeading
+            eyebrow="FAQ"
+            title="Questions candidates ask"
+            size="lg"
+          />
           <dl className="mt-14 space-y-8">
             {faqs.map((faq, index) => (
-              <Reveal key={faq.question} index={index} className="border-t border-[var(--border)] pt-5">
+              <Reveal
+                key={faq.question}
+                index={index}
+                className="border-t border-[var(--border)] pt-5"
+              >
                 <dt className="font-display text-lg font-semibold text-[var(--navy)] dark:text-white">
                   {faq.question}
                 </dt>
-                <dd className="mt-2 text-base leading-7 text-[var(--muted)]">{faq.answer}</dd>
+                <dd className="mt-2 text-base leading-7 text-[var(--muted)]">
+                  {faq.answer}
+                </dd>
               </Reveal>
             ))}
           </dl>

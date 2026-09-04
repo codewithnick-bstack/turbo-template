@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ContactDetailLink } from "@/components/contact-detail-link";
 import { ContactForm } from "@/components/contact-form";
 import { PageHero } from "@/components/page-hero";
+import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Section, Container } from "@/components/section";
 import { siteConfig } from "@/lib/site-data";
@@ -18,7 +19,14 @@ export const metadata: Metadata = {
       "Talk to S.R. Clarke about an open search or a confidential career move.",
     url: "/contact",
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
     type: "website",
   },
   twitter: {
@@ -26,7 +34,14 @@ export const metadata: Metadata = {
     title: "Contact",
     description:
       "Talk to S.R. Clarke about an open search or a confidential career move.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
   },
 };
 
@@ -34,6 +49,7 @@ export default function ContactPage() {
   return (
     <div>
       <PageHero
+        image={photos.bridgeDusk}
         eyebrow="Contact"
         title="One conversation tells you whether we can help."
         intro="Whether you're hiring or looking, reach out directly or use the form. We respond personally — there is no queue."

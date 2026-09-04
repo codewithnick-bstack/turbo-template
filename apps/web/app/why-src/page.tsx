@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { CountUp } from "@/components/count-up";
 import { PageHero } from "@/components/page-hero";
+import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Section, Container } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
@@ -17,6 +18,7 @@ export default function WhySrcPage() {
   return (
     <div>
       <PageHero
+        image={photos.skylineBand}
         eyebrow="Why SRC"
         title="Four decades of putting the right people on site."
         intro="S.R. Clarke Consulting Services has provided the professionals who built and renovated America's most iconic buildings, bridges, highways, and surrounding infrastructure."
@@ -31,7 +33,9 @@ export default function WhySrcPage() {
                 <dd className="font-display tnum text-3xl font-semibold text-[var(--navy)] dark:text-white">
                   <CountUp value={stat.value} />
                 </dd>
-                <dt className="mt-1 text-xs tracking-wide text-[var(--muted)] uppercase">{stat.label}</dt>
+                <dt className="mt-1 text-xs tracking-wide text-[var(--muted)] uppercase">
+                  {stat.label}
+                </dt>
               </Reveal>
             ))}
           </dl>
@@ -40,14 +44,24 @@ export default function WhySrcPage() {
 
       <Section>
         <Container>
-          <SectionHeading eyebrow="What we stand for" title="What we hold ourselves to." size="lg" />
+          <SectionHeading
+            eyebrow="What we stand for"
+            title="What we hold ourselves to."
+            size="lg"
+          />
           <dl className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2">
             {values.map((value, index) => (
-              <Reveal key={value.title} index={index} className="border-t border-[var(--border)] pt-5">
+              <Reveal
+                key={value.title}
+                index={index}
+                className="border-t border-[var(--border)] pt-5"
+              >
                 <dt className="font-display text-lg font-semibold text-[var(--navy)] dark:text-white">
                   {value.title}
                 </dt>
-                <dd className="mt-2 text-sm leading-6 text-[var(--muted)]">{value.description}</dd>
+                <dd className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                  {value.description}
+                </dd>
               </Reveal>
             ))}
           </dl>

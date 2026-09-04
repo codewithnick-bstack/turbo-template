@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { CtaLink } from "@/components/cta";
 import { PageHero } from "@/components/page-hero";
+import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Section, Container } from "@/components/section";
 import { faqs, siteConfig } from "@/lib/site-data";
@@ -15,14 +16,28 @@ export const metadata: Metadata = {
     description: "How S.R. Clarke is paid — candidates never pay a fee.",
     url: "/pricing",
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Pricing",
     description: "How S.R. Clarke is paid — candidates never pay a fee.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
   },
 };
 
@@ -36,6 +51,7 @@ export default function PricingPage() {
   return (
     <div>
       <PageHero
+        image={photos.heavyCivil}
         eyebrow="Pricing"
         title="Candidates never pay a fee."
         intro={
@@ -48,14 +64,26 @@ export default function PricingPage() {
         <Container measure="narrow">
           <Reveal>
             <p className="text-lg leading-8 text-[var(--muted)]">
-              Employer search fees are scoped and negotiated per engagement — they depend on the
-              role, the level, and how the search is run. There is no packaged rate card to quote
-              in the abstract. The fastest way to get a number is to tell us what you are trying to
+              Employer search fees are scoped and negotiated per engagement —
+              they depend on the role, the level, and how the search is run.
+              There is no packaged rate card to quote in the abstract. The
+              fastest way to get a number is to tell us what you are trying to
               fill.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <CtaLink href="/employers" label="Start a search" variant="outlineDark" size="lg" withArrow />
-              <CtaLink href="/contact" label="Talk to us" variant="outlineDark" size="lg" />
+              <CtaLink
+                href="/employers"
+                label="Start a search"
+                variant="outlineDark"
+                size="lg"
+                withArrow
+              />
+              <CtaLink
+                href="/contact"
+                label="Talk to us"
+                variant="outlineDark"
+                size="lg"
+              />
             </div>
           </Reveal>
         </Container>

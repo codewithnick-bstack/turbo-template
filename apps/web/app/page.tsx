@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -12,6 +13,7 @@ import { Rule } from "@/components/rule";
 import { ScaleIn } from "@/components/scale-in";
 import { ScrollDepthTracker } from "@/components/scroll-depth-tracker";
 import { StaggerWords } from "@/components/stagger-words";
+import { industryPhotos, pathPhotos, photos } from "@/lib/photos";
 import { industries, paths, siteConfig, stats, values } from "@/lib/site-data";
 
 export const metadata: Metadata = {
@@ -23,14 +25,28 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     url: "/",
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
   },
 };
 
@@ -65,7 +81,10 @@ export default function HomePage() {
 
       {/* Two doors. Narrow intro column, then a wide split — the measure
           changes so the page does not read as one repeated container. */}
-      <section id="what-we-do" className="bg-[var(--background)] py-24 lg:py-32">
+      <section
+        id="what-we-do"
+        className="bg-[var(--background)] py-24 lg:py-32"
+      >
         <div className="mx-auto max-w-2xl px-4 sm:px-6">
           <Reveal>
             <Rule />
@@ -79,36 +98,53 @@ export default function HomePage() {
 
         <div className="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-10">
           <div className="grid gap-14 lg:grid-cols-2 lg:gap-24">
-            {paths.map((path, index) => (
-              <Reveal key={path.audience} index={index} className="relative">
-                <span
-                  aria-hidden="true"
-                  className="font-display pointer-events-none absolute -top-14 -left-3 text-[9rem] leading-none font-bold text-[var(--navy)]/[0.05] select-none dark:text-white/[0.04]"
-                >
-                  0{index + 1}
-                </span>
-                <div className="relative">
-                  <p className="eyebrow">{path.audience}</p>
-                  <h3 className="font-display mt-4 text-3xl font-semibold tracking-[-0.02em] text-[var(--navy)] sm:text-4xl dark:text-white">
-                    {path.title}
-                  </h3>
-                  <p className="mt-5 max-w-md text-base leading-7 text-[var(--muted)]">
-                    {path.description}
-                  </p>
-                  <ul className="mt-8 space-y-0">
-                    {path.bullets.map((bullet) => (
-                      <li
-                        key={bullet}
-                        className="border-t border-[var(--border)] py-4 text-sm leading-6 text-[var(--muted)]"
-                      >
-                        {bullet}
-                      </li>
-                    ))}
-                  </ul>
-                  <TextLink href={path.cta.href} label={path.cta.label} className="mt-9" />
-                </div>
-              </Reveal>
-            ))}
+            {paths.map((path, index) => {
+              const photo = pathPhotos[index] ?? photos.siteMeeting;
+              return (
+                <Reveal key={path.audience} index={index} className="relative">
+                  {/* Each door opens on a photograph of the person behind it. */}
+                  <figure className="relative mb-10 aspect-[4/3] overflow-hidden">
+                    <Image
+                      src={photo.src}
+                      alt={photo.alt}
+                      fill
+                      sizes="(min-width: 1024px) 45vw, 100vw"
+                      className="object-cover"
+                    />
+                  </figure>
+                  <span
+                    aria-hidden="true"
+                    className="font-display pointer-events-none absolute -top-14 -left-3 text-[9rem] leading-none font-bold text-[var(--navy)]/[0.05] select-none dark:text-white/[0.04]"
+                  >
+                    0{index + 1}
+                  </span>
+                  <div className="relative">
+                    <p className="eyebrow">{path.audience}</p>
+                    <h3 className="font-display mt-4 text-3xl font-semibold tracking-[-0.02em] text-[var(--navy)] sm:text-4xl dark:text-white">
+                      {path.title}
+                    </h3>
+                    <p className="mt-5 max-w-md text-base leading-7 text-[var(--muted)]">
+                      {path.description}
+                    </p>
+                    <ul className="mt-8 space-y-0">
+                      {path.bullets.map((bullet) => (
+                        <li
+                          key={bullet}
+                          className="border-t border-[var(--border)] py-4 text-sm leading-6 text-[var(--muted)]"
+                        >
+                          {bullet}
+                        </li>
+                      ))}
+                    </ul>
+                    <TextLink
+                      href={path.cta.href}
+                      label={path.cta.label}
+                      className="mt-9"
+                    />
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -131,8 +167,9 @@ export default function HomePage() {
           />
           <Reveal index={1}>
             <p className="mt-7 max-w-xl text-lg leading-8 text-[var(--muted)]">
-              Approximately 35,000 placements. The professionals who built and renovated
-              America&apos;s most iconic buildings, bridges, and highways came through this desk.
+              Approximately 35,000 placements. The professionals who built and
+              renovated America&apos;s most iconic buildings, bridges, and
+              highways came through this desk.
             </p>
             <TextLink href="/why-src" label="Why SRC" className="mt-9" />
           </Reveal>
@@ -152,43 +189,63 @@ export default function HomePage() {
             </Reveal>
 
             <div className="grid gap-px bg-[var(--border)] sm:grid-cols-2">
-              {industries.map((industry, index) => (
-                <Reveal key={industry.slug} index={index}>
-                  <Link
-                    href={`/positions#${industry.slug}`}
-                    className="group flex h-full flex-col justify-between bg-[var(--background)] p-8 transition-colors duration-[var(--duration-micro)] hover:bg-[var(--navy)]"
-                  >
-                    <div>
-                      <span
-                        aria-hidden="true"
-                        className="font-display tnum text-xs font-bold tracking-[0.14em] text-[var(--accent-text)] group-hover:text-white"
-                      >
-                        0{index + 1}
-                      </span>
-                      <h3 className="font-display mt-4 text-xl font-semibold text-[var(--navy)] group-hover:text-white dark:text-white">
-                        {industry.title}
-                      </h3>
-                      <p className="mt-3 text-sm leading-6 text-[var(--muted)] group-hover:text-white/70">
-                        {industry.description}
-                      </p>
-                    </div>
-                    <span className="mt-8 inline-flex items-center gap-2 text-[0.7rem] font-bold tracking-[0.1em] text-[var(--accent-text)] uppercase group-hover:text-white">
-                      View openings
-                      <ArrowRight
-                        className="size-3.5 transition-transform duration-[var(--duration-micro)] group-hover:translate-x-1"
-                        aria-hidden="true"
+              {industries.map((industry, index) => {
+                const photo =
+                  industryPhotos[industry.slug] ?? photos.commercialHighrise;
+                return (
+                  <Reveal key={industry.slug} index={index}>
+                    {/* Photo tile: the picture does the work, the scrim keeps
+                      the type at contrast, hover pulls the picture forward. */}
+                    <Link
+                      href={`/positions#${industry.slug}`}
+                      className="group relative isolate flex h-full min-h-[18rem] flex-col justify-between overflow-hidden p-8 text-white"
+                    >
+                      <Image
+                        src={photo.src}
+                        alt={photo.alt}
+                        fill
+                        sizes="(min-width: 1024px) 30vw, (min-width: 640px) 50vw, 100vw"
+                        className="-z-20 object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                    </span>
-                  </Link>
-                </Reveal>
-              ))}
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-0 -z-10 bg-gradient-to-t from-[var(--navy-deep)] via-[var(--navy-deep)]/75 to-[var(--navy-deep)]/35 transition-opacity duration-300 group-hover:opacity-85"
+                      />
+                      <div>
+                        <span
+                          aria-hidden="true"
+                          className="font-display tnum text-xs font-bold tracking-[0.14em] text-[#f4564a]"
+                        >
+                          0{index + 1}
+                        </span>
+                        <h3 className="font-display mt-4 text-xl font-semibold">
+                          {industry.title}
+                        </h3>
+                        <p className="mt-3 text-sm leading-6 text-white/75">
+                          {industry.description}
+                        </p>
+                      </div>
+                      <span className="mt-8 inline-flex items-center gap-2 text-[0.7rem] font-bold tracking-[0.1em] text-white uppercase">
+                        View openings
+                        <ArrowRight
+                          className="size-3.5 transition-transform duration-[var(--duration-micro)] group-hover:translate-x-1"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </Link>
+                  </Reveal>
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
       {/* Image band. Narrow copy column against the photograph. */}
-      <ParallaxBand image="/hero/band.jpg" className="py-28 text-white lg:py-40">
+      <ParallaxBand
+        image="/hero/band.jpg"
+        className="py-28 text-white lg:py-40"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
           <ScaleIn className="max-w-xl" from={1.06}>
             <Reveal>
@@ -198,8 +255,9 @@ export default function HomePage() {
                 Subject matter experts, not resume forwarders.
               </h2>
               <p className="mt-6 text-lg leading-8 text-white/70">
-                We know the projects, the pay bands, and the managers you would be working for.
-                That is the difference between a submittal and a placement.
+                We know the projects, the pay bands, and the managers you would
+                be working for. That is the difference between a submittal and a
+                placement.
               </p>
             </Reveal>
           </ScaleIn>
@@ -225,7 +283,9 @@ export default function HomePage() {
                 <dt className="font-display mt-6 text-lg font-semibold text-[var(--navy)] dark:text-white">
                   {value.title}
                 </dt>
-                <dd className="mt-3 text-sm leading-6 text-[var(--muted)]">{value.description}</dd>
+                <dd className="mt-3 text-sm leading-6 text-[var(--muted)]">
+                  {value.description}
+                </dd>
               </Reveal>
             ))}
           </dl>
@@ -234,7 +294,10 @@ export default function HomePage() {
 
       {/* Closing. Centred here on purpose — it is the one moment that should
           feel like an address to the reader rather than a column of copy. */}
-      <ParallaxBand image="/hero/band-2.jpg" className="py-28 text-white lg:py-40">
+      <ParallaxBand
+        image={photos.bridgeDusk.src}
+        className="py-28 text-white lg:py-40"
+      >
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
           <StaggerWords
             text="Join us in the mission today."
@@ -245,7 +308,9 @@ export default function HomePage() {
               One conversation tells you whether we can help.
             </p>
             <CtaPair size="lg" align="center" className="mt-12" />
-            <p className="mt-10 text-sm tracking-wide text-white/40">Or call {siteConfig.phone}</p>
+            <p className="mt-10 text-sm tracking-wide text-white/40">
+              Or call {siteConfig.phone}
+            </p>
           </Reveal>
         </div>
       </ParallaxBand>

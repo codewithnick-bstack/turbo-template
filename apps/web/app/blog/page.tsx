@@ -4,6 +4,7 @@ import { format } from "date-fns";
 
 import { BlogPostLink } from "@/components/blog-post-link";
 import { PageHero } from "@/components/page-hero";
+import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Section, Container } from "@/components/section";
 import { getBlogPosts } from "@/lib/api";
@@ -15,7 +16,11 @@ const blogJsonLd = {
   name: "Blog",
   description: "Articles, insights, and updates from our team.",
   url: `${siteConfig.url}/blog`,
-  publisher: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
+  publisher: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: siteConfig.url,
+  },
 };
 
 export const metadata: Metadata = {
@@ -30,14 +35,18 @@ export const metadata: Metadata = {
     description: "Articles, insights, and updates from our team.",
     url: "/blog",
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Blog" }],
+    images: [
+      { url: "/opengraph-image", width: 1200, height: 630, alt: "Blog" },
+    ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Blog",
     description: "Articles, insights, and updates from our team.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Blog" }],
+    images: [
+      { url: "/opengraph-image", width: 1200, height: 630, alt: "Blog" },
+    ],
   },
 };
 
@@ -45,7 +54,9 @@ async function BlogPostsList() {
   const posts = await getBlogPosts().catch(() => []);
 
   if (posts.length === 0) {
-    return <p className="text-[var(--muted)]">No posts yet. Check back soon.</p>;
+    return (
+      <p className="text-[var(--muted)]">No posts yet. Check back soon.</p>
+    );
   }
 
   return (
@@ -61,13 +72,17 @@ async function BlogPostsList() {
             <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
               {post.author ? <span>{post.author}</span> : null}
               {post.author && post.publishedAt ? <span>·</span> : null}
-              {post.publishedAt ? <span>{format(new Date(post.publishedAt), "MMM d, yyyy")}</span> : null}
+              {post.publishedAt ? (
+                <span>{format(new Date(post.publishedAt), "MMM d, yyyy")}</span>
+              ) : null}
             </div>
             <h2 className="font-display mt-3 text-2xl font-semibold text-[var(--navy)] dark:text-white">
               {post.title}
             </h2>
             {post.excerpt ? (
-              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{post.excerpt}</p>
+              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                {post.excerpt}
+              </p>
             ) : null}
           </BlogPostLink>
         </Reveal>
@@ -89,8 +104,12 @@ function BlogSkeleton() {
 export default function BlogPage() {
   return (
     <div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+      />
       <PageHero
+        image={photos.plans}
         eyebrow="Blog"
         title="Insights, updates, and useful reads."
         intro="Notes on the construction and infrastructure labor market, from the desk that's been placing people on it for 41 years."

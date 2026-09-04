@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Quote } from "lucide-react";
 
 import { PageHero } from "@/components/page-hero";
+import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Section, Container } from "@/components/section";
 import { getTestimonials } from "@/lib/api";
@@ -10,21 +11,38 @@ import { siteConfig } from "@/lib/site-data";
 
 export const metadata: Metadata = {
   title: "Testimonials",
-  description: "What clients and candidates say about working with S.R. Clarke.",
+  description:
+    "What clients and candidates say about working with S.R. Clarke.",
   alternates: { canonical: "/testimonials" },
   openGraph: {
     title: "Testimonials",
-    description: "What clients and candidates say about working with S.R. Clarke.",
+    description:
+      "What clients and candidates say about working with S.R. Clarke.",
     url: "/testimonials",
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Testimonials",
-    description: "What clients and candidates say about working with S.R. Clarke.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+    description:
+      "What clients and candidates say about working with S.R. Clarke.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
   },
 };
 
@@ -35,7 +53,9 @@ async function TestimonialsList() {
   }
   const rated = testimonials.filter((t) => t.rating > 0);
   const avgRating =
-    rated.length > 0 ? (rated.reduce((sum, t) => sum + t.rating, 0) / rated.length).toFixed(1) : null;
+    rated.length > 0
+      ? (rated.reduce((sum, t) => sum + t.rating, 0) / rated.length).toFixed(1)
+      : null;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -55,12 +75,23 @@ async function TestimonialsList() {
       "@type": "Review",
       author: { "@type": "Person", name: t.authorName },
       reviewBody: t.quote,
-      ...(t.rating > 0 ? { reviewRating: { "@type": "Rating", ratingValue: t.rating, bestRating: 5 } } : {}),
+      ...(t.rating > 0
+        ? {
+            reviewRating: {
+              "@type": "Rating",
+              ratingValue: t.rating,
+              bestRating: 5,
+            },
+          }
+        : {}),
     })),
   };
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="grid gap-6 md:grid-cols-2">
         {testimonials.map((item, index) => (
           <Reveal key={item.id} index={index}>
@@ -73,7 +104,9 @@ async function TestimonialsList() {
                 &ldquo;{item.quote}&rdquo;
               </p>
               <div className="mt-5">
-                <p className="font-semibold text-[var(--navy)] dark:text-white">{item.authorName}</p>
+                <p className="font-semibold text-[var(--navy)] dark:text-white">
+                  {item.authorName}
+                </p>
                 {item.role || item.company ? (
                   <p className="text-sm text-[var(--muted)]">
                     {[item.role, item.company].filter(Boolean).join(" · ")}
@@ -87,7 +120,11 @@ async function TestimonialsList() {
                   aria-label={`Rating: ${item.rating} out of 5 stars`}
                 >
                   {Array.from({ length: item.rating }).map((_, i) => (
-                    <span key={i} className="text-[var(--accent-text)]" aria-hidden="true">
+                    <span
+                      key={i}
+                      className="text-[var(--accent-text)]"
+                      aria-hidden="true"
+                    >
                       ★
                     </span>
                   ))}
@@ -115,6 +152,7 @@ export default function TestimonialsPage() {
   return (
     <div>
       <PageHero
+        image={photos.concrete}
         eyebrow="Testimonials"
         title="What clients and candidates say."
         intro="41 years of placements, in their own words."

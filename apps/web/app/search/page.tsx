@@ -32,7 +32,9 @@ export default function SearchPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const debouncedQuery = useDebounce(query.trim(), 350);
 
-  useEffect(() => { inputRef.current?.focus(); }, []);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
@@ -45,24 +47,39 @@ export default function SearchPage() {
   }, [debouncedQuery, router, searchParams]);
 
   const runSearch = useCallback(async (q: string) => {
-    if (!q) { setPosts([]); setPortfolio([]); setSearched(false); return; }
+    if (!q) {
+      setPosts([]);
+      setPortfolio([]);
+      setSearched(false);
+      return;
+    }
     setLoading(true);
     try {
       const [blogResults, portfolioResults] = await searchContent(q);
-      const publishedPosts = blogResults.filter((p) => p.status === "published");
-      const publishedPortfolio = portfolioResults.filter((e) => e.status === "published");
+      const publishedPosts = blogResults.filter(
+        (p) => p.status === "published",
+      );
+      const publishedPortfolio = portfolioResults.filter(
+        (e) => e.status === "published",
+      );
       setPosts(publishedPosts);
       setPortfolio(publishedPortfolio);
       setSearched(true);
-      trackEvent(ANALYTICS_EVENTS.NAV_LINK_CLICKED, { href: "/search", label: `search:${q}` });
+      trackEvent(ANALYTICS_EVENTS.NAV_LINK_CLICKED, {
+        href: "/search",
+        label: `search:${q}`,
+      });
     } catch {
-      setPosts([]); setPortfolio([]);
+      setPosts([]);
+      setPortfolio([]);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => { void runSearch(debouncedQuery); }, [debouncedQuery, runSearch]);
+  useEffect(() => {
+    void runSearch(debouncedQuery);
+  }, [debouncedQuery, runSearch]);
 
   const total = posts.length + portfolio.length;
 
@@ -71,8 +88,14 @@ export default function SearchPage() {
       <h1 className="text-3xl font-bold tracking-tight mb-8">Search</h1>
 
       <div className="relative mb-10">
-        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
-        <label htmlFor="search-input" className="sr-only">Search</label>
+        <Search
+          size={16}
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+          aria-hidden="true"
+        />
+        <label htmlFor="search-input" className="sr-only">
+          Search
+        </label>
         <input
           id="search-input"
           ref={inputRef}
@@ -87,18 +110,34 @@ export default function SearchPage() {
       </div>
 
       {loading && (
-        <p className="text-sm text-slate-500 dark:text-slate-400" aria-live="polite">Searching…</p>
+        <p
+          className="text-sm text-slate-500 dark:text-slate-400"
+          aria-live="polite"
+        >
+          Searching…
+        </p>
       )}
 
       {!loading && searched && (
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6" aria-live="polite" aria-atomic="true">
-          {total === 0 ? `No results for "${debouncedQuery}"` : `${total} result${total === 1 ? "" : "s"} for "${debouncedQuery}"`}
+        <p
+          className="text-sm text-slate-500 dark:text-slate-400 mb-6"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {total === 0
+            ? `No results for "${debouncedQuery}"`
+            : `${total} result${total === 1 ? "" : "s"} for "${debouncedQuery}"`}
         </p>
       )}
 
       {!loading && posts.length > 0 && (
         <section aria-labelledby="blog-results-heading" className="mb-10">
-          <h2 id="blog-results-heading" className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-4">Blog posts</h2>
+          <h2
+            id="blog-results-heading"
+            className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-4"
+          >
+            Blog posts
+          </h2>
           <ul className="space-y-3">
             {posts.map((post) => (
               <li key={post.id}>
@@ -106,9 +145,17 @@ export default function SearchPage() {
                   href={`/blog/${post.slug}`}
                   className="group block rounded-xl border border-slate-200 bg-white p-4 hover:border-indigo-300 hover:shadow-sm transition-all dark:border-slate-800 dark:bg-slate-900 dark:hover:border-indigo-700"
                 >
-                  <p className="font-medium text-slate-900 group-hover:text-indigo-600 dark:text-slate-100 dark:group-hover:text-indigo-400">{post.title}</p>
-                  {post.excerpt && <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{post.excerpt}</p>}
-                  {post.author && <p className="mt-2 text-xs text-slate-400">{post.author}</p>}
+                  <p className="font-medium text-slate-900 group-hover:text-indigo-600 dark:text-slate-100 dark:group-hover:text-indigo-400">
+                    {post.title}
+                  </p>
+                  {post.excerpt && (
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 line-clamp-2">
+                      {post.excerpt}
+                    </p>
+                  )}
+                  {post.author && (
+                    <p className="mt-2 text-xs text-slate-400">{post.author}</p>
+                  )}
                 </Link>
               </li>
             ))}
@@ -118,7 +165,12 @@ export default function SearchPage() {
 
       {!loading && portfolio.length > 0 && (
         <section aria-labelledby="portfolio-results-heading">
-          <h2 id="portfolio-results-heading" className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-4">Portfolio</h2>
+          <h2
+            id="portfolio-results-heading"
+            className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-4"
+          >
+            Portfolio
+          </h2>
           <ul className="space-y-3">
             {portfolio.map((entry) => (
               <li key={entry.id}>
@@ -126,12 +178,26 @@ export default function SearchPage() {
                   href={`/portfolio/${entry.id}`}
                   className="group block rounded-xl border border-slate-200 bg-white p-4 hover:border-indigo-300 hover:shadow-sm transition-all dark:border-slate-800 dark:bg-slate-900 dark:hover:border-indigo-700"
                 >
-                  <p className="font-medium text-slate-900 group-hover:text-indigo-600 dark:text-slate-100 dark:group-hover:text-indigo-400">{entry.title}</p>
-                  {entry.client && <p className="mt-0.5 text-xs text-slate-400">Client: {entry.client}</p>}
-                  {entry.description && <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{entry.description}</p>}
+                  <p className="font-medium text-slate-900 group-hover:text-indigo-600 dark:text-slate-100 dark:group-hover:text-indigo-400">
+                    {entry.title}
+                  </p>
+                  {entry.client && (
+                    <p className="mt-0.5 text-xs text-slate-400">
+                      Client: {entry.client}
+                    </p>
+                  )}
+                  {entry.description && (
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 line-clamp-2">
+                      {entry.description}
+                    </p>
+                  )}
                   {entry.tags?.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1.5">
-                      {entry.tags.map((tag) => <Badge key={tag} className="text-xs">{tag}</Badge>)}
+                      {entry.tags.map((tag) => (
+                        <Badge key={tag} className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))}
                     </div>
                   )}
                 </Link>
@@ -142,7 +208,9 @@ export default function SearchPage() {
       )}
 
       {!loading && !searched && (
-        <p className="text-sm text-slate-400 dark:text-slate-500">Type to search across blog posts and portfolio.</p>
+        <p className="text-sm text-slate-400 dark:text-slate-500">
+          Type to search across blog posts and portfolio.
+        </p>
       )}
     </main>
   );

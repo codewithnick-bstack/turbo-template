@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { CountUp } from "@/components/count-up";
 import { PageHero } from "@/components/page-hero";
+import { photos } from "@/lib/photos";
 import { Reveal } from "@/components/reveal";
 import { Section, Container } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
@@ -19,6 +20,7 @@ export default function EmployersPage() {
   return (
     <div>
       <PageHero
+        image={photos.employerOffice}
         eyebrow={path.audience}
         title={path.title}
         intro={path.description}
@@ -33,7 +35,9 @@ export default function EmployersPage() {
                 <dd className="font-display tnum text-3xl font-semibold text-[var(--navy)] dark:text-white">
                   <CountUp value={stat.value} />
                 </dd>
-                <dt className="mt-1 text-xs tracking-wide text-[var(--muted)] uppercase">{stat.label}</dt>
+                <dt className="mt-1 text-xs tracking-wide text-[var(--muted)] uppercase">
+                  {stat.label}
+                </dt>
               </Reveal>
             ))}
           </dl>
@@ -50,7 +54,9 @@ export default function EmployersPage() {
                   <h3 className="font-display text-xl font-semibold text-[var(--navy)] dark:text-white">
                     {industry.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{industry.description}</p>
+                  <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+                    {industry.description}
+                  </p>
                 </div>
               </Reveal>
             ))}
