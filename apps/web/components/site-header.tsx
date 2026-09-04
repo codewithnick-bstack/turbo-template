@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { CtaLink } from "@/components/cta";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
+import { LogoMark } from "@/components/logo-mark";
 import { headerCta, hero, siteConfig } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
@@ -62,6 +63,13 @@ export function SiteHeader() {
           className="font-display flex items-baseline text-lg leading-none font-bold tracking-[-0.02em]"
           aria-label={`${siteConfig.name} — home`}
         >
+          <LogoMark
+            variant="span"
+            className={cn(
+              "mr-2 size-6 shrink-0",
+              overlay ? "text-[#f76b60]" : "text-[var(--accent)] dark:text-[#f76b60]",
+            )}
+          />
           <span className={overlay ? "text-white" : "text-[var(--navy)] dark:text-white"}>S.R.</span>
           <span className={cn("ml-1.5", overlay ? "text-[#f76b60]" : "text-[var(--accent-text)]")}>
             Clarke
