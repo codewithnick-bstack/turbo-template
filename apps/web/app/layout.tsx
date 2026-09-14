@@ -29,7 +29,11 @@ import brand from "../../../brand.config";
 import "./globals.css";
 
 const brandCss = generateTokens(brand);
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? siteConfig.url;
+// Uses the resolved value from site-data rather than re-reading the env var:
+// `??` let a defined-but-empty NEXT_PUBLIC_SITE_URL through as "", and
+// `new URL("")` below threw ERR_INVALID_URL at module scope, failing the build
+// during page-data collection.
+const siteUrl = siteConfig.url;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
