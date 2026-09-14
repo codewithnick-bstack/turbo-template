@@ -1,0 +1,18 @@
+{
+  "$comment": "Consumed by CI bundle-analyzer gate (Phase 5 Unit 5.8). Values in bytes (gzipped).",
+  "web": {
+    "app.js": 180000,
+    "framework.js": 110000,
+    "css": 40000
+  },
+  "admin": {
+    "app.js": 260000,
+    "framework.js": 110000,
+    "css": 60000
+  },
+  "cwv": {
+    "lcp_p75_ms": 2500,
+    "cls_p75": 0.1,
+    "inp_p75_ms": 200
+  }
+}

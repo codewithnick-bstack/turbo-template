@@ -14,7 +14,14 @@
     "test": "turbo run test",
     "format": "prettier --write .",
     "clean": "rimraf node_modules apps/*/node_modules packages/*/node_modules",
-    "prepare": "husky"
+    "prepare": "husky",
+    "changeset": "changeset",
+    "parity:check": "tsx scripts/verify-parity.ts",
+    "generate:openapi": "tsx scripts/generate-openapi.ts",
+    "db:up": "docker compose -f infra/docker-compose.yml up -d postgres redis",
+    "db:down": "docker compose -f infra/docker-compose.yml down",
+    "db:migrate": "pnpm -F @repo/db db:migrate",
+    "db:seed": "pnpm -F @repo/db db:seed"
   },
   "lint-staged": {
     "*.{ts,tsx,js,mjs,cjs}": [
@@ -26,6 +33,10 @@
   },
   "devDependencies": {
     "@axe-core/cli": "^4.10.2",
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.11",
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
     "@types/node": "^22.14.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",

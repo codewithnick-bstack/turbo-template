@@ -1,24 +1,31 @@
+import brand from "../../../brand.config";
+
 export const siteConfig = {
-  name: "Northstar Studio",
-  description:
-    "A polished client-site starter for agencies, freelancers, and small businesses that need beautiful websites shipped fast.",
+  name: brand.businessName,
+  description: brand.tagline ?? "Professional services for modern businesses.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  phone: "+1 (555) 014-2211",
-  email: "hello@northstarstudio.dev",
-  location: "Remote-first · Serving clients worldwide",
+  phone: brand.phone ?? "",
+  email: brand.email ?? "",
+  location: brand.address ?? "",
   nav: [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
     { href: "/services", label: "Services" },
+    { href: "/pricing", label: "Pricing" },
     { href: "/portfolio", label: "Portfolio" },
     { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
   ],
-  socials: [
-    { href: "https://x.com", label: "X" },
-    { href: "https://instagram.com", label: "Instagram" },
-    { href: "https://linkedin.com", label: "LinkedIn" },
+  footerExtra: [
+    { href: "/team", label: "Team" },
+    { href: "/testimonials", label: "Testimonials" },
+    { href: "/status", label: "System Status" },
   ],
+  socials: brand.socialLinks
+    ? Object.entries(brand.socialLinks)
+        .filter((entry): entry is [string, string] => typeof entry[1] === "string")
+        .map(([label, href]) => ({ label: label.charAt(0).toUpperCase() + label.slice(1), href }))
+    : [],
 };
 
 export const stats = [
@@ -86,76 +93,6 @@ export const values = [
   {
     title: "Accessible by default",
     description: "Semantic structure, contrast-friendly palettes, keyboard support, and reduced-motion respect.",
-  },
-];
-
-export const teamMembers = [
-  {
-    name: "Maya Ortiz",
-    role: "Creative Director",
-    bio: "Shapes each site's tone, layout, and visual system so every page feels premium and intentional.",
-  },
-  {
-    name: "Jon Park",
-    role: "Full-Stack Developer",
-    bio: "Owns Next.js, API integrations, and deployment so launches stay fast and low-maintenance.",
-  },
-  {
-    name: "Aisha Khan",
-    role: "SEO Strategist",
-    bio: "Connects on-page SEO, structured data, and content planning to support long-term growth.",
-  },
-];
-
-export const testimonials = [
-  {
-    quote:
-      "We went from a dated brochure site to a fast, confident brand experience in under three weeks.",
-    name: "Olivia Reed",
-    company: "Reed Wellness Co.",
-  },
-  {
-    quote:
-      "The starter gave us a repeatable system for client launches without sacrificing polish.",
-    name: "Daniel Price",
-    company: "Harbor Creative",
-  },
-  {
-    quote:
-      "Our leads increased almost immediately after the contact flow and service pages went live.",
-    name: "Nina Brooks",
-    company: "North Peak Consulting",
-  },
-];
-
-export const projects = [
-  {
-    slug: "atelier-luna",
-    title: "Atelier Luna",
-    category: "Lifestyle",
-    summary: "A warm editorial-style site for a boutique interior design studio.",
-    results: ["+42% inquiry rate", "94 mobile speed score"],
-  },
-  {
-    slug: "pulse-legal",
-    title: "Pulse Legal",
-    category: "Professional Services",
-    summary: "A credible, high-trust presence built for consultation bookings.",
-    results: ["+27% booked calls", "Expanded local SEO reach"],
-  },
-  {
-    slug: "summit-fit",
-    title: "Summit Fit",
-    category: "Fitness",
-    summary: "Campaign-ready landing pages for a growing online coaching brand.",
-    results: ["2.1x conversion lift", "Better ad relevance scores"],
-  },
-  {
-    slug: "craft-and-clay",
-    title: "Craft & Clay",
-    category: "Ecommerce",
-    summary: "A visual-first launch page that pairs storytelling with product drops.",
-    results: ["Sold out first collection", "Featured by local press"],
   },
 ];
 

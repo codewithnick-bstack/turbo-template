@@ -1,14 +1,18 @@
-FROM node:20-alpine
-
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-
+FROM node:22-alpine AS base
 RUN corepack enable
 WORKDIR /app
 
+FROM base AS build
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter api build
+RUN pnpm turbo run build --filter=api
 
-EXPOSE 4000
-CMD ["pnpm", "--filter", "api", "start"]
+FROM node:22-alpine AS runner
+RUN corepack enable
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=build /app/apps/api/dist ./dist
+COPY --from=build /app/apps/api/package.json ./package.json
+COPY --from=build /app/node_modules ./node_modules
+EXPOSE 3001
+CMD ["node", "dist/index.js"]

@@ -1,27 +1,38 @@
-import { config } from "dotenv";
 import { z } from "zod";
 
-config();
-
-const emptyToUndefined = (value: unknown) => {
-  if (typeof value === "string" && value.trim() === "") {
-    return undefined;
-  }
-
-  return value;
-};
-
 const envSchema = z.object({
-  PORT: z.coerce.number().default(4000),
-  NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  WEB_ORIGIN: z.string().default("http://localhost:3000"),
-  CONTACT_FROM_EMAIL: z.preprocess(emptyToUndefined, z.string().email().optional()),
-  CONTACT_TO_EMAIL: z.preprocess(emptyToUndefined, z.string().email().optional()),
-  RESEND_API_KEY: z.preprocess(emptyToUndefined, z.string().optional()),
-  SMTP_HOST: z.preprocess(emptyToUndefined, z.string().optional()),
-  SMTP_PORT: z.coerce.number().default(587),
-  SMTP_USER: z.preprocess(emptyToUndefined, z.string().optional()),
-  SMTP_PASS: z.preprocess(emptyToUndefined, z.string().optional()),
+  DATABASE_URL: z.string().min(1),
+  AUTH_SECRET: z.string().min(32),
+  PORT: z.coerce.number().default(3001),
+  API_URL: z.string().url().default("http://localhost:3001"),
+  WEB_URL: z.string().url().default("http://localhost:3000"),
+  ADMIN_URL: z.string().url().default("http://localhost:4000"),
+  ADMIN_EMAIL: z.string().email().optional(),
+  NOTIFICATION_EMAIL: z.string().email().optional(),
+  AI_PROVIDER: z.enum(["anthropic", "openai", "openrouter", "mock"]).default("mock"),
+  AI_MODEL: z.string().optional(),
+  ANTHROPIC_API_KEY: z.string().optional(),
+  OPENAI_API_KEY: z.string().optional(),
+  OPENROUTER_API_KEY: z.string().optional(),
+  RESEND_API_KEY: z.string().optional(),
+  FROM_EMAIL: z.string().email().default("noreply@example.com"),
+  MCP_API_KEY: z.string().optional(),
+  REVALIDATE_SECRET: z.string().optional(),
+  ADMIN_PASSWORD: z.string().min(8).optional(),
+  CAL_API_KEY: z.string().optional(),
+  CAL_EVENT_TYPE_ID: z.coerce.number().optional(),
 });
 
-export const env = envSchema.parse(process.env);
+function parseEnv() {
+  const result = envSchema.safeParse(process.env);
+  if (!result.success) {
+    console.error("Invalid environment variables:");
+    for (const [field, errors] of Object.entries(result.error.flatten().fieldErrors)) {
+      console.error(`  ${field}: ${errors?.join(", ")}`);
+    }
+    process.exit(1);
+  }
+  return result.data;
+}
+
+export const env = parseEnv();

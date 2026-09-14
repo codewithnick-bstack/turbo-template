@@ -13,3 +13,5 @@ apps/web/out
 apps/api/dist
 apps/cron/dist
 *.log
+*.tsbuildinfo
+**/next-env.d.ts
