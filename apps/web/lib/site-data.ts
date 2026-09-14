@@ -1,9 +1,33 @@
 import brand from "../../../brand.config";
 
+/**
+ * The site's own origin.
+ *
+ * `??` only falls back on null/undefined, so an env var that is DEFINED BUT
+ * EMPTY — which is what NEXT_PUBLIC_SITE_URL is on the Vercel project — passed
+ * straight through as "" and reached `new URL("")` in app/layout.tsx. That
+ * throws ERR_INVALID_URL at module scope, which Next surfaces as "Failed to
+ * collect page data for /_not-found" and fails the whole build.
+ *
+ * So: trim, treat empty as unset, and prefer Vercel's own deployment URL over
+ * localhost when running on Vercel without an explicit value.
+ */
+function resolveSiteUrl(): string {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (explicit) return explicit;
+
+  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (vercel) return `https://${vercel}`;
+
+  return "http://localhost:3000";
+}
+
+export const siteUrl = resolveSiteUrl();
+
 export const siteConfig = {
   name: brand.businessName,
   description: brand.tagline ?? "Professional services for modern businesses.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: siteUrl,
   phone: brand.phone ?? "",
   email: brand.email ?? "",
   location: brand.address ?? "",

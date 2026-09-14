@@ -7,7 +7,11 @@ const withBundleAnalyzer = createBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+// Same empty-string trap as NEXT_PUBLIC_SITE_URL: `??` passes a defined-but-
+// empty env var straight through. This one does not crash the build — it goes
+// into the CSP connect-src below — so an empty value would quietly ship a
+// malformed policy instead.
+const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim() || "http://localhost:3001";
 
 const isDev = process.env.NODE_ENV === "development";
 
