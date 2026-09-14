@@ -1,6 +1,8 @@
 import type { BlogPost, ChatMessage, ContactPayload, PortfolioEntry, SiteSettings, TeamMember, Testimonial } from "./types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+// `||` not `??`: a defined-but-empty env var must fall back too, or every
+// fetch below targets a relative "" path.
+const API_URL = process.env.NEXT_PUBLIC_API_URL?.trim() || "http://localhost:3001";
 
 async function apiFetch<T>(path: string, options?: RequestInit & { next?: { revalidate?: number } }): Promise<T> {
   const res = await fetch(`${API_URL}/api/v1${path}`, options);
